@@ -85,7 +85,7 @@
                                                         >Hapus</button>
                                                     </form>
                                                     <a
-                                                        href="{{ route('siswa.dataedit', $dt->id) }}"
+                                                        href="{{ route('siswa.editdata', $dt->id) }}"
                                                         class="btn btn-primary"
                                                     >Edit</a>
                                                 </td>
