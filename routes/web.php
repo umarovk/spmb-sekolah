@@ -34,8 +34,8 @@ Route::resource('siswa', StudentController::class)->names([
     'destroy' => 'siswa.destroy',
 ]);
 Route::get('/tabelsiswa', [StudentController::class, 'tabelsiswa'])->name('tabelsiswa');
-// Route::get('/{id}/edit', [StudentController::class, 'edit'])->name('siswa.edit');
-Route::get('siswa/{id}/edit', [StudentController::class, 'edit'])->name('siswa.dataedit');
+Route::get('/{id}/edit', [StudentController::class, 'edit'])->name('siswa.editdata');
+// Route::get('siswa/{id}/edit', [StudentController::class, 'edit'])->name('siswa.dataedit');
 
 
 
@@ -44,13 +44,14 @@ Route::resource('payments', PaymentController::class)->names([
     'create'  => 'payments.create',
     'store'   => 'payments.store',
     'show'    => 'payments.show',
-    'edit'    => 'paymentsaa.edit',
+    'edit'    => 'payments.edit',
     'update'  => 'payments.update',
     'destroy' => 'payments.destroy',
 ]);
-Route::get('payments/create/{siswa_id?}', [PaymentController::class, 'create'])->name('payments.create.with.siswa');
+// Route::get('payments/create/{siswa_id?}', [PaymentController::class, 'create'])->name('payments.create.with.siswa');
 Route::get('payments/siswa/{siswa_id}', [PaymentController::class, 'bySiswa'])->name('payments.by.siswa');
-Route::get('/{id}/edit', [PaymentController::class, 'edit'])->name('payments.edit');
+Route::get('payments/siswa/{siswa_id}', [PaymentController::class, 'PaymentPerSiswa'])->name('PaymentPerSiswa');
+// Route::get('/{id}/edit', [PaymentController::class, 'edit'])->name('payments.edit');
 
 
 

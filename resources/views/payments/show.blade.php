@@ -34,7 +34,7 @@
                                 <th>Nama Siswa</th>
                                 <td>
                                     <a href="{{ route('payments.by.siswa', $payment->siswa_id) }}">
-                                        {{ $payment->siswa->nama ?? 'Data siswa tidak ditemukan' }}
+                                        {{ $payment->siswa->namasiswa ?? 'Data siswa tidak ditemukan' }}
                                     </a>
                                 </td>
                             </tr>
