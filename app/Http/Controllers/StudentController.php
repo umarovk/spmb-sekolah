@@ -176,11 +176,11 @@ class StudentController extends Controller
         return view('siswa.edit', compact('datasiswa'));    
     }
 
-    public function editsiswa($id)
+    public function ubah($id)
     {
     $datasiswa = Siswa::findOrFail($id);
     // return view('siswa.editsiswa', compact('datasiswa'));
-    return view('siswa.edit', compact('datasiswa'));
+    return view('siswa.ubah', compact('datasiswa'));
     }
 
     /**
