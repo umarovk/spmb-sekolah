@@ -78,8 +78,11 @@
         rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=delete"
     />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -425,11 +428,11 @@
                                 </li>
                                 <li class="nav-item">
                                     <a
-                                        href="./index3.html"
+                                        href="{{ route('payments.index') }}"
                                         class="nav-link"
                                     >
                                         <i class="nav-icon bi bi-circle"></i>
-                                        <p>Dashboard v3</p>
+                                        <p>Pembayaran</p>
                                     </a>
                                 </li>
                             </ul>

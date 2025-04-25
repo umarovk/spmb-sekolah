@@ -13,21 +13,24 @@ class PaymentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $payments = Pembayaran::with('siswa')->latest()->paginate(10);
-        return view('payments.index', compact('payments'));
+        $keyword = $request->input('search');
+        $siswa = Siswa::when($keyword, function($query) use ($keyword) {
+        $query->where('nama', 'like', "%$keyword%")
+              ->orWhere('nis', 'like', "%$keyword%");
+    })->get();
+
+    return view('payments.index', compact('siswa'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create($siswa_id = null)
+    public function create(Request $request)
     {
-        $siswaList = Siswa::all();
-        $selectedSiswa = $siswa_id ? Siswa::findOrFail($siswa_id) : null;
-        
-        return view('payments.create', compact('siswaList', 'selectedSiswa'));
+        $siswa = Siswa::findOrFail($request->input('siswa_id'));
+        return view('payments.create', compact('siswa'));
     }
 
     /**
@@ -35,6 +38,12 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
+
+        // $data = $request->all();
+        // $bayar = \App\Models\Pembayaran::create($data);
+    
+        // dd($bayar);
+
         $request->validate([
             'siswa_id' => 'required|exists:siswas,id',
             'nama_pembayaran' => 'required|string|max:255',
@@ -71,11 +80,12 @@ class PaymentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Pembayaran $payment)
+    public function show($siswa_id)
     {
-        $payment->load('siswa');
-        return view('payments.show', compact('payment'));
+        $siswa = \App\Models\Siswa::with('pembayarans')->findOrFail($siswa_id); // <= penting!
+        return view('payments.show', compact('siswa'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
