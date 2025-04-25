@@ -132,4 +132,12 @@ class PaymentController extends Controller
         
         return view('payments.by_siswa', compact('payments', 'siswa'));
     }
+
+    public function PaymentPerSiswa($siswa_id)
+    {
+        $siswa = Siswa::findOrFail($siswa_id);
+        $payments = Pembayaran::where('siswa_id', $siswa_id)->latest()->paginate(10);
+        
+        return view('payments.payment_per_siswa', compact('payments', 'siswa'));
+    }
 }

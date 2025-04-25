@@ -37,8 +37,6 @@ Route::get('/tabelsiswa', [StudentController::class, 'tabelsiswa'])->name('tabel
 Route::get('/{id}/edit', [StudentController::class, 'edit'])->name('siswa.editdata');
 // Route::get('/{id}/ubah', [StudentController::class, 'ubah'])->name('siswa.ubah'); //INI WORK
 
-
-
 // Route::resource('payments', PaymentController::class)->names([
 //     'index'   => 'payments.index',
 //     'create'  => 'payments.create',
@@ -50,6 +48,7 @@ Route::get('/{id}/edit', [StudentController::class, 'edit'])->name('siswa.editda
 // ]);
 // Route::get('payments/create/{siswa_id?}', [PaymentController::class, 'create'])->name('payments.create.with.siswa');
 // Route::get('payments/siswa/{siswa_id}', [PaymentController::class, 'bySiswa'])->name('payments.by.siswa');
+
 // Route::get('/{id}/edit', [PaymentController::class, 'edit'])->name('payments.edit');
 
 
