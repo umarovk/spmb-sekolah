@@ -439,14 +439,14 @@
                         </li>
                         <li class="nav-item">
                             <a
-                                href="./generate/theme.html"
+                                href="#"
                                 class="nav-link"
                             >
                                 <i class="nav-icon bi bi-palette"></i>
-                                <p>Theme Generate</p>
+                                <p>Exite</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a
                                 href="#"
                                 class="nav-link"
@@ -979,8 +979,8 @@
                                 <p>Informational</p>
                             </a>
                         </li>
-                    </ul>
-                    <!--end::Sidebar Menu-->
+                    </ul> --}}
+                        <!--end::Sidebar Menu-->
                 </nav>
             </div>
             <!--end::Sidebar Wrapper-->

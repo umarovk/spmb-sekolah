@@ -8,6 +8,8 @@ use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use Dompdf\Dompdf;
+
 class PaymentController extends Controller
 {
 
@@ -162,4 +164,22 @@ class PaymentController extends Controller
         
         return view('payments.payment_per_siswa', compact('payments', 'siswa'));
     }
+
+
+
+
+
+    public function printKwitansi(Pembayaran $payment)
+    {
+        return view('payments.kwitansi', compact('payment'));
+    }
+
+    public function printPdf(Pembayaran $payment)
+    {
+        $pdf = new Dompdf('payments.kwitansi', compact('payment'));
+        return $pdf->stream('kwitansi-'.$payment->kode_bayar.'.pdf');
+    }
+
+
+
 }

@@ -12,17 +12,16 @@
                         @if ($siswa->pembayarans->count() > 0)
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped">
-                                    <thead class="bg-primary text-white">
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Kode Bayar</th>
-                                            <th>Nama Pembayaran</th>
-                                            <th>Nominal</th>
-                                            <th>Keterangan</th>
-                                            <th>Tanggal Bayar</th>
-                                            <th>Teller</th>
-                                        </tr>
-                                    </thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Kode Bayar</th>
+                                        <th>Nama Pembayaran</th>
+                                        <th>Nominal</th>
+                                        <th>Keterangan</th>
+                                        <th>Tanggal Bayar</th>
+                                        <th>Teller</th>
+                                        <th>Print</th>
+                                    </tr>
                                     <tbody>
                                         @foreach ($siswa->pembayarans as $index => $bayar)
                                             <tr>
@@ -31,8 +30,41 @@
                                                 <td>{{ $bayar->nama_pembayaran }}</td>
                                                 <td>Rp{{ number_format($bayar->nominal, 0, ',', '.') }}</td>
                                                 <td>{{ $bayar->keterangan ?? '-' }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($bayar->tanggal_bayar)->format('d M Y') }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($bayar->tanggal_bayar)->format('d M Y') }}
+                                                </td>
                                                 <td>{{ $bayar->teller }}</td>
+                                                <td>
+                                                    <div class="btn-group">
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-info btn-sm dropdown-toggle"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false"
+                                                        >
+                                                            <i class="bi bi-printer"></i> Cetak
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <a
+                                                                    class="dropdown-item"
+                                                                    href="{{ route('payments.print.kwitansi', $bayar->id) }}"
+                                                                    target="_blank"
+                                                                >
+                                                                    <i class="bi bi-receipt"></i> Kwitansi
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a
+                                                                    class="dropdown-item"
+                                                                    href="{{ route('payments.print.pdf', $bayar->id) }}"
+                                                                    target="_blank"
+                                                                >
+                                                                    <i class="bi bi-file-pdf"></i> PDF
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -54,22 +86,22 @@
                                 Belum ada riwayat pembayaran untuk siswa ini.
                             </div>
                         @endif
-
-                        <div class="mt-3">
-                            <a
-                                href="{{ route('payments.index') }}"
-                                class="btn btn-secondary"
-                            >
-                                <i class="bi bi-arrow-left"></i> Kembali
-                            </a>
-                            <a
-                                href="{{ route('payments.create', ['siswa_id' => $siswa->id]) }}"
-                                class="btn btn-success"
-                            >
-                                <i class="bi bi-plus-circle"></i> Tambah Pembayaran
-                            </a>
-                        </div>
                     </div>
+
+                </div>
+                <div class="mt-3">
+                    <a
+                        href="{{ route('payments.index') }}"
+                        class="btn btn-secondary"
+                    >
+                        <i class="bi bi-arrow-left"></i> Kembali
+                    </a>
+                    <a
+                        href="{{ route('payments.create', ['siswa_id' => $siswa->id]) }}"
+                        class="btn btn-success"
+                    >
+                        <i class="bi bi-plus-circle"></i> Tambah Pembayaran
+                    </a>
                 </div>
             </div>
         </div>

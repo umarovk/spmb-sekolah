@@ -52,3 +52,9 @@ Route::get('/paymentsdetailsiswa/{$siswa_id}', [PaymentController::class, 'payme
 // Route::get('/payments/create/{siswa_id}', [PaymentController::class, 'create'])->name('payments.create');
 Route::get('/payments/detail/{siswa_id}', [PaymentController::class, 'detail'])->name('payments.detail');
 Route::get('/test', [StudentController::class, 'test'])->name('test');
+
+// ...existing routes...
+Route::get('/payments/{payment}/print/kwitansi', [PaymentController::class, 'printKwitansi'])
+    ->name('payments.print.kwitansi');
+Route::get('/payments/{payment}/print/pdf', [PaymentController::class, 'printPdf'])
+    ->name('payments.print.pdf');
