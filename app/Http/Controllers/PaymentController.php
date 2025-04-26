@@ -15,21 +15,18 @@ class PaymentController extends Controller
      */
     public function index(Request $request)
     {
-        $keyword = $request->input('search');
-        $siswa = Siswa::when($keyword, function($query) use ($keyword) {
-        $query->where('nama', 'like', "%$keyword%")
-              ->orWhere('nis', 'like', "%$keyword%");
-    })->get();
-
-    return view('payments.index', compact('siswa'));
+        $siswas = Siswa::all();
+        return view('payments.index', compact('siswas'));
     }
+
+    
 
     /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request)
     {
-        $siswa = Siswa::findOrFail($request->input('siswa_id'));
+        $siswa = Siswa::findOrFail($request->siswa_id);
         return view('payments.create', compact('siswa'));
     }
 
@@ -37,13 +34,8 @@ class PaymentController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-
-        // $data = $request->all();
-        // $bayar = \App\Models\Pembayaran::create($data);
-    
-        // dd($bayar);
-
+{
+    try {
         $request->validate([
             'siswa_id' => 'required|exists:siswas,id',
             'nama_pembayaran' => 'required|string|max:255',
@@ -52,17 +44,16 @@ class PaymentController extends Controller
             'tanggal_bayar' => 'required|date',
         ]);
 
-        // Generate kode bayar: PYM-tahun-bulan-4 digit nomor urut
+        // Generate kode bayar
         $lastPayment = Pembayaran::whereMonth('created_at', now()->month)
-                             ->whereYear('created_at', now()->year)
-                             ->latest()
-                             ->first();
+                                ->whereYear('created_at', now()->year)
+                                ->latest()
+                                ->first();
         
         $lastNumber = $lastPayment ? intval(substr($lastPayment->kode_bayar, -4)) : 0;
         $newNumber = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
         $kodeBayar = 'PYM-' . date('Ym') . '-' . $newNumber;
 
-        // Simpan pembayaran
         $payment = Pembayaran::create([
             'siswa_id' => $request->siswa_id,
             'kode_bayar' => $kodeBayar,
@@ -70,20 +61,34 @@ class PaymentController extends Controller
             'nominal' => $request->nominal,
             'keterangan' => $request->keterangan,
             'tanggal_bayar' => $request->tanggal_bayar,
-            'teller' => Auth::user()->name ?? 'Admin',
+            'teller' => auth()->user()->name ?? 'Admin',
         ]);
 
-        return redirect()->route('payments.show', $payment->id)
-                         ->with('success', 'Pembayaran berhasil disimpan.');
+        return redirect()->route('payments.show', $request->siswa_id)
+                        ->with('success', 'Pembayaran berhasil disimpan.');
+
+    } catch (\Exception $e) {
+        return redirect()->back()
+                        ->withInput()
+                        ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
     }
+}
 
     /**
      * Display the specified resource.
      */
     public function show($siswa_id)
     {
-        $siswa = \App\Models\Siswa::with('pembayarans')->findOrFail($siswa_id); // <= penting!
+        $siswa = Siswa::with('pembayarans')->findOrFail($siswa_id);
         return view('payments.show', compact('siswa'));
+    }
+
+    public function paymentsdetailsiswa(Pembayaran $siswa_id)
+    {
+        $siswa = Siswa::findOrFail($siswa_id);
+        $riwayatPembayaran = Pembayaran::where('siswa_id', $siswa_id)->get();
+
+        return view('payments.detailsiswa', compact('siswa', 'riwayatPembayaran'));
     }
 
 
