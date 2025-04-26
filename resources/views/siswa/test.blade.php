@@ -142,7 +142,7 @@
 
                         <div class="card-footer">
                             <div class="d-flex justify-content-end">
-                                {{ $datasiswa->appends(['search' => $search, 'perPage' => $perPage])->links('vendor.pagination.custom') }}
+                                {{ $datasiswa->appends(['search' => $search, 'perPage' => $perPage])->links() }}
                             </div>
                         </div>
                     </div>

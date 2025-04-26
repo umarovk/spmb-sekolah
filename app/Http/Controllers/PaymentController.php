@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
+
+    public function test(Request $request)
+    {
+        $datasiswa = Siswa::all();
+        return view('siswa.test', compact('datasiswa'));
+    }
+
     /**
      * Display a listing of the resource.
      */

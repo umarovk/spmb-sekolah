@@ -320,9 +320,31 @@ class StudentController extends Controller
     }
 
 
-    public function tabelsiswa(): View{
-        $datasiswa = Siswa::all();
-        $pembayaran = Pembayaran::with('siswa')->get();
-        return view('siswa.siswa', compact('pembayaran', 'datasiswa'));
+    public function tabelsiswa(Request $request)
+    {
+        $search = $request->input('search');
+        $perPage = $request->input('perPage', 10);
+
+        $datasiswa = Siswa::when($search, function($query) use ($search) {
+                return $query->where('namasiswa', 'LIKE', "%{$search}%");
+            })
+            ->latest()
+            ->paginate($perPage);
+
+        return view('siswa.siswa', compact('datasiswa', 'search', 'perPage'));
+    }
+
+    public function test(Request $request)
+    {
+        $search = $request->input('search');
+        $perPage = $request->input('perPage', 10);
+
+        $datasiswa = Siswa::when($search, function($query) use ($search) {
+                return $query->where('namasiswa', 'LIKE', "%{$search}%");
+            })
+            ->latest()
+            ->paginate($perPage);
+
+        return view('siswa.test', compact('datasiswa', 'search', 'perPage'));
     }
 }

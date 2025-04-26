@@ -51,3 +51,4 @@ Route::get('/paymentsdetailsiswa/{$siswa_id}', [PaymentController::class, 'payme
 
 // Route::get('/payments/create/{siswa_id}', [PaymentController::class, 'create'])->name('payments.create');
 Route::get('/payments/detail/{siswa_id}', [PaymentController::class, 'detail'])->name('payments.detail');
+Route::get('/test', [StudentController::class, 'test'])->name('test');
