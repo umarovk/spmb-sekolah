@@ -313,10 +313,26 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        $datasiswa = siswa::findOrFail($id);
-        $datasiswa->delete();
+        try {
+            $datasiswa = Siswa::findOrFail($id);
+            
+            // Cek apakah siswa memiliki pembayaran
+            if ($datasiswa->pembayarans()->exists()) {
+                return redirect()
+                    ->route('tabelsiswa')
+                    ->with('error', 'Tidak dapat menghapus data siswa karena memiliki riwayat pembayaran.');
+            }
 
-        return redirect()->route('tabelsiswa')->with('success', 'Data siswa berhasil dihapus');
+            $datasiswa->delete();
+            return redirect()
+                ->route('tabelsiswa')
+                ->with('success', 'Data siswa berhasil dihapus');
+
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('tabelsiswa')
+                ->with('error', 'Gagal menghapus data siswa: ' . $e->getMessage());
+        }
     }
 
 

@@ -102,14 +102,16 @@
                                         <tr>
                                             <td>{{ ($datasiswa->currentPage() - 1) * $datasiswa->perPage() + $loop->iteration }}
                                             </td>
-                                            <td>{{ $loop->iteration }}</td>
+                                            {{-- <td>{{ $loop->iteration }}</td> --}}
                                             <td>{{ $dt->namasiswa }}</td>
                                             <td>{{ $dt->jurusan }}</td>
                                             <td>{{ $dt->agama ?? '-' }}</td>
                                             <td>{{ $dt->jeniskelamin }}</td>
-                                            <td>Status Bayar</td>
+                                            <td>SKL</td>
                                             <td>
-                                                <form
+
+                                                {{-- FITUR HAPUS DATA SISWA --}}
+                                                {{-- <form
                                                     action="{{ route('siswa.destroy', $dt->id) }}"
                                                     method="POST"
                                                     style="display:inline;"
@@ -121,11 +123,39 @@
                                                         type="submit"
                                                         class="btn btn-danger"
                                                     >Hapus</button>
-                                                </form>
+                                                </form> --}}
+
+                                                @if ($dt->pembayarans()->exists())
+                                                    <button
+                                                        class="btn btn-danger"
+                                                        disabled
+                                                        title="Tidak dapat dihapus karena memiliki pembayaran"
+                                                    >
+                                                        <i class="bi bi-trash"></i> Hapus
+                                                    </button>
+                                                @else
+                                                    <form
+                                                        action="{{ route('siswa.destroy', $dt->id) }}"
+                                                        method="POST"
+                                                        style="display:inline;"
+                                                        onsubmit="return confirm('Yakin ingin menghapus data siswa ini?')"
+                                                    >
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button
+                                                            type="submit"
+                                                            class="btn btn-danger"
+                                                        >
+                                                            <i class="bi bi-trash"></i> Hapus
+                                                        </button>
+                                                    </form>
+                                                @endif
                                                 <a
                                                     href="{{ route('siswa.editdata', $dt->id) }}"
                                                     class="btn btn-primary"
-                                                >Edit</a>
+                                                >
+                                                    <i class="bi bi-pencil"></i> Edit
+                                                </a>
                                             </td>
                                         </tr>
                                     @empty
@@ -141,8 +171,11 @@
                         </div>
 
                         <div class="card-footer">
-                            <div class="d-flex justify-content-end">
-                                {{ $datasiswa->appends(['search' => $search, 'perPage' => $perPage])->links('vendor.pagination.custom') }}
+                            <div class="mb-4 mt-4">
+
+                                <div class="d-flex justify-content-end">
+                                    {{ $datasiswa->appends(['search' => $search, 'perPage' => $perPage])->links('vendor.pagination.custom') }}
+                                </div>
                             </div>
                         </div>
                     </div>

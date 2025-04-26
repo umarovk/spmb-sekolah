@@ -30,4 +30,15 @@ class Siswa extends Model
     {
         return $this->hasMany(Pembayaran::class, 'siswa_id');
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function($siswa) {
+            if ($siswa->pembayarans()->exists()) {
+                throw new \Exception('Tidak dapat menghapus data siswa yang memiliki riwayat pembayaran.');
+            }
+        });
+    }
 }

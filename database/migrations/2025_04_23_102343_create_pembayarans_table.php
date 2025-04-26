@@ -12,8 +12,13 @@ class CreatePembayaransTable extends Migration
             $table->id();
 
             // Relasi ke tabel siswa
+            // $table->foreign('siswa_id')->references('id')->on('siswas')->onDelete('cascade'); // sebelumnya ini work
             $table->unsignedBigInteger('siswa_id');
-            $table->foreign('siswa_id')->references('id')->on('siswas')->onDelete('cascade');
+            $table->foreign('siswa_id')
+              ->references('id')
+              ->on('siswas')
+              ->onDelete('restrict'); // Mengubah cascade menjadi restrict
+
 
             // Kolom-kolom pembayaran
             $table->string('kode_bayar')->unique();

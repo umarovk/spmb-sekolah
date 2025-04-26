@@ -23,10 +23,16 @@ class PaymentController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        $siswas = Siswa::all();
-        return view('payments.index', compact('siswas'));
-    }
+{
+    $search = $request->input('search');
+    $siswas = Siswa::when($search, function($query) use ($search) {
+            return $query->where('namasiswa', 'LIKE', "%{$search}%");
+        })
+        ->with('pembayarans')
+        ->get();
+    
+    return view('payments.index', compact('siswas', 'search'));
+}
 
     
 
