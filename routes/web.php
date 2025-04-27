@@ -65,5 +65,12 @@ Route::middleware(['auth'])->group(function () {
             ->name('payments.print.pdf');
     });
 
+    // Routes untuk backup database
+    Route::middleware(['auth', 'role:admin'])->group(function () {
+        Route::get('/admin/backup', [App\Http\Controllers\DatabaseBackupController::class, 'index'])->name('admin.backup.index');
+        Route::get('/admin/backup/generate', [App\Http\Controllers\DatabaseBackupController::class, 'generateBackup'])->name('admin.backup.generate');
+        Route::get('/admin/backup/generate-php', [App\Http\Controllers\DatabaseBackupController::class, 'downloadBackupUsingPHP'])->name('admin.backup.generate-php');
+    });
+
 });
 
