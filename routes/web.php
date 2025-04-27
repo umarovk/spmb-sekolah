@@ -35,6 +35,8 @@ Route::resource('siswa', StudentController::class)->names([
 ]);
 Route::get('/tabelsiswa', [StudentController::class, 'tabelsiswa'])->name('tabelsiswa');
 Route::get('/{id}/edit', [StudentController::class, 'edit'])->name('siswa.editdata');
+Route::get('/siswa/{siswa}/print/surat-keterangan', [StudentController::class, 'printSuratKeterangan'])
+    ->name('siswa.print.surat-keterangan');
 // Route::get('/{id}/ubah', [StudentController::class, 'ubah'])->name('siswa.ubah'); //INI WORK
 
 Route::resource('payments', PaymentController::class)->names([

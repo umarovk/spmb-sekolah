@@ -263,10 +263,10 @@ if (!function_exists('terbilang')) {
                     </div>
                 </div>
                 <div class="col-6">
-                    <p class="text-right">Petugas Teller</p>
+                    <p class="text-center">Petugas Teller</p>
                     <br>
                     <br>
-                    <p class="text-right">{{ $payment->keterangan }}</p>
+                    <p class="text-center">({{ $payment->keterangan }})</p>
                 </div>
             </div>
         </div>
@@ -369,10 +369,10 @@ if (!function_exists('terbilang')) {
                     </div>
                 </div>
                 <div class="col-6">
-                    <p class="text-right">Petugas Teller</p>
+                    <p class="text-center">Petugas Teller</p>
                     <br>
                     <br>
-                    <p class="text-right">{{ $payment->keterangan }}</p>
+                    <p class="text-center">({{ $payment->keterangan }})</p>
                 </div>
             </div>
         </div>
@@ -475,10 +475,10 @@ if (!function_exists('terbilang')) {
                     </div>
                 </div>
                 <div class="col-6">
-                    <p class="text-right">Petugas Teller</p>
+                    <p class="text-center">Petugas Teller</p>
                     <br>
                     <br>
-                    <p class="text-right">{{ $payment->keterangan }}</p>
+                    <p class="text-center">({{ $payment->keterangan }})</p>
                 </div>
             </div>
         </div>

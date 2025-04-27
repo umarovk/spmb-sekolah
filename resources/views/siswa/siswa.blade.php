@@ -156,6 +156,14 @@
                                                 >
                                                     <i class="bi bi-pencil"></i> Edit
                                                 </a>
+                                                <a
+                                                    href="{{ route('siswa.print.surat-keterangan', $dt->id) }}"
+                                                    class="btn btn-info"
+                                                    target="_blank"
+                                                    title="Cetak Surat Keterangan"
+                                                >
+                                                    <i class="bi bi-printer"></i> Surat
+                                                </a>
                                             </td>
                                         </tr>
                                     @empty

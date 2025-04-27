@@ -363,4 +363,10 @@ class StudentController extends Controller
 
         return view('siswa.test', compact('datasiswa', 'search', 'perPage'));
     }
+
+    public function printSuratKeterangan(Siswa $siswa)
+    {
+        $tanggal = now()->translatedFormat('d F Y');
+        return view('siswa.surat-keterangan', compact('siswa', 'tanggal'));
+    }
 }
