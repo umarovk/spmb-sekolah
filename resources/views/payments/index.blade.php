@@ -1,98 +1,110 @@
 @extends('partials.master')
 
 @section('content')
-    <div class="container">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h4>Daftar Pembayaran</h4>
-                <a
-                    href="{{ route('payments.create') }}"
-                    class="btn btn-primary"
-                >Tambah Pembayaran</a>
-            </div>
-            <div class="card-body">
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Kode Bayar</th>
-                                <th>Nama Siswa</th>
-                                <th>Pembayaran</th>
-                                <th>Nominal</th>
-                                <th>Tanggal</th>
-                                <th>Teller</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($payments as $payment)
-                                <tr>
-                                    <td>{{ $payment->kode_bayar }}</td>
-                                    <td>
-                                        <a href="{{ route('payments.by.siswa', $payment->siswa_id) }}">
-                                            {{ $payment->siswa->namasiswa ?? 'Data siswa tidak ditemukan' }}
-                                        </a>
-                                    </td>
-                                    <td>{{ $payment->nama_pembayaran }}</td>
-                                    <td>Rp {{ number_format($payment->nominal, 0, ',', '.') }}</td>
-                                    <td>{{ $payment->tanggal_bayar->format('d/m/Y') }}</td>
-                                    <td>{{ $payment->teller }}</td>
-                                    <td>
-                                        <div
-                                            class="btn-group"
-                                            role="group"
+    <main class="app-main">
+        <div class="app-content-header">
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h3 class="card-title">Data Pembayaran Siswa</h3>
+                            </div>
+                            <div class="col-md-4">
+                                <form
+                                    action="{{ route('payments.index') }}"
+                                    method="GET"
+                                    class="float-end"
+                                >
+                                    <div class="input-group">
+                                        <input
+                                            type="text"
+                                            name="search"
+                                            class="form-control form-control-sm"
+                                            placeholder="Cari nama siswa..."
+                                            value="{{ $search ?? '' }}"
                                         >
+                                        <button
+                                            class="btn btn-primary btn-sm"
+                                            type="submit"
+                                        >
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                        @if ($search)
                                             <a
-                                                href="{{ route('payments.show', $payment->id) }}"
-                                                class="btn btn-sm btn-info"
+                                                href="{{ route('payments.index') }}"
+                                                class="btn btn-secondary btn-sm"
                                             >
-                                                <i class="bi bi-eye"></i> Detail
+                                                <i class="bi bi-x-circle"></i>
                                             </a>
-                                            <a
-                                                href="{{ route('payments.edit', $payment->id) }}"
-                                                class="btn btn-sm btn-warning"
-                                            >
-                                                <i class="bi bi-pencil"></i> Edit
-                                            </a>
-                                            <form
-                                                action="{{ route('payments.destroy', $payment->id) }}"
-                                                method="POST"
-                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')"
-                                            >
-                                                @csrf
-                                                @method('DELETE')
-                                                <button
-                                                    type="submit"
-                                                    class="btn btn-sm btn-danger"
-                                                >
-                                                    <i class="bi bi-trash"></i> Hapus
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td
-                                        colspan="7"
-                                        class="text-center"
-                                    >Tidak ada data pembayaran</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+                                        @endif
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Tampilkan alert jika tidak ada hasil pencarian -->
+                        @if ($search && $siswas->isEmpty())
+                            <div class="alert alert-info">
+                                Tidak ditemukan siswa dengan nama yang mengandung "{{ $search }}"
+                            </div>
+                        @endif
 
-                <div class="d-flex justify-content-center mt-3">
-                    {{ $payments->links() }}
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead class="bg-primary text-white">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama Siswa</th>
+                                        <th>Jurusan</th>
+                                        <th>Total Pembayaran</th>
+                                        <th width="200px">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($siswas as $index => $siswa)
+                                        <tr>
+                                            <td>{{ $index + 1 }}</td>
+                                            <td>{{ $siswa->namasiswa }}</td>
+                                            <td>{{ $siswa->jurusan }}</td>
+                                            <td>
+                                                Rp {{ number_format($siswa->pembayarans->sum('nominal'), 0, ',', '.') }}
+                                            </td>
+                                            <td>
+                                                <div
+                                                    class="btn-group"
+                                                    role="group"
+                                                >
+                                                    <a
+                                                        href="{{ route('payments.create', ['siswa_id' => $siswa->id]) }}"
+                                                        class="btn btn-success btn-sm"
+                                                    >
+                                                        <i class="bi bi-plus-circle"></i> Tambah Pembayaran
+                                                    </a>
+                                                    <a
+                                                        href="{{ route('payments.show', $siswa->id) }}"
+                                                        class="btn btn-info btn-sm ms-1"
+                                                    >
+                                                        <i class="bi bi-eye"></i> Detail
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td
+                                                colspan="5"
+                                                class="text-center"
+                                            >Tidak ada data siswa</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 @endsection

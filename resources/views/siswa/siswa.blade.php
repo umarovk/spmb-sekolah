@@ -2,129 +2,196 @@
 
 @section('isisiswa')
     <main class="app-main">
-        <!--begin::App Content Header-->
         <div class="app-content-header">
-            <!--begin::Container-->
             <div class="container-fluid">
-                <!-- /.row -->
                 <h1>Data Calon Siswa Baru</h1>
 
-                <button
-                    class="btn btn-success"
-                    onclick="window.location.href='{{ route('siswa.create') }}'"
-                >Input data siswa
-                </button>
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        <button
+                            class="btn btn-success"
+                            onclick="window.location.href='{{ route('siswa.create') }}'"
+                        >
+                            Input data siswa
+                        </button>
+                    </div>
+                </div>
 
-
-                <div class="row mt-3">
+                <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Responsive Hover Table</h3>
-
-                                <div class="card-tools">
-                                    <div
-                                        class="input-group input-group-sm"
-                                        style="width: 150px;"
-                                    >
-                                        <input
-                                            type="text"
-                                            name="table_search"
-                                            class="form-control float-right"
-                                            placeholder="Search"
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <form
+                                            action="{{ route('tabelsiswa') }}"
+                                            method="GET"
+                                            class="form-inline"
                                         >
-
-                                        <div class="input-group-append">
-                                            <button
-                                                type="submit"
-                                                class="btn btn-default"
+                                            <div class="input-group">
+                                                <input
+                                                    type="text"
+                                                    name="search"
+                                                    class="form-control"
+                                                    placeholder="Cari nama siswa..."
+                                                    value="{{ $search ?? '' }}"
+                                                >
+                                                <button
+                                                    class="btn btn-primary"
+                                                    type="submit"
+                                                >
+                                                    <i class="bi bi-search"></i> Cari
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="float-end">
+                                            <form
+                                                action="{{ route('tabelsiswa') }}"
+                                                method="GET"
+                                                class="form-inline"
                                             >
-                                                <i class="fas fa-search"></i>
-                                            </button>
+                                                <div class="input-group">
+                                                    <label class="input-group-text">Tampilkan</label>
+                                                    <select
+                                                        class="form-select"
+                                                        name="perPage"
+                                                        onchange="this.form.submit()"
+                                                    >
+                                                        <option
+                                                            value="10"
+                                                            {{ ($perPage ?? 10) == 10 ? 'selected' : '' }}
+                                                        >10</option>
+                                                        <option
+                                                            value="25"
+                                                            {{ ($perPage ?? 10) == 25 ? 'selected' : '' }}
+                                                        >25</option>
+                                                        <option
+                                                            value="50"
+                                                            {{ ($perPage ?? 10) == 50 ? 'selected' : '' }}
+                                                        >50</option>
+                                                        <option
+                                                            value="100"
+                                                            {{ ($perPage ?? 10) == 100 ? 'selected' : '' }}
+                                                        >100</option>
+                                                    </select>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- /.card-header -->
-                            <div class="card-body table-responsive p-0">
-                                <table class="table table-hover text-nowrap">
-                                    <thead>
+                        </div>
+
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-hover text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>Nomor</th>
+                                        <th>Nama</th>
+                                        <th>Jurusan</th>
+                                        <th>Agama</th>
+                                        <th>Gender</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($datasiswa as $dt)
                                         <tr>
-                                            <th>Nomor</th>
-                                            <th>Nama</th>
-                                            <th>Jurusan</th>
-                                            <th>Agama</th>
-                                            <th>Gender</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {{-- @foreach ($dtsiswa as $dt) --}}
-                                        @forelse ($datasiswa as $dt)
-                                            <tr>
-                                                {{-- buat looping penomoran --}}
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $dt->namasiswa }}</td>
-                                                <td>{{ $dt->jurusan }}</td>
-                                                <td>{{ $dt->agama ?? '-' }}</td>
-                                                <td>{{ $dt->jeniskelamin }}</td>
-                                                <td>Status Bayar</td>
-                                                <td>
+                                            <td>{{ ($datasiswa->currentPage() - 1) * $datasiswa->perPage() + $loop->iteration }}
+                                            </td>
+                                            {{-- <td>{{ $loop->iteration }}</td> --}}
+                                            <td>{{ $dt->namasiswa }}</td>
+                                            <td>{{ $dt->jurusan }}</td>
+                                            <td>{{ $dt->agama ?? '-' }}</td>
+                                            <td>{{ $dt->jeniskelamin }}</td>
+                                            <td>SKL</td>
+                                            <td>
+
+                                                {{-- FITUR HAPUS DATA SISWA --}}
+                                                {{-- <form
+                                                    action="{{ route('siswa.destroy', $dt->id) }}"
+                                                    method="POST"
+                                                    style="display:inline;"
+                                                    onsubmit="return confirm('Yakin ingin menghapus dokumen ini?')"
+                                                >
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button
+                                                        type="submit"
+                                                        class="btn btn-danger"
+                                                    >Hapus</button>
+                                                </form> --}}
+
+                                                @if ($dt->pembayarans()->exists())
+                                                    <button
+                                                        class="btn btn-danger"
+                                                        disabled
+                                                        title="Tidak dapat dihapus karena memiliki pembayaran"
+                                                    >
+                                                        <i class="bi bi-trash"></i> Hapus
+                                                    </button>
+                                                @else
                                                     <form
                                                         action="{{ route('siswa.destroy', $dt->id) }}"
                                                         method="POST"
                                                         style="display:inline;"
-                                                        onsubmit="return confirm('Yakin ingin menghapus dokumen ini?')"
+                                                        onsubmit="return confirm('Yakin ingin menghapus data siswa ini?')"
                                                     >
                                                         @csrf
                                                         @method('DELETE')
                                                         <button
                                                             type="submit"
                                                             class="btn btn-danger"
-                                                        >Hapus</button>
+                                                        >
+                                                            <i class="bi bi-trash"></i> Hapus
+                                                        </button>
                                                     </form>
-                                                    <a
-                                                        href="{{ route('siswa.editdata', $dt->id) }}"
-                                                        class="btn btn-primary"
-                                                    >Edit</a>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <div class="alert alert-danger">
-                                                Data Post belum Tersedia.
-                                            </div>
-                                        @endforelse ($dtsiswa as $dt)
-                                        {{-- @endforeach --}}
-                                    </tbody>
-                                </table>
-                                {{-- {{ $datasiswa->links() }} --}}
-                            </div>
-                            <!-- /.card-body -->
+                                                @endif
+                                                <a
+                                                    href="{{ route('siswa.editdata', $dt->id) }}"
+                                                    class="btn btn-primary"
+                                                >
+                                                    <i class="bi bi-pencil"></i> Edit
+                                                </a>
+                                                <a
+                                                    href="{{ route('siswa.print.surat-keterangan', $dt->id) }}"
+                                                    class="btn btn-info"
+                                                    target="_blank"
+                                                    title="Cetak Surat Keterangan"
+                                                >
+                                                    <i class="bi bi-printer"></i> Surat
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td
+                                                colspan="7"
+                                                class="text-center"
+                                            >Data siswa tidak ditemukan</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         </div>
-                        <!-- /.card -->
+
+                        <div class="card-footer">
+                            <div class="mb-4 mt-4">
+
+                                <div class="d-flex justify-content-end">
+                                    {{ $datasiswa->appends(['search' => $search, 'perPage' => $perPage])->links('vendor.pagination.custom') }}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- /.row -->
             </div>
-            <!--end::Container-->
         </div>
-        <!--end::App Content-->
+        </div>
     </main>
-    <!--end::App Main-->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-    <script>
-        //message with toastr
-        @if (session()->has('success'))
-
-            toastr.success('{{ session('success') }}', 'BERHASIL!');
-        @elseif (session()->has('error'))
-
-            toastr.error('{{ session('error') }}', 'GAGAL!');
-        @endif
-    </script>
+    <!-- ... existing scripts ... -->
 @endsection

@@ -86,6 +86,107 @@
                                                             <div class="invalid-feedback">Pilih Jurusan</div>
                                                         </div>
 
+                                                        {{-- batas --}}
+
+                                                        <div class="col-md-6">
+                                                            <label
+                                                                for="validationCustom01"
+                                                                class="form-label"
+                                                                name="sekolah_asal"
+                                                            >Sekolah Asal</label>
+                                                            <input
+                                                                type="text"
+                                                                class="form-control"
+                                                                id="validationCustom01"
+                                                                placeholder="Sekolah Asal"
+                                                                name="sekolah_asal"
+                                                                required
+                                                            />
+                                                        </div>
+
+                                                        {{-- batas --}}
+
+                                                        <div class="col-md-6">
+                                                            <label
+                                                                for="validationCustom03"
+                                                                class="form-label"
+                                                            >Gender</label>
+                                                            <select
+                                                                name="jeniskelamin"
+                                                                class="form-select"
+                                                                required
+                                                            >
+                                                                <option value="">Jenis Kelamin</option>
+                                                                <option value="Laki-laki">Laki-laki</option>
+                                                                <option value="Perempuan">Perempuan</option>
+                                                            </select>
+                                                            <div class="invalid-feedback">Masukan Gender</div>
+                                                        </div>
+
+                                                        {{-- batas --}}
+
+                                                        <div class="col-md-6">
+                                                            <label
+                                                                for="validationCustomUsername"
+                                                                class="form-label"
+                                                                name="tempatlahir"
+                                                            >Tempat Lahir</label>
+                                                            <div class="input-group has-validation">
+                                                                <input
+                                                                    type="text"
+                                                                    class="form-control"
+                                                                    id="validationCustom01"
+                                                                    placeholder="Tempat Lahir"
+                                                                    name="tempatlahir"
+                                                                    required
+                                                                />
+                                                                <div class="invalid-feedback">Tempat Lahir</div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        {{-- batas --}}
+
+                                                        <div class="col-md-6">
+                                                            <label
+                                                                for="validationCustomUsername"
+                                                                class="form-label"
+                                                            >Tanggal Lahir</label>
+                                                            <div class="input-group has-validation">
+                                                                <input
+                                                                    type="date"
+                                                                    class="form-control"
+                                                                    id="validationCustom01"
+                                                                    placeholder="Tanggal Lahir"
+                                                                    name="tanggallahir"
+                                                                    required
+                                                                />
+                                                                <div class="invalid-feedback">Tanggal Lahir</div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        {{-- batas --}}
+
+                                                        <div class="col-md-6">
+                                                            <label
+                                                                for="validationCustomUsername"
+                                                                class="form-label"
+                                                                name="alamat"
+                                                            >Alamat</label>
+                                                            <div class="input-group has-validation">
+                                                                <textarea
+                                                                    type="textarea"
+                                                                    class="form-control"
+                                                                    id="validationCustom01"
+                                                                    placeholder="Alamat"
+                                                                    name="alamat"
+                                                                ></textarea>
+                                                                <div class="invalid-feedback">Tulis Alamat</div>
+                                                            </div>
+                                                        </div>
+
+
                                                         <div class="col-md-3">
                                                             <label
                                                                 for="validationCustomUsername"
@@ -123,64 +224,9 @@
                                                         </div>
 
 
-                                                        {{-- batas --}}
-
-                                                        <div class="col-md-6">
-                                                            <label
-                                                                for="validationCustom03"
-                                                                class="form-label"
-                                                            >Gender</label>
-                                                            <select
-                                                                name="jeniskelamin"
-                                                                class="form-select"
-                                                                required
-                                                            >
-                                                                <option value="">Jenis Kelamin</option>
-                                                                <option value="Laki-laki">Laki-laki</option>
-                                                                <option value="Perempuan">Perempuan</option>
-                                                            </select>
-                                                            <div class="invalid-feedback">Masukan Gender</div>
-                                                        </div>
-
-                                                        {{-- batas --}}
-
-                                                        <div class="col-md-6">
-                                                            <label
-                                                                for="validationCustomUsername"
-                                                                class="form-label"
-                                                                name="tempatlahir"
-                                                            >Tempat Lahir</label>
-                                                            <div class="input-group has-validation">
-                                                                <input
-                                                                    type="text"
-                                                                    class="form-control"
-                                                                    id="validationCustom01"
-                                                                    placeholder="Tempat Lahir"
-                                                                    name="tempatlahir"
-                                                                />
-                                                                <div class="invalid-feedback">Tempat Lahir</div>
-                                                            </div>
-                                                        </div>
 
 
-                                                        {{-- batas --}}
 
-                                                        <div class="col-md-6">
-                                                            <label
-                                                                for="validationCustomUsername"
-                                                                class="form-label"
-                                                            >Tanggal Lahir</label>
-                                                            <div class="input-group has-validation">
-                                                                <input
-                                                                    type="date"
-                                                                    class="form-control"
-                                                                    id="validationCustom01"
-                                                                    placeholder="Tanggal Lahir"
-                                                                    name="tanggallahir"
-                                                                />
-                                                                <div class="invalid-feedback">Tanggal Lahir</div>
-                                                            </div>
-                                                        </div>
 
 
 
@@ -317,43 +363,10 @@
                                                         </div>
 
 
-                                                        {{-- batas --}}
-
-                                                        <div class="col-md-6">
-                                                            <label
-                                                                for="validationCustomUsername"
-                                                                class="form-label"
-                                                                name="alamat"
-                                                            >Alamat</label>
-                                                            <div class="input-group has-validation">
-                                                                <textarea
-                                                                    type="textarea"
-                                                                    class="form-control"
-                                                                    id="validationCustom01"
-                                                                    placeholder="Alamat"
-                                                                    name="alamat"
-                                                                ></textarea>
-                                                                <div class="invalid-feedback">Tulis Alamat</div>
-                                                            </div>
-                                                        </div>
 
 
-                                                        {{-- batas --}}
 
-                                                        <div class="col-md-6">
-                                                            <label
-                                                                for="validationCustom01"
-                                                                class="form-label"
-                                                                name="sekolah_asal"
-                                                            >Sekolah Asal</label>
-                                                            <input
-                                                                type="text"
-                                                                class="form-control"
-                                                                id="validationCustom01"
-                                                                placeholder="Sekolah Asal"
-                                                                name="sekolah_asal"
-                                                            />
-                                                        </div>
+
 
                                                         {{-- batas --}}
 
