@@ -4,10 +4,12 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\Middleware;
+use App\Models\User;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
 
-class CheckRole
+class CheckRole extends Middleware
 {
     public function handle(Request $request, Closure $next, ...$roles)
     {
