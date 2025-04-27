@@ -1,156 +1,526 @@
-@extends('partials.master')
+<section class="sheet padding-10mm">
+    <div class="container">
 
-@section('isisiswa')
-    <main class="app-main">
-        <div class="app-content-header">
-            <div class="container-fluid">
-                <h1>Data Calon Siswa Baru</h1>
+        <div class="row">
+            <div class="col">
+                <img
+                    src="img/logo smk cokro.png"
+                    alt="logo smkc"
+                    style="width: 140px; margin-left:20px;"
+                >
 
-                <div class="row mb-3">
-                    <div class="col-md-8">
-                        <button
-                            class="btn btn-success"
-                            onclick="window.location.href='{{ route('siswa.create') }}'"
-                        >
-                            Input data siswa
-                        </button>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <form
-                                            action="{{ route('tabelsiswa') }}"
-                                            method="GET"
-                                            class="form-inline"
-                                        >
-                                            <div class="input-group">
-                                                <input
-                                                    type="text"
-                                                    name="search"
-                                                    class="form-control"
-                                                    placeholder="Cari nama siswa..."
-                                                    value="{{ $search ?? '' }}"
-                                                >
-                                                <button
-                                                    class="btn btn-primary"
-                                                    type="submit"
-                                                >
-                                                    <i class="bi bi-search"></i> Cari
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="float-end">
-                                            <form
-                                                action="{{ route('tabelsiswa') }}"
-                                                method="GET"
-                                                class="form-inline"
-                                            >
-                                                <div class="input-group">
-                                                    <label class="input-group-text">Tampilkan</label>
-                                                    <select
-                                                        class="form-select"
-                                                        name="perPage"
-                                                        onchange="this.form.submit()"
-                                                    >
-                                                        <option
-                                                            value="10"
-                                                            {{ ($perPage ?? 10) == 10 ? 'selected' : '' }}
-                                                        >10</option>
-                                                        <option
-                                                            value="25"
-                                                            {{ ($perPage ?? 10) == 25 ? 'selected' : '' }}
-                                                        >25</option>
-                                                        <option
-                                                            value="50"
-                                                            {{ ($perPage ?? 10) == 50 ? 'selected' : '' }}
-                                                        >50</option>
-                                                        <option
-                                                            value="100"
-                                                            {{ ($perPage ?? 10) == 100 ? 'selected' : '' }}
-                                                        >100</option>
-                                                    </select>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card-body table-responsive p-0">
-                            <table class="table table-hover text-nowrap">
-                                <thead>
-                                    <tr>
-                                        <th>Nomor</th>
-                                        <th>Nama</th>
-                                        <th>Jurusan</th>
-                                        <th>Agama</th>
-                                        <th>Gender</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($datasiswa as $dt)
-                                        <tr>
-                                            <td>{{ ($datasiswa->currentPage() - 1) * $datasiswa->perPage() + $loop->iteration }}
-                                            </td>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $dt->namasiswa }}</td>
-                                            <td>{{ $dt->jurusan }}</td>
-                                            <td>{{ $dt->agama ?? '-' }}</td>
-                                            <td>{{ $dt->jeniskelamin }}</td>
-                                            <td>Status Bayar</td>
-                                            <td>
-                                                <form
-                                                    action="{{ route('siswa.destroy', $dt->id) }}"
-                                                    method="POST"
-                                                    style="display:inline;"
-                                                    onsubmit="return confirm('Yakin ingin menghapus dokumen ini?')"
-                                                >
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button
-                                                        type="submit"
-                                                        class="btn btn-danger"
-                                                    >Hapus</button>
-                                                </form>
-                                                <a
-                                                    href="{{ route('siswa.editdata', $dt->id) }}"
-                                                    class="btn btn-primary"
-                                                >Edit</a>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td
-                                                colspan="7"
-                                                class="text-center"
-                                            >Data siswa tidak ditemukan</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="card-footer">
-                            <div class="d-flex justify-content-end">
-                                {{ $datasiswa->appends(['search' => $search, 'perPage' => $perPage])->links() }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <h1
+                    class="text-center"
+                    style="margin-top:-120px;"
+                >SMK COKROAMINOTO WANADADI</h1>
+                <h5 class="text-center">Jl. Hos. Cokroaminoto No. 02 Wanadadi Banjarnegara</h5>
+                <h5 class="text-center">Jawa Tengah 53461 Telp. 0812 2645 3837</h5>
+                <hr class="text border-10 opacity-100">
             </div>
         </div>
-        </div>
-    </main>
 
-    <!-- ... existing scripts ... -->
-@endsection
+        <div
+            class="row"
+            style="margin-left: 0px;"
+        >
+
+            <div class="col">
+                <h5 class="text-left">Kwitansi Daftar Ulang - <?= $tampildatasiswa['gelombang'] ?></h5>
+
+                <label for="nopen"> <b>No. Pendaftaran </b></label>
+                <label for="isinopen"><b>: <?= $siswa['kodedaftar'] ?></b></label>
+            </div>
+
+            <div class="col">
+                <h5 class="text-right text-success"><b>U/ BENDAHARA</b></h5>
+                <label for="tanggal"><b> Tanggal </b></label>
+                <label for="isitanggal"><b>: <?= $siswa['tanggal'] ?></b></label>
+            </div>
+
+        </div>
+
+        <div
+            class="row"
+            style="margin-left: 0px;"
+        >
+
+            <div class="col">
+                <label for="nama"><b> Nama </b></label>
+                <label for="isinama"><b>: <?= $tampildatasiswa['nama'] ?></b></label>
+            </div>
+
+            <div class="col">
+                <label for="jurusan"><b> Jurusan </b></label>
+                <label for="isijurusan"><b>: <?= $tampildatasiswa['jurusan'] ?></b></label>
+            </div>
+
+        </div>
+        <!-- <hr class="text border-10 opacity-100"> -->
+
+        <div class="row">
+            <div
+                class="col"
+                style="margin-left: 13px;"
+            >
+                <p>Pembayaran daftar ulang <?= $gelombangke ?> sebesar <?php
+                if ($gelombangke == 'Gelombang 1') {
+                    echo $biayagel1;
+                } elseif ($gelombangke == 'Gelombang 2') {
+                    echo $biayagel2;
+                } elseif ($gelombangke == 'Gelombang 3') {
+                    echo $biayagel3;
+                } else {
+                    echo 'data gelombang error';
+                }
+                ?>.
+                    <b>Telah dibayarkan sejumlah : Rp. <?= number_format($siswa['bayar'], 0, ',', '.') ?></b>.
+
+                    Terimakasih telah bergabung di SMK Cokroaminoto Wanadadi. Kwitansi ini sebagai bukti pembayaran
+                    peserta didik baru 2023-2024. Mohon disimpan dengan baik.
+                </p>
+                <br>
+            </div>
+        </div>
+
+        <div class="row">
+            <div
+                class="col"
+                style="margin-left: 13px;"
+            >
+                <p class="fw-bold">Diterima :</p>
+                Bahan Osis
+                <br>Bahan Pramuka
+                <br>Atribut, dasi, topi, badge
+            </div>
+            <div class="col text-center">
+                <p class="fw-bold">&nbsp;</p>
+                <input
+                    type="radio"
+                    class="form-check-input"
+                >
+                <br><input
+                    type="radio"
+                    class="form-check-input"
+                >
+                <br><input
+                    type="radio"
+                    class="form-check-input"
+                >
+            </div>
+            <div class="col">
+
+            </div>
+            <div class="col">
+                <p class=" text-center">Petugas</p>
+                <br>
+                <br>
+                <p class=" text-center"><?= $siswa['petugas'] ?></p>
+
+            </div>
+            <div class="col">
+                <p class="text-center">Bendahara</p>
+                <br>
+                <br>
+                <p class=" text-center">(. . . . . . . . . . . . . . . . . . .)</p>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- KWITANSI 1 -->
+
+<section class="sheet padding-10mm">
+    <div class="container">
+
+        <div class="row">
+            <div class="col">
+                <img
+                    src="img/logo smk cokro.png"
+                    alt="logo smkc"
+                    style="width: 140px; margin-left:20px;"
+                >
+
+                <h1
+                    class="text-center"
+                    style="margin-top:-120px;"
+                >SMK COKROAMINOTO WANADADI</h1>
+                <h5 class="text-center">Jl. Hos. Cokroaminoto No. 02 Wanadadi Banjarnegara</h5>
+                <h5 class="text-center">Jawa Tengah 53461 Telp. 0812 2645 3837</h5>
+                <hr class="text border-10 opacity-100">
+            </div>
+        </div>
+
+        <div
+            class="row"
+            style="margin-left: 0px;"
+        >
+
+            <div class="col">
+                <h5 class="text-left">Kwitansi Daftar Ulang - <?= $tampildatasiswa['gelombang'] ?></h5>
+
+                <label for="nopen"> <b>No. Pendaftaran </b></label>
+                <label for="isinopen"><b>: <?= $siswa['kodedaftar'] ?></b></label>
+            </div>
+
+            <div class="col">
+                <h5 class="text-right text-success"><b>U/ SISWA</b></h5>
+                <label for="tanggal"><b> Tanggal </b></label>
+                <label for="isitanggal"><b>: <?= $siswa['tanggal'] ?></b></label>
+            </div>
+
+        </div>
+
+        <div
+            class="row"
+            style="margin-left: 0px;"
+        >
+
+            <div class="col">
+                <label for="nama"><b> Nama </b></label>
+                <label for="isinama"><b>: <?= $tampildatasiswa['nama'] ?></b></label>
+            </div>
+
+            <div class="col">
+                <label for="jurusan"><b> Jurusan </b></label>
+                <label for="isijurusan"><b>: <?= $tampildatasiswa['jurusan'] ?></b></label>
+            </div>
+
+        </div>
+        <!-- <hr class="text border-10 opacity-100"> -->
+
+        <div class="row">
+            <div
+                class="col"
+                style="margin-left: 13px;"
+            >
+                <p>Pembayaran daftar ulang <?= $gelombangke ?> sebesar <?php
+                if ($gelombangke == 'Gelombang 1') {
+                    echo $biayagel1;
+                } elseif ($gelombangke == 'Gelombang 2') {
+                    echo $biayagel2;
+                } elseif ($gelombangke == 'Gelombang 3') {
+                    echo $biayagel3;
+                } else {
+                    echo 'data gelombang error';
+                }
+                ?>.
+                    <b>Telah dibayarkan sejumlah : Rp. <?= number_format($siswa['bayar'], 0, ',', '.') ?></b>.
+
+                    Terimakasih telah bergabung di SMK Cokroaminoto Wanadadi. Kwitansi ini sebagai bukti pembayaran
+                    peserta didik baru 2023-2024. Mohon disimpan dengan baik.
+                </p>
+                <br>
+            </div>
+        </div>
+
+        <div class="row">
+            <div
+                class="col"
+                style="margin-left: 13px;"
+            >
+                <p class="fw-bold">Diterima :</p>
+                Bahan Osis
+                <br>Bahan Pramuka
+                <br>Atribut, dasi, topi, badge
+            </div>
+            <div class="col text-center">
+                <p class="fw-bold">&nbsp;</p>
+                <input
+                    type="radio"
+                    class="form-check-input"
+                >
+                <br><input
+                    type="radio"
+                    class="form-check-input"
+                >
+                <br><input
+                    type="radio"
+                    class="form-check-input"
+                >
+            </div>
+            <div class="col">
+
+            </div>
+            <div class="col">
+                <p class=" text-center">Petugas</p>
+                <br>
+                <br>
+                <p class=" text-center"><?= $siswa['petugas'] ?></p>
+
+            </div>
+            <div class="col">
+                <p class="text-center">Bendahara</p>
+                <br>
+                <br>
+                <p class=" text-center">(. . . . . . . . . . . . . . . . . . .)</p>
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- KWITANSI 1 -->
+
+<section class="sheet padding-10mm">
+    <div class="container">
+
+        <div class="row">
+            <div class="col">
+                <img
+                    src="img/logo smk cokro.png"
+                    alt="logo smkc"
+                    style="width: 140px; margin-left:20px;"
+                >
+
+                <h1
+                    class="text-center"
+                    style="margin-top:-120px;"
+                >SMK COKROAMINOTO WANADADI</h1>
+                <h5 class="text-center">Jl. Hos. Cokroaminoto No. 02 Wanadadi Banjarnegara</h5>
+                <h5 class="text-center">Jawa Tengah 53461 Telp. 0812 2645 3837</h5>
+                <hr class="text border-10 opacity-100">
+            </div>
+        </div>
+
+        <div
+            class="row"
+            style="margin-left: 0px;"
+        >
+
+            <div class="col">
+                <h5 class="text-left">Kwitansi Daftar Ulang - <?= $tampildatasiswa['gelombang'] ?></h5>
+
+                <label for="nopen"> <b>No. Pendaftaran </b></label>
+                <label for="isinopen"><b>: <?= $siswa['kodedaftar'] ?></b></label>
+            </div>
+
+            <div class="col">
+                <h5 class="text-right text-success"><b>U/ ARSIP</b></h5>
+                <label for="tanggal"><b> Tanggal </b></label>
+                <label for="isitanggal"><b>: <?= $siswa['tanggal'] ?></b></label>
+            </div>
+
+        </div>
+
+        <div
+            class="row"
+            style="margin-left: 0px;"
+        >
+
+            <div class="col">
+                <label for="nama"><b> Nama </b></label>
+                <label for="isinama"><b>: <?= $tampildatasiswa['nama'] ?></b></label>
+            </div>
+
+            <div class="col">
+                <label for="jurusan"><b> Jurusan </b></label>
+                <label for="isijurusan"><b>: <?= $tampildatasiswa['jurusan'] ?></b></label>
+            </div>
+
+        </div>
+        <!-- <hr class="text border-10 opacity-100"> -->
+
+        <div class="row">
+            <div
+                class="col"
+                style="margin-left: 13px;"
+            >
+                <p>Pembayaran daftar ulang <?= $gelombangke ?> sebesar <?php
+                if ($gelombangke == 'Gelombang 1') {
+                    echo $biayagel1;
+                } elseif ($gelombangke == 'Gelombang 2') {
+                    echo $biayagel2;
+                } elseif ($gelombangke == 'Gelombang 3') {
+                    echo $biayagel3;
+                } else {
+                    echo 'data gelombang error';
+                }
+                ?>.
+                    <b>Telah dibayarkan sejumlah : Rp. <?= number_format($siswa['bayar'], 0, ',', '.') ?></b>.
+
+                    Terimakasih telah bergabung di SMK Cokroaminoto Wanadadi. Kwitansi ini sebagai bukti pembayaran
+                    peserta didik baru 2023-2024. Mohon disimpan dengan baik.
+                </p>
+                <br>
+            </div>
+        </div>
+
+        <div class="row">
+            <div
+                class="col"
+                style="margin-left: 13px;"
+            >
+                <p class="fw-bold">Diterima :</p>
+                Bahan Osis
+                <br>Bahan Pramuka
+                <br>Atribut, dasi, topi, badge
+            </div>
+            <div class="col text-center">
+                <p class="fw-bold">&nbsp;</p>
+                <input
+                    type="radio"
+                    class="form-check-input"
+                >
+                <br><input
+                    type="radio"
+                    class="form-check-input"
+                >
+                <br><input
+                    type="radio"
+                    class="form-check-input"
+                >
+            </div>
+            <div class="col">
+
+            </div>
+            <div class="col">
+                <p class=" text-center">Petugas</p>
+                <br>
+                <br>
+                <p class=" text-center"><?= $siswa['petugas'] ?></p>
+
+            </div>
+            <div class="col">
+                <p class="text-center">Bendahara</p>
+                <br>
+                <br>
+                <p class=" text-center">(. . . . . . . . . . . . . . . . . . .)</p>
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- KWITANSI 1 -->
+
+<section class="sheet padding-10mm">
+    <div class="container">
+
+        <div class="row">
+            <div class="col">
+                <img
+                    src="img/logo smk cokro.png"
+                    alt="logo smkc"
+                    style="width: 140px; margin-left:20px;"
+                >
+
+                <h1
+                    class="text-center"
+                    style="margin-top:-120px;"
+                >SMK COKROAMINOTO WANADADI</h1>
+                <h5 class="text-center">Jl. Hos. Cokroaminoto No. 02 Wanadadi Banjarnegara</h5>
+                <h5 class="text-center">Jawa Tengah 53461 Telp. 0812 2645 3837</h5>
+                <hr class="text border-10 opacity-100">
+            </div>
+        </div>
+
+        <div
+            class="row"
+            style="margin-left: 0px;"
+        >
+
+            <div class="col">
+                <h5 class="text-left">Kwitansi Pengambilan Bahan Seragam</h5>
+
+                <label for="nopen"> <b>No. Pendaftaran </b></label>
+                <label for="isinopen"><b>: <?= $siswa['kodedaftar'] ?></b></label>
+            </div>
+
+            <div class="col">
+                <h5 class="text-right text-success"><b>U/ KOPERASI</b></h5>
+                <label for="tanggal"><b> Tanggal </b></label>
+                <label for="isitanggal"><b>: <?= $siswa['tanggal'] ?></b></label>
+            </div>
+
+        </div>
+
+        <div
+            class="row"
+            style="margin-left: 0px;"
+        >
+
+            <div class="col">
+                <label for="nama"><b> Nama </b></label>
+                <label for="isinama"><b>: <?= $tampildatasiswa['nama'] ?></b></label>
+            </div>
+
+            <div class="col">
+                <label for="jurusan"><b> Jurusan </b></label>
+                <label for="isijurusan"><b>: <?= $tampildatasiswa['jurusan'] ?></b></label>
+            </div>
+
+        </div>
+        <!-- <hr class="text border-10 opacity-100"> -->
+
+        <div class="row">
+            <div
+                class="col"
+                style="margin-left: 13px;"
+            >
+                <p>Pembayaran daftar ulang <?= $gelombangke ?> sebesar <?php
+                if ($gelombangke == 'Gelombang 1') {
+                    echo $biayagel1;
+                } elseif ($gelombangke == 'Gelombang 2') {
+                    echo $biayagel2;
+                } elseif ($gelombangke == 'Gelombang 3') {
+                    echo $biayagel3;
+                } else {
+                    echo 'data gelombang error';
+                }
+                ?>.
+                    <b>Telah dibayarkan sejumlah : Rp. <?= number_format($siswa['bayar'], 0, ',', '.') ?></b>.
+
+                    Terimakasih telah bergabung di SMK Cokroaminoto Wanadadi. Kwitansi ini sebagai bukti pembayaran
+                    peserta didik baru 2023-2024. Mohon disimpan dengan baik.
+                </p>
+                <br>
+            </div>
+        </div>
+
+        <div class="row">
+            <div
+                class="col"
+                style="margin-left: 13px;"
+            >
+                <p class="fw-bold">Diterima :</p>
+                Bahan Osis
+                <br>Bahan Pramuka
+                <br>Atribut, dasi, topi, badge
+            </div>
+            <div class="col text-center">
+                <p class="fw-bold">&nbsp;</p>
+                <input
+                    type="radio"
+                    class="form-check-input"
+                >
+                <br><input
+                    type="radio"
+                    class="form-check-input"
+                >
+                <br><input
+                    type="radio"
+                    class="form-check-input"
+                >
+            </div>
+            <div class="col">
+
+            </div>
+            <div class="col">
+                <p class=" text-center">KOPERASI</p>
+                <br>
+                <br>
+                <p class=" text-center"> . . . . . . . . . .</p>
+
+            </div>
+            <div class="col">
+                <p class="text-center">Bendahara</p>
+                <br>
+                <br>
+                <p class=" text-center">(. . . . . . . . . . . . . . . . . . .)</p>
+
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+
+</html>

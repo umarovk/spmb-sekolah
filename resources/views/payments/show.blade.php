@@ -17,9 +17,9 @@
                                         <th>Kode Bayar</th>
                                         <th>Nama Pembayaran</th>
                                         <th>Nominal</th>
-                                        <th>Keterangan</th>
+                                        <th>Penerima</th>
                                         <th>Tanggal Bayar</th>
-                                        <th>Teller</th>
+                                        {{-- <th>Teller</th> --}}
                                         <th>Print</th>
                                     </tr>
                                     <tbody>
@@ -32,38 +32,17 @@
                                                 <td>{{ $bayar->keterangan ?? '-' }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($bayar->tanggal_bayar)->format('d M Y') }}
                                                 </td>
-                                                <td>{{ $bayar->teller }}</td>
+                                                {{-- <td>{{ $bayar->teller }}</td> --}}
                                                 <td>
-                                                    <div class="btn-group">
-                                                        <button
-                                                            type="button"
-                                                            class="btn btn-info btn-sm dropdown-toggle"
-                                                            data-bs-toggle="dropdown"
-                                                            aria-expanded="false"
-                                                        >
-                                                            <i class="bi bi-printer"></i> Cetak
-                                                        </button>
-                                                        <ul class="dropdown-menu">
-                                                            <li>
-                                                                <a
-                                                                    class="dropdown-item"
-                                                                    href="{{ route('payments.print.kwitansi', $bayar->id) }}"
-                                                                    target="_blank"
-                                                                >
-                                                                    <i class="bi bi-receipt"></i> Kwitansi
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a
-                                                                    class="dropdown-item"
-                                                                    href="{{ route('payments.print.pdf', $bayar->id) }}"
-                                                                    target="_blank"
-                                                                >
-                                                                    <i class="bi bi-file-pdf"></i> PDF
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
+                                                    <a
+                                                        href="{{ route('payments.print.kwitansi', $bayar->id) }}"
+                                                        class="btn btn-outline-primary btn-sm"
+                                                        target="_blank"
+                                                        title="Cetak Kwitansi"
+                                                    >
+                                                        <i class="bi bi-receipt"></i>
+                                                        <span class="ms-1">Cetak</span>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         @endforeach

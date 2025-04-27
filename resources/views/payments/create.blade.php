@@ -70,11 +70,14 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Keterangan</label>
-                                <textarea
+                                <label class="form-label">Penerima Uang</label>
+                                <input
+                                    type="text"
                                     name="keterangan"
                                     class="form-control"
-                                >{{ old('keterangan') }}</textarea>
+                                    value="{{ old('keterangan') }}"
+                                    required
+                                >
                             </div>
 
                             <div class="d-flex justify-content-between">
