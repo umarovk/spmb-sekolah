@@ -78,8 +78,11 @@
         rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=delete"
     />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -104,13 +107,10 @@
                         </a>
                     </li>
                     <li class="nav-item d-none d-md-block"><a
-                            href="#"
+                            href="https://www.instagram.com/umarov.studio/"
                             class="nav-link"
-                        >Home</a></li>
-                    <li class="nav-item d-none d-md-block"><a
-                            href="#"
-                            class="nav-link"
-                        >Contact</a></li>
+                        >SPMB Apps {{ auth()->user()->created_at->format('Y') }} by TKJ SMKCWND</a></li>
+
                 </ul>
                 <!--end::Start Navbar Links-->
                 <!--begin::End Navbar Links-->
@@ -306,7 +306,7 @@
                                 class="user-image rounded-circle shadow"
                                 alt="User Image"
                             />
-                            <span class="d-none d-md-inline">Admin Tampan</span>
+                            <span class="d-none d-md-inline">{{ auth()->user()->name }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                             <!--begin::User Image-->
@@ -317,13 +317,13 @@
                                     alt="User Image"
                                 />
                                 <p>
-                                    Admin Tampan - Web Developer
-                                    <small>Member since March. 1924</small>
+                                    {{ auth()->user()->name }} - {{ ucfirst(auth()->user()->role) }}
+                                    <small>Member since {{ auth()->user()->created_at->format('M. Y') }}</small>
                                 </p>
                             </li>
                             <!--end::User Image-->
                             <!--begin::Menu Body-->
-                            <li class="user-body">
+                            {{-- <li class="user-body">
                                 <!--begin::Row-->
                                 <div class="row">
                                     <div class="col-4 text-center"><a href="#">Followers</a></div>
@@ -343,7 +343,7 @@
                                     href="#"
                                     class="btn btn-default btn-flat float-end"
                                 >Sign out</a>
-                            </li>
+                            </li> --}}
                             <!--end::Menu Footer-->
                         </ul>
                     </li>
@@ -367,620 +367,115 @@
                     class="brand-link"
                 >
                     <!--begin::Brand Image-->
-                    <img
+                    {{-- <img
                         src="../lte/dist/assets/img/AdminLTELogo.png"
                         alt="AdminLTE Logo"
                         class="brand-image opacity-75 shadow"
-                    />
+                    /> --}}
                     <!--end::Brand Image-->
                     <!--begin::Brand Text-->
-                    <span class="brand-text fw-light">SMKcwnd</span>
+                    <span class="brand-text fw-light">SPMB</span>
                     <!--end::Brand Text-->
                 </a>
                 <!--end::Brand Link-->
             </div>
             <!--end::Sidebar Brand-->
             <!--begin::Sidebar Wrapper-->
-            <div class="sidebar-wrapper">
-                <nav class="mt-2">
-                    <!--begin::Sidebar Menu-->
-                    <ul
-                        class="nav sidebar-menu flex-column"
-                        data-lte-toggle="treeview"
-                        role="menu"
-                        data-accordion="false"
-                    >
-                        <li class="nav-item menu-open">
-                            <a
-                                href="#"
-                                class="nav-link active"
-                            >
-                                <i class="nav-icon bi bi-speedometer"></i>
-                                <p>
-                                    Dashboard
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a
-                                        href="{{ route('tabelsiswa') }}"
-                                        class="nav-link active"
-                                    >
-                                        {{-- <a href="#" class="nav-link active"> --}}
+            @auth
+                <div class="sidebar-wrapper">
+                    <nav class="mt-2">
+                        <!--begin::Sidebar Menu-->
+                        <ul
+                            class="nav sidebar-menu flex-column"
+                            data-lte-toggle="treeview"
+                            role="menu"
+                            data-accordion="false"
+                        >
+                            <li class="nav-item menu-open">
+                                <a
+                                    href="{{ route('home') }}"
+                                    class="nav-link active"
+                                >
+                                    <i class="nav-icon bi bi-speedometer"></i>
+                                    <p>
+                                        Dashboard
+                                        <i class="nav-arrow bi bi-chevron-right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <!-- Student Management (Guest & Admin) -->
+                                    @if (auth()->user()->isAdmin() || auth()->user()->isGuest() || auth()->user()->isTeller())
+                                        <li class="nav-item">
+                                            <a
+                                                href="{{ route('tabelsiswa') }}"
+                                                class="nav-link active"
+                                            >
+                                                <i class="nav-icon bi bi-circle"></i>
+                                                <p>Data Siswa</p>
+                                            </a>
+                                        </li>
+                                    @endif
 
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Data Siswa</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a
-                                        href="../LTE/dist/pages/index2.html"
-                                        class="nav-link"
-                                    >
-                                        {{-- <a href="./index2.html" class="nav-link"> --}}
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Dashboard v2</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a
-                                        href="./index3.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Dashboard v3</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="./generate/theme.html"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-palette"></i>
-                                <p>Theme Generate</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="#"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-box-seam-fill"></i>
-                                <p>
-                                    Widgets
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a
-                                        href="./widgets/small-box.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Small Box</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a
-                                        href="./widgets/info-box.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>info Box</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a
-                                        href="./widgets/cards.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Cards</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="#"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-clipboard-fill"></i>
-                                <p>
-                                    Layout Options
-                                    <span class="nav-badge badge text-bg-secondary me-3">6</span>
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a
-                                        href="./layout/unfixed-sidebar.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Default Sidebar</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a
-                                        href="./layout/fixed-sidebar.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Fixed Sidebar</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a
-                                        href="./layout/layout-custom-area.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Layout <small>+ Custom Area </small></p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a
-                                        href="./layout/sidebar-mini.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Sidebar Mini</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a
-                                        href="./layout/collapsed-sidebar.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Sidebar Mini <small>+ Collapsed</small></p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a
-                                        href="./layout/logo-switch.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Sidebar Mini <small>+ Logo Switch</small></p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a
-                                        href="./layout/layout-rtl.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Layout RTL</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="#"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-tree-fill"></i>
-                                <p>
-                                    UI Elements
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a
-                                        href="./UI/general.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>General</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a
-                                        href="./UI/icons.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Icons</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a
-                                        href="./UI/timeline.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Timeline</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="#"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-pencil-square"></i>
-                                <p>
-                                    Forms
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a
-                                        href="./forms/general.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>General Elements</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="#"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-table"></i>
-                                <p>
-                                    Tables
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a
-                                        href="./tables/simple.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Simple Tables</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-header">EXAMPLES</li>
-                        <li class="nav-item">
-                            <a
-                                href="#"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-box-arrow-in-right"></i>
-                                <p>
-                                    Auth
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a
-                                        href="#"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-box-arrow-in-right"></i>
-                                        <p>
-                                            Version 1
-                                            <i class="nav-arrow bi bi-chevron-right"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
+
+
+                                    {{-- AKSES KE TEMPLATE ADMIN LTE --}}
+                                    {{-- <li class="nav-item">
+                                        <a
+                                            href="../LTE/dist/pages/index2.html"
+                                            class="nav-link"
+                                        >
+                                            <i class="nav-icon bi bi-circle"></i>
+                                            <p>Dashboard v2</p>
+                                        </a>
+                                    </li> --}}
+
+                                    <!-- Payment Management (Teller & Admin) -->
+                                    @if (auth()->user()->isAdmin() || auth()->user()->isTeller())
                                         <li class="nav-item">
                                             <a
-                                                href="./examples/login.html"
+                                                href="{{ route('payments.index') }}"
                                                 class="nav-link"
                                             >
                                                 <i class="nav-icon bi bi-circle"></i>
-                                                <p>Login</p>
+                                                <p>Pembayaran</p>
                                             </a>
                                         </li>
+                                    @endif
+
+                                    @if (auth()->user()->isAdmin())
                                         <li class="nav-item">
                                             <a
-                                                href="./examples/register.html"
+                                                href="{{ route('admin.backup.index') }}"
                                                 class="nav-link"
                                             >
-                                                <i class="nav-icon bi bi-circle"></i>
-                                                <p>Register</p>
+                                                <i class="nav-icon bi bi-database-down"></i>
+                                                <p>Backup Database</p>
                                             </a>
                                         </li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item">
-                                    <a
-                                        href="#"
-                                        class="nav-link"
+                                    @endif
+
+
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <form
+                                    action="{{ route('logout') }}"
+                                    method="POST"
+                                >
+                                    @csrf
+                                    <button
+                                        type="submit"
+                                        class="nav-link btn btn-link"
                                     >
-                                        <i class="nav-icon bi bi-box-arrow-in-right"></i>
-                                        <p>
-                                            Version 2
-                                            <i class="nav-arrow bi bi-chevron-right"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a
-                                                href="./examples/login-v2.html"
-                                                class="nav-link"
-                                            >
-                                                <i class="nav-icon bi bi-circle"></i>
-                                                <p>Login</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a
-                                                href="./examples/register-v2.html"
-                                                class="nav-link"
-                                            >
-                                                <i class="nav-icon bi bi-circle"></i>
-                                                <p>Register</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item">
-                                    <a
-                                        href="./examples/lockscreen.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Lockscreen</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-header">DOCUMENTATIONS</li>
-                        <li class="nav-item">
-                            <a
-                                href="./docs/introduction.html"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-download"></i>
-                                <p>Installation</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="./docs/layout.html"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-grip-horizontal"></i>
-                                <p>Layout</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="./docs/color-mode.html"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-star-half"></i>
-                                <p>Color Mode</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="#"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-ui-checks-grid"></i>
-                                <p>
-                                    Components
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a
-                                        href="./docs/components/main-header.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Main Header</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a
-                                        href="./docs/components/main-sidebar.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Main Sidebar</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="#"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-filetype-js"></i>
-                                <p>
-                                    Javascript
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a
-                                        href="./docs/javascript/treeview.html"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Treeview</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="./docs/browser-support.html"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-browser-edge"></i>
-                                <p>Browser Support</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="./docs/how-to-contribute.html"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-hand-thumbs-up-fill"></i>
-                                <p>How To Contribute</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="./docs/faq.html"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-question-circle-fill"></i>
-                                <p>FAQ</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="./docs/license.html"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-patch-check-fill"></i>
-                                <p>License</p>
-                            </a>
-                        </li>
-                        <li class="nav-header">MULTI LEVEL EXAMPLE</li>
-                        <li class="nav-item">
-                            <a
-                                href="#"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-circle-fill"></i>
-                                <p>Level 1</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="#"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-circle-fill"></i>
-                                <p>
-                                    Level 1
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a
-                                        href="#"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Level 2</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a
-                                        href="#"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>
-                                            Level 2
-                                            <i class="nav-arrow bi bi-chevron-right"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a
-                                                href="#"
-                                                class="nav-link"
-                                            >
-                                                <i class="nav-icon bi bi-record-circle-fill"></i>
-                                                <p>Level 3</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a
-                                                href="#"
-                                                class="nav-link"
-                                            >
-                                                <i class="nav-icon bi bi-record-circle-fill"></i>
-                                                <p>Level 3</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a
-                                                href="#"
-                                                class="nav-link"
-                                            >
-                                                <i class="nav-icon bi bi-record-circle-fill"></i>
-                                                <p>Level 3</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item">
-                                    <a
-                                        href="#"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon bi bi-circle"></i>
-                                        <p>Level 2</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="#"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-circle-fill"></i>
-                                <p>Level 1</p>
-                            </a>
-                        </li>
-                        <li class="nav-header">LABELS</li>
-                        <li class="nav-item">
-                            <a
-                                href="#"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-circle text-danger"></i>
-                                <p class="text">Important</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="#"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-circle text-warning"></i>
-                                <p>Warning</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="#"
-                                class="nav-link"
-                            >
-                                <i class="nav-icon bi bi-circle text-info"></i>
-                                <p>Informational</p>
-                            </a>
-                        </li>
-                    </ul>
-                    <!--end::Sidebar Menu-->
-                </nav>
-            </div>
-            <!--end::Sidebar Wrapper-->
+                                        <i class="bi bi-box-arrow-right"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+
+                    </nav>
+                </div>
+                <!--end::Sidebar Wrapper-->
+            @endauth
         </aside>
         <!--end::Sidebar-->
         @yield('isihome')
@@ -998,17 +493,16 @@
         <!--begin::Footer-->
         <footer class="app-footer">
             <!--begin::To the end-->
-            <div class="float-end d-none d-sm-inline">Anything you want</div>
+            <div class="float-end d-none d-sm-inline">SMK Cokroaminoto Wanadadi</div>
             <!--end::To the end-->
             <!--begin::Copyright-->
             <strong>
-                Copyright &copy; 2014-2024&nbsp;
-                <a
+                Copyright &copy; 2025&nbsp; Dev Tampan
+                {{-- <a
                     href="https://adminlte.io"
                     class="text-decoration-none"
-                >AdminLTE.io</a>.
+                ></a>. --}}
             </strong>
-            All rights reserved.
             <!--end::Copyright-->
         </footer>
         <!--end::Footer-->

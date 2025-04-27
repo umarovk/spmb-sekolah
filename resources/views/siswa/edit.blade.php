@@ -94,44 +94,23 @@
                                                             <div class="invalid-feedback">Pilih Jurusan</div>
                                                         </div>
 
-                                                        <div class="col-md-3">
-                                                            <label
-                                                                for="validationCustomUsername"
-                                                                class="form-label"
-                                                                name="beratbadan"
-                                                            >Berat Badan</label>
-                                                            <div class="input-group has-validation">
-                                                                <input
-                                                                    value="{{ old('beratbadan', $datasiswa->beratbadan) }}"
-                                                                    type="text"
-                                                                    class="form-control"
-                                                                    id="validationCustom01"
-                                                                    placeholder="Berat Badan"
-                                                                    name="beratbadan"
-                                                                />
-                                                                <div class="invalid-feedback">Berat Badan</div>
-                                                            </div>
-                                                        </div>
+                                                        {{-- batas --}}
 
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-6">
                                                             <label
-                                                                for="validationCustomUsername"
+                                                                for="validationCustom01"
                                                                 class="form-label"
-                                                                name="tinggibadan"
-                                                            >Tinggi Badan</label>
-                                                            <div class="input-group has-validation">
-                                                                <input
-                                                                    value="{{ old('tinggibadan', $datasiswa->tinggibadan) }}"
-                                                                    type="text"
-                                                                    class="form-control"
-                                                                    id="validationCustom01"
-                                                                    placeholder="Tinggi Badan"
-                                                                    name="tinggibadan"
-                                                                />
-                                                                <div class="invalid-feedback">Tinggi Badan</div>
-                                                            </div>
+                                                                name="sekolah_asal"
+                                                            >Sekolah Asal</label>
+                                                            <input
+                                                                value="{{ old('sekolah_asal', $datasiswa->sekolah_asal) }}"
+                                                                type="text"
+                                                                class="form-control"
+                                                                id="validationCustom01"
+                                                                placeholder="Sekolah Asal"
+                                                                name="sekolah_asal"
+                                                            />
                                                         </div>
-
 
                                                         {{-- batas --}}
 
@@ -159,8 +138,6 @@
                                                             </select>
                                                             <div class="invalid-feedback">Masukan Gender</div>
                                                         </div>
-
-
 
                                                         {{-- batas --}}
 
@@ -203,6 +180,71 @@
                                                                 <div class="invalid-feedback">Tanggal Lahir</div>
                                                             </div>
                                                         </div>
+
+
+                                                        {{-- batas --}}
+
+                                                        <div class="col-md-6">
+                                                            <label
+                                                                for="validationCustomUsername"
+                                                                class="form-label"
+                                                                name="alamat"
+                                                            >Alamat</label>
+                                                            <div class="input-group has-validation">
+                                                                <textarea
+                                                                    type="textarea"
+                                                                    class="form-control"
+                                                                    id="validationCustom01"
+                                                                    placeholder="Alamat"
+                                                                    name="alamat"
+                                                                >{{ old('alamat', $datasiswa->alamat) }}</textarea>
+                                                                <div class="invalid-feedback">Tulis Alamat</div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="col-md-3">
+                                                            <label
+                                                                for="validationCustomUsername"
+                                                                class="form-label"
+                                                                name="beratbadan"
+                                                            >Berat Badan</label>
+                                                            <div class="input-group has-validation">
+                                                                <input
+                                                                    value="{{ old('beratbadan', $datasiswa->beratbadan) }}"
+                                                                    type="text"
+                                                                    class="form-control"
+                                                                    id="validationCustom01"
+                                                                    placeholder="Berat Badan"
+                                                                    name="beratbadan"
+                                                                />
+                                                                <div class="invalid-feedback">Berat Badan</div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-3">
+                                                            <label
+                                                                for="validationCustomUsername"
+                                                                class="form-label"
+                                                                name="tinggibadan"
+                                                            >Tinggi Badan</label>
+                                                            <div class="input-group has-validation">
+                                                                <input
+                                                                    value="{{ old('tinggibadan', $datasiswa->tinggibadan) }}"
+                                                                    type="text"
+                                                                    class="form-control"
+                                                                    id="validationCustom01"
+                                                                    placeholder="Tinggi Badan"
+                                                                    name="tinggibadan"
+                                                                />
+                                                                <div class="invalid-feedback">Tinggi Badan</div>
+                                                            </div>
+                                                        </div>
+
+
+
+
+
 
 
 
@@ -345,44 +387,10 @@
                                                         </div>
 
 
-                                                        {{-- batas --}}
-
-                                                        <div class="col-md-6">
-                                                            <label
-                                                                for="validationCustomUsername"
-                                                                class="form-label"
-                                                                name="alamat"
-                                                            >Alamat</label>
-                                                            <div class="input-group has-validation">
-                                                                <textarea
-                                                                    type="textarea"
-                                                                    class="form-control"
-                                                                    id="validationCustom01"
-                                                                    placeholder="Alamat"
-                                                                    name="alamat"
-                                                                >{{ old('alamat', $datasiswa->alamat) }}</textarea>
-                                                                <div class="invalid-feedback">Tulis Alamat</div>
-                                                            </div>
-                                                        </div>
 
 
-                                                        {{-- batas --}}
 
-                                                        <div class="col-md-6">
-                                                            <label
-                                                                for="validationCustom01"
-                                                                class="form-label"
-                                                                name="sekolah_asal"
-                                                            >Sekolah Asal</label>
-                                                            <input
-                                                                value="{{ old('sekolah_asal', $datasiswa->sekolah_asal) }}"
-                                                                type="text"
-                                                                class="form-control"
-                                                                id="validationCustom01"
-                                                                placeholder="Sekolah Asal"
-                                                                name="sekolah_asal"
-                                                            />
-                                                        </div>
+
 
                                                         {{-- batas --}}
 

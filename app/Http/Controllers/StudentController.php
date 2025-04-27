@@ -313,16 +313,61 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        $datasiswa = siswa::findOrFail($id);
-        $datasiswa->delete();
+        try {
+            $datasiswa = Siswa::findOrFail($id);
+            
+            // Cek apakah siswa memiliki pembayaran
+            if ($datasiswa->pembayarans()->exists()) {
+                return redirect()
+                    ->route('tabelsiswa')
+                    ->with('error', 'Tidak dapat menghapus data siswa karena memiliki riwayat pembayaran.');
+            }
 
-        return redirect()->route('tabelsiswa')->with('success', 'Data siswa berhasil dihapus');
+            $datasiswa->delete();
+            return redirect()
+                ->route('tabelsiswa')
+                ->with('success', 'Data siswa berhasil dihapus');
+
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('tabelsiswa')
+                ->with('error', 'Gagal menghapus data siswa: ' . $e->getMessage());
+        }
     }
 
 
-    public function tabelsiswa(): View{
-        $datasiswa = Siswa::all();
-        $pembayaran = Pembayaran::with('siswa')->get();
-        return view('siswa.siswa', compact('pembayaran', 'datasiswa'));
+    public function tabelsiswa(Request $request)
+    {
+        $search = $request->input('search');
+        $perPage = $request->input('perPage', 10);
+
+        $datasiswa = Siswa::when($search, function($query) use ($search) {
+                return $query->where('namasiswa', 'LIKE', "%{$search}%");
+            })
+            ->latest()
+            ->paginate($perPage);
+
+        return view('siswa.siswa', compact('datasiswa', 'search', 'perPage'));
+    }
+
+    public function test(Request $request)
+    {
+        $search = $request->input('search');
+        $perPage = $request->input('perPage', 10);
+
+        $datasiswa = Siswa::when($search, function($query) use ($search) {
+                return $query->where('namasiswa', 'LIKE', "%{$search}%");
+            })
+            ->latest()
+            ->paginate($perPage);
+
+        return view('siswa.test', compact('datasiswa', 'search', 'perPage'));
+    }
+
+    public function printSuratKeterangan(Siswa $siswa)
+    {
+        $user = auth()->user();
+        $tanggal = now()->translatedFormat('d F Y');
+        return view('siswa.surat-keterangan', compact('siswa', 'tanggal', 'user'));
     }
 }
