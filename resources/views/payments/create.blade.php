@@ -46,6 +46,7 @@
                                 <input
                                     type="number"
                                     name="nominal"
+                                    min="1"
                                     class="form-control @error('nominal') is-invalid @enderror"
                                     value="{{ old('nominal') }}"
                                     required
@@ -75,8 +76,8 @@
                                     type="text"
                                     name="keterangan"
                                     class="form-control"
-                                    value="{{ old('keterangan') }}"
-                                    required
+                                    value="{{ auth()->user()->name }}"
+                                    readonly
                                 >
                             </div>
 

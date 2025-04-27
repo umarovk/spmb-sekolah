@@ -366,7 +366,8 @@ class StudentController extends Controller
 
     public function printSuratKeterangan(Siswa $siswa)
     {
+        $user = auth()->user();
         $tanggal = now()->translatedFormat('d F Y');
-        return view('siswa.surat-keterangan', compact('siswa', 'tanggal'));
+        return view('siswa.surat-keterangan', compact('siswa', 'tanggal', 'user'));
     }
 }
