@@ -154,7 +154,7 @@
     <hr style="border-top: 1px solid black; margin: 2px 0;">
 
     <div class="title">
-        BUKTI PENDAFTARAN
+        SURAT KETERANGAN PENDAFTARAN
     </div>
 
     <div class="content">
@@ -184,8 +184,9 @@
         <p class="text-indent">Telah mendaftar sebagai <strong>calon peserta didik baru di SMK Cokroaminoto Wanadadi
                 Tahun
                 Ajaran
-                {{ now()->year }}/{{ now()->addYear()->year }}.</strong> Diharapkan kepada calon siswa untuk melakukan
-            pembayaran daftar ulang maksimal 2
+                {{ now()->year }}/{{ now()->addYear()->year }}.</strong> Demikian surat keterangan ini dibuat untuk
+            digunakan
+            sebagaimana mestinya. Kami mohon kepada calon siswa untuk melakukan pembayaran daftar ulang maksimal 2
             minggu setelah melaksanakan rangkaian tes dan dinyatakan
             diterima.</p>
 
@@ -197,7 +198,7 @@
             </p>
             <br><br><br>
             <p><u></u></p>
-            <p>( {{ auth()->user()->name }} )</p>
+            <p>(____________________)</p>
         </div>
     </div>
 
