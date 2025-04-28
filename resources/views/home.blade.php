@@ -9,7 +9,7 @@
             <div class="container-fluid">
                 <!--begin::Row-->
                 <div class="row">
-                    <h1>APLIKASI PENDAFTARAN SISWA BARU</h1>
+                    <h1>APLIKASI PENDAFTARAN SISWA BARU uu</h1>
                     <P>SMK COKROAMINOTO WANADADI</P>
                     <div class="col-sm-6">
                         <h3 class="mb-0">Dashboard</h3>
