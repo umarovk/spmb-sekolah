@@ -45,17 +45,17 @@ class User extends Authenticatable
     ];
 
     // Role checking methods
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return $this->role === 'admin';
     }
 
-    public function isTeller()
+    public function isTeller(): bool
     {
         return $this->role === 'teller';
     }
 
-    public function isGuest()
+    public function isGuest(): bool
     {
         return $this->role === 'guest';
     }

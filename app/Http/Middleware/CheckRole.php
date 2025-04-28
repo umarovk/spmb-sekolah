@@ -9,7 +9,15 @@ use Illuminate\Support\Facades\Log;
 
 class CheckRole
 {
-    public function handle(Request $request, Closure $next, ...$roles)
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @param  string[]  ...$roles
+     * @return mixed
+     */
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
         if (!auth()->check()) {
             return redirect('login');
@@ -17,10 +25,16 @@ class CheckRole
 
         $user = auth()->user();
         
+
         // Admin can access everything
-        if ($user->isAdmin()) {
+        if ($user instanceof \App\Models\User && $user->role === 'admin') {
             return $next($request);
         }
+
+        // // Admin can access everything
+        // if ($user->isAdmin()) {
+        //     return $next($request);
+        // }
 
         // Debug logging
         Log::info('User Role Check', [
@@ -34,6 +48,6 @@ class CheckRole
             return $next($request);
         }
 
-        abort(403, 'Hayo cari apa?');
+        abort(403, 'Unauthorized action.');
     }
 }
