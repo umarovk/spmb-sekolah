@@ -384,17 +384,16 @@
             @auth
                 <div class="sidebar-wrapper">
                     <nav class="mt-2">
-                        <!--begin::Sidebar Menu-->
                         <ul
                             class="nav sidebar-menu flex-column"
                             data-lte-toggle="treeview"
                             role="menu"
                             data-accordion="false"
                         >
-                            <li class="nav-item menu-open">
+                            <li class="nav-item">
                                 <a
                                     href="{{ route('home') }}"
-                                    class="nav-link active"
+                                    class="nav-link {{ Request::is('/') ? 'active' : '' }}"
                                 >
                                     <i class="nav-icon bi bi-speedometer"></i>
                                     <p>
@@ -402,61 +401,48 @@
                                         <i class="nav-arrow bi bi-chevron-right"></i>
                                     </p>
                                 </a>
-                                <ul class="nav nav-treeview">
-                                    <!-- Student Management (Guest & Admin) -->
-                                    @if (auth()->user()->isAdmin() || auth()->user()->isGuest() || auth()->user()->isTeller())
-                                        <li class="nav-item">
-                                            <a
-                                                href="{{ route('tabelsiswa') }}"
-                                                class="nav-link active"
-                                            >
-                                                <i class="nav-icon bi bi-circle"></i>
-                                                <p>Data Siswa</p>
-                                            </a>
-                                        </li>
-                                    @endif
-
-
-
-                                    {{-- AKSES KE TEMPLATE ADMIN LTE --}}
-                                    {{-- <li class="nav-item">
-                                        <a
-                                            href="../LTE/dist/pages/index2.html"
-                                            class="nav-link"
-                                        >
-                                            <i class="nav-icon bi bi-circle"></i>
-                                            <p>Dashboard v2</p>
-                                        </a>
-                                    </li> --}}
-
-                                    <!-- Payment Management (Teller & Admin) -->
-                                    @if (auth()->user()->isAdmin() || auth()->user()->isTeller())
-                                        <li class="nav-item">
-                                            <a
-                                                href="{{ route('payments.index') }}"
-                                                class="nav-link"
-                                            >
-                                                <i class="nav-icon bi bi-circle"></i>
-                                                <p>Pembayaran</p>
-                                            </a>
-                                        </li>
-                                    @endif
-
-                                    @if (auth()->user()->isAdmin())
-                                        <li class="nav-item">
-                                            <a
-                                                href="{{ route('admin.backup.index') }}"
-                                                class="nav-link"
-                                            >
-                                                <i class="nav-icon bi bi-database-down"></i>
-                                                <p>Backup Database</p>
-                                            </a>
-                                        </li>
-                                    @endif
-
-
-                                </ul>
                             </li>
+
+                            <!-- Student Management (Guest & Admin) -->
+                            @if (auth()->user()->isAdmin() || auth()->user()->isGuest() || auth()->user()->isTeller())
+                                <li class="nav-item">
+                                    <a
+                                        href="{{ route('tabelsiswa') }}"
+                                        class="nav-link {{ Request::routeIs('tabelsiswa*', 'siswa.*') ? 'active' : '' }}"
+                                    >
+                                        <i class="nav-icon bi bi-people"></i>
+                                        <p>Data Siswa</p>
+                                    </a>
+                                </li>
+                            @endif
+
+                            <!-- Payment Management (Teller & Admin) -->
+                            @if (auth()->user()->isAdmin() || auth()->user()->isTeller())
+                                <li class="nav-item">
+                                    <a
+                                        href="{{ route('payments.index') }}"
+                                        class="nav-link {{ Request::routeIs('payments.*', 'tabelbayar') ? 'active' : '' }}"
+                                    >
+                                        <i class="nav-icon bi bi-cash-coin"></i>
+                                        <p>Pembayaran</p>
+                                    </a>
+                                </li>
+                            @endif
+
+                            <!-- Backup Database (Admin Only) -->
+                            @if (auth()->user()->isAdmin())
+                                <li class="nav-item">
+                                    <a
+                                        href="{{ route('admin.backup.index') }}"
+                                        class="nav-link {{ Request::routeIs('admin.backup.*') ? 'active' : '' }}"
+                                    >
+                                        <i class="nav-icon bi bi-database-down"></i>
+                                        <p>Backup Database</p>
+                                    </a>
+                                </li>
+                            @endif
+
+                            <!-- Logout -->
                             <li class="nav-item">
                                 <form
                                     action="{{ route('logout') }}"
@@ -471,10 +457,9 @@
                                     </button>
                                 </form>
                             </li>
-
+                        </ul>
                     </nav>
                 </div>
-                <!--end::Sidebar Wrapper-->
             @endauth
         </aside>
         <!--end::Sidebar-->
