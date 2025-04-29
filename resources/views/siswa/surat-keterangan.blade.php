@@ -197,7 +197,7 @@
             </p>
             <br><br><br>
             <p><u></u></p>
-            <p>( {{ auth()->user()->name }} )</p>
+            <p>( {{ auth()->user()->nama }} )</p>
         </div>
     </div>
 

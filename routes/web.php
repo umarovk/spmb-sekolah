@@ -20,8 +20,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Authentication Routes
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
+});
+
+// Add GET route for logout that redirects to POST route
+Route::get('/logout', function() {
+    return redirect()->route('home');
+})->name('logout.get');
+
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Protected Routes
