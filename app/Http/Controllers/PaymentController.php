@@ -41,8 +41,9 @@ class PaymentController extends Controller
      */
     public function create(Request $request)
     {
+        $user = auth()->user();
         $siswa = Siswa::findOrFail($request->siswa_id);
-        return view('payments.create', compact('siswa'));
+        return view('payments.create', compact('siswa', 'user'));
     }
 
     /**
@@ -177,7 +178,8 @@ class PaymentController extends Controller
 
     public function printKwitansi(Pembayaran $payment)
     {
-        return view('payments.kwitansi', compact('payment'));
+        $user = auth()->user();
+        return view('payments.kwitansi', compact('payment', 'user'));
     }
 
     public function printPdf(Pembayaran $payment)

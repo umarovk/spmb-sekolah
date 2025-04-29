@@ -107,13 +107,10 @@
                         </a>
                     </li>
                     <li class="nav-item d-none d-md-block"><a
-                            href="#"
+                            href="https://www.instagram.com/umarov.studio/"
                             class="nav-link"
-                        >Home</a></li>
-                    <li class="nav-item d-none d-md-block"><a
-                            href="#"
-                            class="nav-link"
-                        >Contact</a></li>
+                        >SPMB Apps {{ auth()->user()->created_at->format('Y') }} by TKJ SMKCWND</a></li>
+
                 </ul>
                 <!--end::Start Navbar Links-->
                 <!--begin::End Navbar Links-->
@@ -309,7 +306,7 @@
                                 class="user-image rounded-circle shadow"
                                 alt="User Image"
                             />
-                            <span class="d-none d-md-inline">Admin Tampan</span>
+                            <span class="d-none d-md-inline">{{ auth()->user()->name }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                             <!--begin::User Image-->
@@ -320,13 +317,13 @@
                                     alt="User Image"
                                 />
                                 <p>
-                                    Admin Tampan - Web Developer
-                                    <small>Member since March. 1924</small>
+                                    {{ auth()->user()->name }} - {{ ucfirst(auth()->user()->role) }}
+                                    <small>Member since {{ auth()->user()->created_at->format('M. Y') }}</small>
                                 </p>
                             </li>
                             <!--end::User Image-->
                             <!--begin::Menu Body-->
-                            <li class="user-body">
+                            {{-- <li class="user-body">
                                 <!--begin::Row-->
                                 <div class="row">
                                     <div class="col-4 text-center"><a href="#">Followers</a></div>
@@ -346,7 +343,7 @@
                                     href="#"
                                     class="btn btn-default btn-flat float-end"
                                 >Sign out</a>
-                            </li>
+                            </li> --}}
                             <!--end::Menu Footer-->
                         </ul>
                     </li>
@@ -370,14 +367,14 @@
                     class="brand-link"
                 >
                     <!--begin::Brand Image-->
-                    <img
+                    {{-- <img
                         src="../lte/dist/assets/img/AdminLTELogo.png"
                         alt="AdminLTE Logo"
                         class="brand-image opacity-75 shadow"
-                    />
+                    /> --}}
                     <!--end::Brand Image-->
                     <!--begin::Brand Text-->
-                    <span class="brand-text fw-light">SMKcwnd</span>
+                    <span class="brand-text fw-light">SPMB</span>
                     <!--end::Brand Text-->
                 </a>
                 <!--end::Brand Link-->
@@ -420,7 +417,9 @@
                                     @endif
 
 
-                                    <li class="nav-item">
+
+                                    {{-- AKSES KE TEMPLATE ADMIN LTE --}}
+                                    {{-- <li class="nav-item">
                                         <a
                                             href="../LTE/dist/pages/index2.html"
                                             class="nav-link"
@@ -428,7 +427,7 @@
                                             <i class="nav-icon bi bi-circle"></i>
                                             <p>Dashboard v2</p>
                                         </a>
-                                    </li>
+                                    </li> --}}
 
                                     <!-- Payment Management (Teller & Admin) -->
                                     @if (auth()->user()->isAdmin() || auth()->user()->isTeller())
@@ -442,6 +441,20 @@
                                             </a>
                                         </li>
                                     @endif
+
+                                    @if (auth()->user()->isAdmin())
+                                        <li class="nav-item">
+                                            <a
+                                                href="{{ route('admin.backup.index') }}"
+                                                class="nav-link"
+                                            >
+                                                <i class="nav-icon bi bi-database-down"></i>
+                                                <p>Backup Database</p>
+                                            </a>
+                                        </li>
+                                    @endif
+
+
                                 </ul>
                             </li>
                             <li class="nav-item">

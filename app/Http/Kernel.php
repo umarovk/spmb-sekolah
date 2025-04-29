@@ -66,8 +66,4 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'role' => \App\Http\Middleware\CheckRole::class,
     ];
-
-    protected $commands = [
-        \App\Console\Commands\BackupDatabase::class,
-    ];
 }
