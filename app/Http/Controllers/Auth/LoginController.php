@@ -32,7 +32,7 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        $fieldType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+        $fieldType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
         
         if(Auth::attempt([$fieldType => $input['login'], 'password' => $input['password']])) {
             $request->session()->regenerate();
@@ -40,7 +40,7 @@ class LoginController extends Controller
         }
 
         return back()->withErrors([
-            'login' => 'Email/Username atau password salah.',
+            'login' => 'Username/Email atau password salah.',
         ])->onlyInput('login');
     }
 

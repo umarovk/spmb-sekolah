@@ -107,23 +107,8 @@
                                             <td>{{ $dt->jurusan }}</td>
                                             <td>{{ $dt->agama ?? '-' }}</td>
                                             <td>{{ $dt->jeniskelamin }}</td>
-                                            <td>SKL</td>
+                                            <td>Ket. Terima</td>
                                             <td>
-
-                                                {{-- FITUR HAPUS DATA SISWA --}}
-                                                {{-- <form
-                                                    action="{{ route('siswa.destroy', $dt->id) }}"
-                                                    method="POST"
-                                                    style="display:inline;"
-                                                    onsubmit="return confirm('Yakin ingin menghapus dokumen ini?')"
-                                                >
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button
-                                                        type="submit"
-                                                        class="btn btn-danger"
-                                                    >Hapus</button>
-                                                </form> --}}
 
                                                 @if ($dt->pembayarans()->exists())
                                                     <button

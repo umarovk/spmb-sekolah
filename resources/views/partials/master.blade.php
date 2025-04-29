@@ -106,11 +106,14 @@
                             <i class="bi bi-list"></i>
                         </a>
                     </li>
-                    <li class="nav-item d-none d-md-block"><a
+                    <li class="nav-item d-none d-md-block">
+                        <a
                             href="https://www.instagram.com/umarov.studio/"
                             class="nav-link"
-                        >SPMB Apps {{ auth()->user()->created_at->format('Y') }} by TKJ SMKCWND</a></li>
-
+                        >
+                            SPMB Apps {{ date('Y') }} by TKJ SMKCWND
+                        </a>
+                    </li>
                 </ul>
                 <!--end::Start Navbar Links-->
                 <!--begin::End Navbar Links-->
@@ -306,7 +309,7 @@
                                 class="user-image rounded-circle shadow"
                                 alt="User Image"
                             />
-                            <span class="d-none d-md-inline">{{ auth()->user()->name }}</span>
+                            <span class="d-none d-md-inline">{{ auth()->user()->username }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                             <!--begin::User Image-->
@@ -317,8 +320,9 @@
                                     alt="User Image"
                                 />
                                 <p>
-                                    {{ auth()->user()->name }} - {{ ucfirst(auth()->user()->role) }}
-                                    <small>Member since {{ auth()->user()->created_at->format('M. Y') }}</small>
+                                    {{ auth()->user()->username }} - {{ ucfirst(auth()->user()->role) }}
+                                    <small>Member since
+                                        {{ auth()->user()->created_at ? auth()->user()->created_at->format('M. Y') : 'N/A' }}</small>
                                 </p>
                             </li>
                             <!--end::User Image-->

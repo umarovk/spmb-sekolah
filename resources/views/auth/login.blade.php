@@ -37,7 +37,7 @@
                                 <label
                                     for="login"
                                     class="form-label"
-                                >Email / Username</label>
+                                >Username / Email</label>
                                 <input
                                     type="text"
                                     class="form-control @error('login') is-invalid @enderror"

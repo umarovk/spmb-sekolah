@@ -76,7 +76,7 @@
                                     type="text"
                                     name="keterangan"
                                     class="form-control"
-                                    value="{{ auth()->user()->name }}"
+                                    value="{{ auth()->user()->nama }}"
                                     readonly
                                 >
                             </div>

@@ -266,6 +266,8 @@ if (!function_exists('terbilang')) {
                     <p class="text-center">Petugas Teller</p>
                     <br>
                     <br>
+
+                    {{-- // ini diambil dari tabel keterangan models --}}
                     <p class="text-center">({{ $payment->keterangan }})</p>
                 </div>
             </div>
