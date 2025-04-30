@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Siswa;
 use App\Models\Pembayaran;
+use App\Exports\SiswaExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -23,7 +25,35 @@ class StudentController extends Controller
         $databayar = Pembayaran::all();
         $totalPembayaran = Pembayaran::totalPembayaran();
         $pembayaran = Pembayaran::with('siswa')->get();
-        return view('home', compact('jumlahData', 'datasiswa', 'databayar', 'pembayaran', 'totalPembayaran'));
+        
+        // Add this code for chart data
+        $jurusanData = [
+            'tkj' => Siswa::where('jurusan', 'Teknik Komputer Jaringan')->count(),
+            'tsm' => Siswa::where('jurusan', 'Teknik Sepeda Motor')->count()
+        ];
+
+        // Add gender chart data
+        $genderData = [
+            'laki' => Siswa::where('jeniskelamin', 'Laki-laki')->count(),
+            'perempuan' => Siswa::where('jeniskelamin', 'Perempuan')->count()
+        ];
+
+        // Add payment status chart data
+        $paymentStatusData = [
+            'sudah_bayar' => Siswa::whereHas('pembayarans')->count(),
+            'belum_bayar' => Siswa::whereDoesntHave('pembayarans')->count()
+        ];
+
+        return view('home', compact(
+            'jumlahData', 
+            'datasiswa', 
+            'databayar', 
+            'pembayaran', 
+            'totalPembayaran',
+            'jurusanData',
+            'genderData',
+            'paymentStatusData'
+        ));
     }
 
     /**
@@ -377,5 +407,26 @@ class StudentController extends Controller
         $user = auth()->user();
         $tanggal = now()->translatedFormat('d F Y');
         return view('siswa.surat-diterima', compact('siswa', 'tanggal', 'user'));
+    }
+
+    public function export() 
+    {
+        $exporter = new SiswaExport();
+        $data = $exporter->export();
+        
+        $filename = 'data-siswa-' . date('Y-m-d') . '.csv';
+        $filepath = storage_path('app/public/' . $filename);
+        
+        // Create CSV file
+        $fp = fopen($filepath, 'w');
+        foreach ($data as $row) {
+            fputcsv($fp, $row);
+        }
+        fclose($fp);
+        
+        // Return download response
+        return response()->download($filepath, $filename, [
+            'Content-Type' => 'text/csv',
+        ])->deleteFileAfterSend();
     }
 }

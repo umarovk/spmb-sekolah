@@ -54,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
             ->name('siswa.print.surat-keterangan');
         Route::get('/siswa/{siswa}/print/surat-diterima', [StudentController::class, 'printSuratDiterima'])
             ->name('siswa.print.surat-diterima');
+        Route::get('/export-siswa', [StudentController::class, 'export'])->name('siswa.export');
     });
 
     // Teller & Admin Routes (Payment Management)
@@ -73,7 +74,11 @@ Route::middleware(['auth'])->group(function () {
             ->name('payments.print.kwitansi');
         Route::get('/payments/{payment}/print/pdf', [PaymentController::class, 'printPdf'])
             ->name('payments.print.pdf');
+            Route::get('/export-payments', [PaymentController::class, 'export'])
+                ->name('payments.export')
+                ->middleware(['auth', 'role:admin,teller']);
     });
+
 
     // Routes untuk backup database
     Route::middleware(['auth', 'role:admin'])->group(function () {

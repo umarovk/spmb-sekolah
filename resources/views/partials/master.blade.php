@@ -7,7 +7,7 @@
         http-equiv="Content-Type"
         content="text/html; charset=utf-8"
     />
-    <title>AdminLTE v4 | Dashboard</title>
+    <title>SPMB by Umarov</title>
     <!--begin::Primary Meta Tags-->
     <meta
         name="viewport"
@@ -67,6 +67,10 @@
         integrity="sha256-4MX+61mt9NVvvuPjUWdUdyfZfxSB1/Rf9WtqRHgG5S0="
         crossorigin="anonymous"
     />
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.css"
+    >
     <!-- jsvectormap -->
     <link
         rel="stylesheet"
