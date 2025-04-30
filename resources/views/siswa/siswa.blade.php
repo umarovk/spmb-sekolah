@@ -110,6 +110,15 @@
                                             <td>Ket. Terima</td>
                                             <td>
 
+                                                <a
+                                                    href="{{ route('siswa.print.surat-keterangan', $dt->id) }}"
+                                                    class="btn btn-info"
+                                                    target="_blank"
+                                                    title="Cetak Surat Keterangan"
+                                                >
+                                                    <i class="bi bi-printer"></i> Daftar
+                                                </a>
+
                                                 @if ($dt->pembayarans()->exists())
                                                     <button
                                                         class="btn btn-danger"
@@ -141,13 +150,14 @@
                                                 >
                                                     <i class="bi bi-pencil"></i> Edit
                                                 </a>
+
                                                 <a
-                                                    href="{{ route('siswa.print.surat-keterangan', $dt->id) }}"
-                                                    class="btn btn-info"
+                                                    href="{{ route('siswa.print.surat-diterima', $dt->id) }}"
+                                                    class="btn btn-success"
                                                     target="_blank"
-                                                    title="Cetak Surat Keterangan"
+                                                    title="Cetak Surat diterima"
                                                 >
-                                                    <i class="bi bi-printer"></i> Surat
+                                                    <i class="bi bi-printer"></i> Terima
                                                 </a>
                                             </td>
                                         </tr>

@@ -26,6 +26,8 @@ class Siswa extends Model
         'nomor_wali', 'penghasilan_wali'
     ];
 
+    protected $dates = ['created_at', 'updated_at'];
+
     public function pembayarans()
     {
         return $this->hasMany(Pembayaran::class, 'siswa_id');

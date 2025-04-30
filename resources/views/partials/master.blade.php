@@ -309,7 +309,7 @@
                                 class="user-image rounded-circle shadow"
                                 alt="User Image"
                             />
-                            <span class="d-none d-md-inline">{{ auth()->user()->username }}</span>
+                            <span class="d-none d-md-inline">{{ auth()->user()->nama }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                             <!--begin::User Image-->

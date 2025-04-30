@@ -7,7 +7,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
-    <title>Surat Keterangan Pendaftaran</title>
+    <title>Surat Keterangan diterima</title>
     <style>
         @page {
             size: 210mm 148mm;
@@ -101,9 +101,10 @@
         }
 
         .footer {
-            text-align: right;
+            text-align: center;
             margin-top: auto;
-            padding-right: 20px;
+            padding-left: 10cm;
+
         }
 
         .footer p {
@@ -112,23 +113,33 @@
 
         .text-indent {
 
-            text-indent: 40px;
+            text-indent: 20px;
         }
 
         @media print {
             @page {
-                size: 210mm 148mm landscape;
+                size: 210mm 297mm;
+                /* A4 size */
+                margin: 0;
             }
 
             body {
                 width: 210mm;
-                height: 148mm;
-                margin-top: -5mm;
+                height: 297mm;
+                margin: 0;
                 padding: 1cm;
+                /* Seragamkan padding di semua sisi */
+                -webkit-print-color-adjust: exact;
             }
 
-            .no-print {
-                display: none;
+            .content {
+                margin: 0 1.5cm;
+                /* Tambahkan margin di konten */
+            }
+
+            .footer {
+                margin-right: 1.5cm;
+                /* Sesuaikan margin footer */
             }
         }
     </style>
@@ -152,9 +163,9 @@
 
     <hr style="border-top: 2px solid black; margin: 0;">
     <hr style="border-top: 1px solid black; margin: 2px 0;">
-
+    <br>
     <div class="title">
-        BUKTI PENDAFTARAN
+        SURAT KETERANGAN DITERIMA
     </div>
 
     <div class="content">
@@ -180,24 +191,36 @@
                 <td>: {{ $siswa->sekolah_asal ?? '-' }}</td>
             </tr>
         </table>
+        <strong>
 
-        <p class="text-indent">Telah mendaftar sebagai <strong>calon peserta didik baru di SMK Cokroaminoto Wanadadi
-                Tahun
-                Ajaran
-                {{ now()->year }}/{{ now()->addYear()->year }}.</strong> Diharapkan kepada calon siswa untuk melakukan
-            pembayaran daftar ulang maksimal 2
-            minggu setelah melaksanakan rangkaian tes dan dinyatakan
-            diterima.</p>
-
+        </strong>
+        <p class="text-indent">Dengan ini dinyatakan <strong>telah diterima</strong> sebagai <strong>peserta didik baru
+                di SMK Cokroaminoto Wanadadi</strong> Tahun Ajaran
+            {{ now()->year }}/{{ now()->addYear()->year }}</strong>, sesuai jurusan yang telah dipilih. <br> <br>
+            Diharapkan kepada siswa yang bersangkutan untuk <strong>melunasi administrasi daftar ulang
+                selambat-lambatnya 2
+                (dua) pekan setelah surat ini diberikan.</strong> Apabila hingga batas waktu tersebut belum melunasi,
+            maka dianggap
+            mengundurkan diri.</p>
+        <p>
+            Demikian surat keterangan ini dibuat untuk dapat digunakan sebagaimana mestinya.
+        </p>
+        <br>
+        <br>
+        <br><br>
+        <br>
+        <br>
+        <br>
         <div class="footer">
-            <p>Wanadadi, {{ $siswa->created_at->translatedFormat('d F Y') }}</p>
-            <p>Panitia SPMB
+            <p>Wanadadi, {{ $tanggal }}</p>
+            <p>Kepala Sekolah
                 <br>
                 SMK Cokroaminoto Wanadadi
             </p>
             <br><br><br>
             <p><u></u></p>
-            <p>( {{ auth()->user()->nama }} )</p>
+            {{-- <p>( {{ auth()->user()->nama }} )</p> --}}
+            <p>Soeprijadi, S.Kom</p>
         </div>
     </div>
 
