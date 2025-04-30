@@ -9,7 +9,7 @@
             <div class="container-fluid">
                 <!--begin::Row-->
                 <div class="row">
-                    <h1>APLIKASI PENDAFTARAN SISWA BARU uu</h1>
+                    <h1>APLIKASI PENDAFTARAN SISWA BARU</h1>
                     <P>SMK COKROAMINOTO WANADADI</P>
                     <div class="col-sm-6">
                         <h3 class="mb-0">Dashboard</h3>
@@ -51,7 +51,7 @@
                                 aria-hidden="true"
                             >
                                 <path
-                                    d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"
+                                    d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"
                                 ></path>
                             </svg>
                             <a
@@ -68,8 +68,10 @@
                         <!--begin::Small Box Widget 2-->
                         <div class="small-box text-bg-success">
                             <div class="inner">
-                                <h3><sup class="fs-5">{{ $totalPembayaran }}</sup></h3>
-                                <p>Bounce Rate</p>
+                                <h3><sup
+                                        class="fs-5">{{ \App\Helpers\FormatHelper::formatRupiah($totalPembayaran) }}</sup>
+                                </h3>
+                                <p>Pembayaran</p>
                             </div>
                             <svg
                                 class="small-box-icon"
@@ -82,12 +84,24 @@
                                     d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z"
                                 ></path>
                             </svg>
-                            {{-- <a
-                                href="{{ route('payments.index') }}"
-                                class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover"
-                            > --}}
-                            Info Pembayaran <i class="bi bi-link-45deg"></i>
-                            </a>
+                            @if (auth()->user()->isAdmin() || auth()->user()->isTeller())
+                                <a
+                                    href="{{ route('payments.index') }}"
+                                    class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover"
+                                >
+                                    Info Pembayaran <i class="bi bi-link-45deg"></i>
+                                </a>
+                            @else
+                                <a
+                                    href="#"
+                                    class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom"
+                                    title="Anda tidak memiliki akses ke halaman ini"
+                                >
+                                    Akses Terbatas <i class="bi bi-lock"></i>
+                                </a>
+                            @endif
                         </div>
                         <!--end::Small Box Widget 2-->
                     </div>
@@ -155,15 +169,174 @@
                         <!--end::Small Box Widget 4-->
                     </div>
                     <!--end::Col-->
-                </div>
-                <!--end::Row-->
-                <!--begin::Row-->
 
-                <!-- /.row (main row) -->
+
+
+                    <!-- Inside your card where you want to show the chart -->
+                    <div class="col-lg-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Distribusi Jurusan</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="jurusanChart"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add this after your existing jurusan chart -->
+                    <div class="col-lg-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Distribusi Gender</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="genderChart"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add this after your gender chart -->
+                    <div class="col-lg-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Status Pembayaran</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="paymentStatusChart"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--end::Row-->
+                    <!--begin::Row-->
+
+                    <!-- /.row (main row) -->
+                </div>
+                <!--end::Container-->
             </div>
-            <!--end::Container-->
-        </div>
-        <!--end::App Content-->
+            <!--end::App Content-->
     </main>
     <!--end::App Main-->
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var options = {
+                series: [{{ $jurusanData['tkj'] }}, {{ $jurusanData['tsm'] }}],
+                chart: {
+                    width: '100%', // This will make it responsive within the col-3
+                    height: 350, // Fixed height
+                    type: 'pie',
+                },
+                labels: ['Teknik Komputer Jaringan', 'Teknik Sepeda Motor'],
+                colors: ['#435ebe', '#fb7d44'],
+                legend: {
+                    position: 'bottom',
+                    fontSize: '14px'
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            height: 300
+                        },
+                        legend: {
+                            fontSize: '12px'
+                        }
+                    }
+                }],
+                tooltip: {
+                    y: {
+                        formatter: function(val) {
+                            return val + " Siswa"
+                        }
+                    }
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#jurusanChart"), options);
+            chart.render();
+
+            // New gender chart
+            var genderOptions = {
+                series: [{{ $genderData['laki'] }}, {{ $genderData['perempuan'] }}],
+                chart: {
+                    width: '100%',
+                    height: 350,
+                    type: 'pie',
+                },
+                labels: ['Laki-laki', 'Perempuan'],
+                colors: ['#3b82f6', '#ec4899'],
+                legend: {
+                    position: 'bottom',
+                    fontSize: '14px'
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            height: 300
+                        },
+                        legend: {
+                            fontSize: '12px'
+                        }
+                    }
+                }],
+                tooltip: {
+                    y: {
+                        formatter: function(val) {
+                            return val + " Siswa"
+                        }
+                    }
+                }
+            };
+
+            var genderChart = new ApexCharts(document.querySelector("#genderChart"), genderOptions);
+            genderChart.render();
+
+            // Payment Status chart
+            var paymentStatusOptions = {
+                series: [{{ $paymentStatusData['sudah_bayar'] }}, {{ $paymentStatusData['belum_bayar'] }}],
+                chart: {
+                    width: '100%',
+                    height: 350,
+                    type: 'pie',
+                },
+                labels: ['Sudah Bayar', 'Belum Bayar'],
+                colors: ['#10b981', '#ef4444'], // green for paid, red for unpaid
+                legend: {
+                    position: 'bottom',
+                    fontSize: '14px'
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            height: 300
+                        },
+                        legend: {
+                            fontSize: '12px'
+                        }
+                    }
+                }],
+                tooltip: {
+                    y: {
+                        formatter: function(val) {
+                            return val + " Siswa"
+                        }
+                    }
+                }
+            };
+
+            var paymentStatusChart = new ApexCharts(document.querySelector("#paymentStatusChart"),
+                paymentStatusOptions);
+            paymentStatusChart.render();
+
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            const tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+        });
+    </script>
 @endsection

@@ -23,7 +23,35 @@ class StudentController extends Controller
         $databayar = Pembayaran::all();
         $totalPembayaran = Pembayaran::totalPembayaran();
         $pembayaran = Pembayaran::with('siswa')->get();
-        return view('home', compact('jumlahData', 'datasiswa', 'databayar', 'pembayaran', 'totalPembayaran'));
+        
+        // Add this code for chart data
+        $jurusanData = [
+            'tkj' => Siswa::where('jurusan', 'Teknik Komputer Jaringan')->count(),
+            'tsm' => Siswa::where('jurusan', 'Teknik Sepeda Motor')->count()
+        ];
+
+        // Add gender chart data
+        $genderData = [
+            'laki' => Siswa::where('jeniskelamin', 'Laki-laki')->count(),
+            'perempuan' => Siswa::where('jeniskelamin', 'Perempuan')->count()
+        ];
+
+        // Add payment status chart data
+        $paymentStatusData = [
+            'sudah_bayar' => Siswa::whereHas('pembayarans')->count(),
+            'belum_bayar' => Siswa::whereDoesntHave('pembayarans')->count()
+        ];
+
+        return view('home', compact(
+            'jumlahData', 
+            'datasiswa', 
+            'databayar', 
+            'pembayaran', 
+            'totalPembayaran',
+            'jurusanData',
+            'genderData',
+            'paymentStatusData'
+        ));
     }
 
     /**
