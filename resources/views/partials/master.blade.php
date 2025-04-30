@@ -7,7 +7,7 @@
         http-equiv="Content-Type"
         content="text/html; charset=utf-8"
     />
-    <title>AdminLTE v4 | Dashboard</title>
+    <title>SPMB by Umarov</title>
     <!--begin::Primary Meta Tags-->
     <meta
         name="viewport"

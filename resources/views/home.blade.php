@@ -36,6 +36,9 @@
                 <!--begin::Row-->
                 <div class="row">
                     <!--begin::Col-->
+
+
+                    {{-- FITUR TAMBAH DATA SISWA --}}
                     <div class="col-lg-3 col-6">
                         <!--begin::Small Box Widget 1-->
                         <div class="small-box text-bg-primary">
@@ -64,6 +67,39 @@
                         <!--end::Small Box Widget 1-->
                     </div>
                     <!--end::Col-->
+
+                    {{-- FITUR EXPORT DATA SISWA --}}
+                    <div class="col-lg-3 col-6">
+                        <!--begin::Small Box Widget 3-->
+                        <div class="small-box text-bg-warning">
+                            <div class="inner">
+                                <h3>{{ $jumlahData }}</h3>
+                                <p>Data Siswa Terdaftar</p>
+                            </div>
+                            <svg
+                                class="small-box-icon"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"
+                                ></path>
+                            </svg>
+                            <a
+                                href="{{ route('siswa.export') }}"
+                                class="small-box-footer link-dark link-underline-opacity-0 link-underline-opacity-50-hover"
+                            >
+                                Download Data Excel <i class="bi bi-download"></i>
+                            </a>
+                        </div>
+                        <!--end::Small Box Widget 3-->
+                    </div>
+                    <!--end::Col-->
+
+
+                    {{-- FITUR TAMBAH PEMBAYARAN --}}
                     <div class="col-lg-3 col-6">
                         <!--begin::Small Box Widget 2-->
                         <div class="small-box text-bg-success">
@@ -106,40 +142,15 @@
                         <!--end::Small Box Widget 2-->
                     </div>
                     <!--end::Col-->
+
+
+
+                    {{-- FITUR EXPORT TOTAL TRANSAKSI --}}
                     <div class="col-lg-3 col-6">
-                        <!--begin::Small Box Widget 3-->
-                        <div class="small-box text-bg-warning">
-                            <div class="inner">
-                                <h3>44</h3>
-                                <p>User Registrations</p>
-                            </div>
-                            <svg
-                                class="small-box-icon"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"
-                                ></path>
-                            </svg>
-                            <a
-                                href="#"
-                                class="small-box-footer link-dark link-underline-opacity-0 link-underline-opacity-50-hover"
-                            >
-                                More info <i class="bi bi-link-45deg"></i>
-                            </a>
-                        </div>
-                        <!--end::Small Box Widget 3-->
-                    </div>
-                    <!--end::Col-->
-                    <div class="col-lg-3 col-6">
-                        <!--begin::Small Box Widget 4-->
                         <div class="small-box text-bg-danger">
                             <div class="inner">
-                                <h3>65</h3>
-                                <p>Unique Visitors</p>
+                                <h3>{{ $pembayaran->count() }}</h3>
+                                <p>Total Transaksi</p>
                             </div>
                             <svg
                                 class="small-box-icon"
@@ -159,18 +170,26 @@
                                     d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z"
                                 ></path>
                             </svg>
-                            <a
-                                href="#"
-                                class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover"
-                            >
-                                More info <i class="bi bi-link-45deg"></i>
-                            </a>
+                            @if (auth()->user()->isAdmin() || auth()->user()->isTeller())
+                                <a
+                                    href="{{ route('payments.export') }}"
+                                    class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover"
+                                >
+                                    Download Data Pembayaran <i class="bi bi-download"></i>
+                                </a>
+                            @else
+                                <a
+                                    href="#"
+                                    class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom"
+                                    title="Anda tidak memiliki akses ke data ini"
+                                >
+                                    Akses Terbatas <i class="bi bi-lock"></i>
+                                </a>
+                            @endif
                         </div>
-                        <!--end::Small Box Widget 4-->
                     </div>
-                    <!--end::Col-->
-
-
 
                     <!-- Inside your card where you want to show the chart -->
                     <div class="col-lg-3">
