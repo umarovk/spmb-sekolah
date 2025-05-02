@@ -107,17 +107,15 @@
                                             <td>{{ $dt->jurusan }}</td>
                                             <td>{{ $dt->agama ?? '-' }}</td>
                                             <td>{{ $dt->jeniskelamin }}</td>
-                                            <td>Ket. Terima</td>
-                                            <td>
-
-                                                <a
+                                            <td><a
                                                     href="{{ route('siswa.print.surat-keterangan', $dt->id) }}"
                                                     class="btn btn-info"
                                                     target="_blank"
                                                     title="Cetak Surat Keterangan"
                                                 >
                                                     <i class="bi bi-printer"></i> Daftar
-                                                </a>
+                                                </a></td>
+                                            <td>
 
                                                 @if ($dt->pembayarans()->exists())
                                                     <button
@@ -151,14 +149,25 @@
                                                     <i class="bi bi-pencil"></i> Edit
                                                 </a>
 
-                                                <a
-                                                    href="{{ route('siswa.print.surat-diterima', $dt->id) }}"
+                                                <button
+                                                    type="button"
                                                     class="btn btn-success"
-                                                    target="_blank"
-                                                    title="Cetak Surat diterima"
+                                                    data-bs-toggle="popover"
+                                                    data-bs-trigger="click"
+                                                    data-bs-html="true"
+                                                    data-bs-content="
+                                                            <p>Apakah <strong>{{ $dt->namasiswa }}</strong> sudah mengikuti seleksi dan diterima?</p>
+                                                            <div class='d-flex justify-content-between mt-2'>
+                                                                <button type='button' class='btn btn-secondary btn-sm dismiss-popover'>Batal</button>
+                                                                <a href='{{ route('siswa.print.surat-diterima', $dt->id) }}' class='btn btn-success btn-sm' target='_blank'>
+                                                                    <i class='bi bi-printer'></i> Ya, Cetak
+                                                                </a>
+                                                            </div>
+                                                        "
+                                                    title="Konfirmasi Cetak"
                                                 >
                                                     <i class="bi bi-printer"></i> Terima
-                                                </a>
+                                                </button>
                                             </td>
                                         </tr>
                                     @empty
@@ -187,6 +196,30 @@
         </div>
         </div>
     </main>
-
-    <!-- ... existing scripts ... -->
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize all popovers
+            const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+            const popoverList = [...popoverTriggerList].map(popoverTriggerEl => {
+                const popover = new bootstrap.Popover(popoverTriggerEl, {
+                    sanitize: false
+                });
+
+                // Add click event listener after popover is shown
+                popoverTriggerEl.addEventListener('shown.bs.popover', function() {
+                    const dismissButtons = document.querySelectorAll('.dismiss-popover');
+                    dismissButtons.forEach(button => {
+                        button.addEventListener('click', function() {
+                            popover.hide();
+                        });
+                    });
+                });
+
+                return popover;
+            });
+        });
+    </script>
+@endpush

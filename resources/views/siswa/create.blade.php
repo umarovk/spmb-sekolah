@@ -187,6 +187,30 @@
                                                         </div>
 
 
+
+                                                        {{-- batas --}}
+
+                                                        <div class="col-md-6">
+                                                            <label
+                                                                for="validationCustomUsername"
+                                                                class="form-label"
+                                                                name="nomorsiswa"
+                                                            >Nomor HP siswa</label>
+                                                            <div class="input-group has-validation">
+                                                                <input
+                                                                    type="text"
+                                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                                    min="0"
+                                                                    class="form-control"
+                                                                    id="validationCustom01"
+                                                                    placeholder="Nomor HP Siswa"
+                                                                    name="nomorsiswa"
+                                                                />
+                                                                <div class="invalid-feedback">Nomor HP Siswa</div>
+                                                            </div>
+                                                        </div>
+
+
                                                         <div class="col-md-3">
                                                             <label
                                                                 for="validationCustomUsername"
@@ -274,27 +298,7 @@
                                                             </div>
                                                         </div>
 
-                                                        {{-- batas --}}
 
-                                                        <div class="col-md-6">
-                                                            <label
-                                                                for="validationCustomUsername"
-                                                                class="form-label"
-                                                                name="nomorsiswa"
-                                                            >Nomor HP siswa</label>
-                                                            <div class="input-group has-validation">
-                                                                <input
-                                                                    type="text"
-                                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                                                    min="0"
-                                                                    class="form-control"
-                                                                    id="validationCustom01"
-                                                                    placeholder="Nomor HP Siswa"
-                                                                    name="nomorsiswa"
-                                                                />
-                                                                <div class="invalid-feedback">Nomor HP Siswa</div>
-                                                            </div>
-                                                        </div>
 
                                                         {{-- batas --}}
 
