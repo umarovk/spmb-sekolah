@@ -119,6 +119,7 @@ class StudentController extends Controller
             'alamat_wali' => 'nullable',
             'nomor_wali' => 'nullable',
             'penghasilan_wali' => 'nullable',
+            'asrama_tahfidz' => 'required|in:Bersedia,Tidak',
         ]);
 
         siswa::create([
@@ -181,7 +182,8 @@ class StudentController extends Controller
             'alamat_wali' => $request->alamat_wali,
 
             'nomor_wali' => $request->nomor_wali, 
-            'penghasilan_wali' => $request->penghasilan_wali
+            'penghasilan_wali' => $request->penghasilan_wali,
+            'asrama_tahfidz' => $request->asrama_tahfidz,
         ]);
 
         return redirect()->route('tabelsiswa')
@@ -268,6 +270,7 @@ class StudentController extends Controller
             'alamat_wali' => 'nullable',
             'nomor_wali' => 'nullable',
             'penghasilan_wali' => 'nullable',
+            'asrama_tahfidz' => 'required|in:Ya,Tidak',
         ]);
 
         $datasiswa = Siswa::findOrFail($id);
@@ -332,6 +335,7 @@ class StudentController extends Controller
 
             $datasiswa->nomor_wali = $request->nomor_wali; 
             $datasiswa->penghasilan_wali = $request->penghasilan_wali;
+            $datasiswa->asrama_tahfidz = $request->asrama_tahfidz;
 
         $datasiswa->save();
 

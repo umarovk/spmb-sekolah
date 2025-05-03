@@ -15,7 +15,11 @@
                                 <p class="stats-label">Total Siswa</p>
                             </div>
                             <div class="stats-icon siswa-icon">
-                                <i class="bi bi-people-fill"></i>
+                                <a
+                                    href="{{ route('tabelsiswa') }}"
+                                    class="nav-link rounded-pill py-2 {{ Request::routeIs('tabelsiswa*', 'siswa.*') ? 'active bg-light text-primary' : 'text-primary' }}"
+                                > <i class="bi bi-people-fill"></i>
+                                </a>
                             </div>
                         </div>
                         <div class="stats-action">
@@ -38,7 +42,12 @@
                                 <p class="stats-label">Data Terdaftar</p>
                             </div>
                             <div class="stats-icon data-icon">
-                                <i class="bi bi-file-earmark-text"></i>
+                                <a
+                                    href="{{ route('tabelsiswa') }}"
+                                    class="nav-link rounded-pill py-2 {{ Request::routeIs('tabelsiswa*', 'siswa.*') ? 'active bg-light text-primary' : 'text-warning' }}"
+                                >
+                                    <i class="bi bi-file-earmark-text"></i>
+                                </a>
                             </div>
                         </div>
                         <div class="stats-action">

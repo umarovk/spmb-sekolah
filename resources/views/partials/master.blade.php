@@ -91,6 +91,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
+    <!-- This is where styles pushed from individual views will appear -->
+    @stack('styles')
+
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -556,6 +559,7 @@
     <!--end::Script-->
     <!-- At the bottom of your master layout, before </body> -->
     @stack('scripts')
+
 </body>
 <!--end::Body-->
 

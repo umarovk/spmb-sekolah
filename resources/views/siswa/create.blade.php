@@ -106,7 +106,7 @@
 
                                                         {{-- batas --}}
 
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-3">
                                                             <label
                                                                 for="validationCustom03"
                                                                 class="form-label"
@@ -121,6 +121,23 @@
                                                                 <option value="Perempuan">Perempuan</option>
                                                             </select>
                                                             <div class="invalid-feedback">Masukan Gender</div>
+                                                        </div>
+
+                                                        <div class="col-md-3">
+                                                            <label
+                                                                for="asrama_tahfidz"
+                                                                class="form-label"
+                                                            >Asrama Tahfidz</label>
+                                                            <select
+                                                                name="asrama_tahfidz"
+                                                                class="form-select"
+                                                                required
+                                                            >
+                                                                <option value="">Pilih salah satu</option>
+                                                                <option value="Bersedia">Bersedia</option>
+                                                                <option value="Tidak">Tidak</option>
+                                                            </select>
+                                                            <div class="invalid-feedback">Pilih status asrama tahfidz</div>
                                                         </div>
 
                                                         {{-- batas --}}
@@ -205,6 +222,7 @@
                                                                     id="validationCustom01"
                                                                     placeholder="Nomor HP Siswa"
                                                                     name="nomorsiswa"
+                                                                    required
                                                                 />
                                                                 <div class="invalid-feedback">Nomor HP Siswa</div>
                                                             </div>

@@ -3,10 +3,9 @@
     display: flex;
     min-height: 100vh;
     width: 100%;
-}
-
-/* Sidebar styles */
-.app-sidebar {
+    }
+    /* Sidebar styles */
+    .app-sidebar {
     position: fixed;
     top: 0;
     left: 0;
@@ -15,47 +14,66 @@
     background: #fff;
     z-index: 1040;
     transition: all 0.3s ease;
-}
-
-/* Main content wrapper */
-.dashboard-main {
+    }
+    /* Main content wrapper */
+    .dashboard-main {
     flex: 1;
     margin-left: 220px;
     width: calc(100% - 280px);
     min-height: 100vh;
     transition: all 0.3s ease;
-}
+    }
+    /* Sidebar collapsed state */
+    .sidebar-collapsed .app-sidebar {
+    left: -280px;
+    }
+    .sidebar-collapsed .dashboard-main {
+    margin-left: 0;
+    width: 100%;
+    }
+    /* Sidebar toggle button styles */
+    #sidebarToggler, #sidebarTogglerDesktop {
+    cursor: pointer;
+    padding: 0.5rem;
+    margin-right: 0.5rem;
+    }
+    #sidebarToggler i, #sidebarTogglerDesktop i {
+    transition: transform 0.3s ease;
+    }
+    .sidebar-collapsed #sidebarTogglerDesktop i {
+    transform: rotate(180deg);
+    }
 
 /* Responsive adjustments */
 @media (max-width: 991.98px) {
-    .app-sidebar {
-        left: -280px;
-    }
-
-    .app-sidebar.show {
-        left: 0;
-    }
-
-    .dashboard-main {
-        margin-left: 0;
-        width: 100%;
-    }
-
-    .sidebar-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 1030;
-        display: none;
-    }
-
-    .sidebar-overlay.show {
-        display: block;
-    }
+.app-sidebar {
+left: -280px;
 }
+.dashboard-main {
+    margin-left: 0;
+    width: 100%;
+}
+
+.app-sidebar.show {
+    left: 0;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1030;
+    display: none;
+}
+
+.sidebar-overlay.show {
+    display: block;
+}
+}
+
 
 /* Content container */
 .dashboard-content {

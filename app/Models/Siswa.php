@@ -13,7 +13,7 @@ class Siswa extends Model
     protected $table = 'siswas';
 
     protected $fillable = [
-        'namasiswa', 'jurusan', 'jeniskelamin', 'agama', 'tempatlahir', 'tanggallahir', 'tahunmasuk',
+        'namasiswa', 'jurusan', 'jeniskelamin', 'asrama_tahfidz', 'agama', 'tempatlahir', 'tanggallahir', 'tahunmasuk',
         'nik', 'nisn', 'nis', 'nomorsiswa', 'nomorkip', 'nomorkps', 'nomorkks',
         'kebutuhan_khusus', 'akta_lahir', 'kartu_keluarga', 'email', 'alamat',
         'nomorsiswa_kontak', 'sekolah_asal', 'npsn', 'ijazah', 'skhun',
