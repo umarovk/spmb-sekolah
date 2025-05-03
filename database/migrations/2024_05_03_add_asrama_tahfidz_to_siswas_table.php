@@ -9,7 +9,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('siswas', function (Blueprint $table) {
-            $table->enum('asrama_tahfidz', ['Bersedia', 'Tidak'])->nullable()->after('jeniskelamin');
+            $table->enum('asrama_tahfidz', ['Bersedia', 'Tidak'])->nullable()->after('penghasilan_wali')->comment('Status keikutsertaan dalam program asrama tahfidz');
         });
     }
 

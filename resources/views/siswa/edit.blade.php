@@ -139,7 +139,6 @@
                                                             <div class="invalid-feedback">Masukan Gender</div>
                                                         </div>
 
-                                                        {{-- batas --}}
 
                                                         <div class="col-md-3">
                                                             <label
@@ -153,7 +152,7 @@
                                                             >
                                                                 <option selected>
                                                                     {{ old('asrama_tahfidz', $datasiswa->asrama_tahfidz) }}
-                                                                    
+
                                                                 </option>
                                                                 <option
                                                                     value="Bersedia"
@@ -168,6 +167,7 @@
                                                         </div>
 
                                                         {{-- batas --}}
+
 
                                                         <div class="col-md-6">
                                                             <label
