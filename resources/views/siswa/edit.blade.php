@@ -152,7 +152,7 @@
                                                                 required
                                                             >
                                                                 <option selected>
-                                                                    {{ old('asrama_tahfidz', $datasiswa->jeniskelamin) }}
+                                                                    {{ old('asrama_tahfidz', $datasiswa->asrama_tahfidz) }}
                                                                     
                                                                 </option>
                                                                 <option
