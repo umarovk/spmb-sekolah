@@ -13,22 +13,8 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     />
-    <meta
-        name="title"
-        content="AdminLTE v4 | Dashboard"
-    />
-    <meta
-        name="author"
-        content="ColorlibHQ"
-    />
-    <meta
-        name="description"
-        content="AdminLTE is a Free Bootstrap 5 Admin Dashboard, 30 example pages using Vanilla JS."
-    />
-    <meta
-        name="keywords"
-        content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard"
-    />
+
+
     <!--end::Primary Meta Tags-->
     <!--begin::Fonts-->
     <link
@@ -87,11 +73,33 @@
         rel="stylesheet"
     >
 
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0&icon_names=account_circle"
+    />
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <!-- This is where styles pushed from individual views will appear -->
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/sidebar.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/dashboard.css') }}"
+    >
+    @stack('styles')
+
 </head>
 <!--end::Head-->
 <!--begin::Body-->
 
-<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+<body class="layout-fixed bg-body-tertiary">
     <!--begin::App Wrapper-->
     <div class="app-wrapper">
         <!--begin::Header-->
@@ -99,359 +107,132 @@
             <!--begin::Container-->
             <div class="container-fluid">
                 <!--begin::Start Navbar Links-->
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a
-                            class="nav-link"
-                            data-lte-toggle="sidebar"
-                            href="#"
-                            role="button"
-                        >
-                            <i class="bi bi-list"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item d-none d-md-block">
-                        <a
-                            href="https://www.instagram.com/umarov.studio/"
-                            class="nav-link"
-                        >
-                            SPMB Apps {{ date('Y') }} by TKJ SMKCWND
-                        </a>
-                    </li>
-                </ul>
                 <!--end::Start Navbar Links-->
+
                 <!--begin::End Navbar Links-->
-                <ul class="navbar-nav ms-auto">
-                    <!--begin::Navbar Search-->
-                    <li class="nav-item">
-                        <a
-                            class="nav-link"
-                            data-widget="navbar-search"
-                            href="#"
-                            role="button"
-                        >
-                            <i class="bi bi-search"></i>
-                        </a>
-                    </li>
-                    <!--end::Navbar Search-->
-                    <!--begin::Messages Dropdown Menu-->
-                    <li class="nav-item dropdown">
-                        <a
-                            class="nav-link"
-                            data-bs-toggle="dropdown"
-                            href="#"
-                        >
-                            <i class="bi bi-chat-text"></i>
-                            <span class="navbar-badge badge text-bg-danger">3</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                            <a
-                                href="#"
-                                class="dropdown-item"
-                            >
-                                <!--begin::Message-->
-                                <div class="d-flex">
-                                    <div class="flex-shrink-0">
-                                        <img
-                                            src="../lte/dist/assets/img/user1-128x128.jpg"
-                                            alt="User Avatar"
-                                            class="img-size-50 rounded-circle me-3"
-                                        />
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <h3 class="dropdown-item-title">
-                                            Brad Diesel
-                                            <span class="float-end fs-7 text-danger"><i
-                                                    class="bi bi-star-fill"></i></span>
-                                        </h3>
-                                        <p class="fs-7">Call me whenever you can...</p>
-                                        <p class="fs-7 text-secondary">
-                                            <i class="bi bi-clock-fill me-1"></i> 4 Hours Ago
-                                        </p>
-                                    </div>
-                                </div>
-                                <!--end::Message-->
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a
-                                href="#"
-                                class="dropdown-item"
-                            >
-                                <!--begin::Message-->
-                                <div class="d-flex">
-                                    <div class="flex-shrink-0">
-                                        <img
-                                            src="../lte/dist/assets/img/user8-128x128.jpg"
-                                            alt="User Avatar"
-                                            class="img-size-50 rounded-circle me-3"
-                                        />
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <h3 class="dropdown-item-title">
-                                            John Pierce
-                                            <span class="float-end fs-7 text-secondary">
-                                                <i class="bi bi-star-fill"></i>
-                                            </span>
-                                        </h3>
-                                        <p class="fs-7">I got your message bro</p>
-                                        <p class="fs-7 text-secondary">
-                                            <i class="bi bi-clock-fill me-1"></i> 4 Hours Ago
-                                        </p>
-                                    </div>
-                                </div>
-                                <!--end::Message-->
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a
-                                href="#"
-                                class="dropdown-item"
-                            >
-                                <!--begin::Message-->
-                                <div class="d-flex">
-                                    <div class="flex-shrink-0">
-                                        <img
-                                            src="../lte/dist/assets/img/user3-128x128.jpg"
-                                            alt="User Avatar"
-                                            class="img-size-50 rounded-circle me-3"
-                                        />
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <h3 class="dropdown-item-title">
-                                            Nora Silvester
-                                            <span class="float-end fs-7 text-warning">
-                                                <i class="bi bi-star-fill"></i>
-                                            </span>
-                                        </h3>
-                                        <p class="fs-7">The subject goes here</p>
-                                        <p class="fs-7 text-secondary">
-                                            <i class="bi bi-clock-fill me-1"></i> 4 Hours Ago
-                                        </p>
-                                    </div>
-                                </div>
-                                <!--end::Message-->
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a
-                                href="#"
-                                class="dropdown-item dropdown-footer"
-                            >See All Messages</a>
-                        </div>
-                    </li>
-                    <!--end::Messages Dropdown Menu-->
-                    <!--begin::Notifications Dropdown Menu-->
-                    <li class="nav-item dropdown">
-                        <a
-                            class="nav-link"
-                            data-bs-toggle="dropdown"
-                            href="#"
-                        >
-                            <i class="bi bi-bell-fill"></i>
-                            <span class="navbar-badge badge text-bg-warning">15</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                            <span class="dropdown-item dropdown-header">15 Notifications</span>
-                            <div class="dropdown-divider"></div>
-                            <a
-                                href="#"
-                                class="dropdown-item"
-                            >
-                                <i class="bi bi-envelope me-2"></i> 4 new messages
-                                <span class="float-end text-secondary fs-7">3 mins</span>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a
-                                href="#"
-                                class="dropdown-item"
-                            >
-                                <i class="bi bi-people-fill me-2"></i> 8 friend requests
-                                <span class="float-end text-secondary fs-7">12 hours</span>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a
-                                href="#"
-                                class="dropdown-item"
-                            >
-                                <i class="bi bi-file-earmark-fill me-2"></i> 3 new reports
-                                <span class="float-end text-secondary fs-7">2 days</span>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a
-                                href="#"
-                                class="dropdown-item dropdown-footer"
-                            > See All Notifications </a>
-                        </div>
-                    </li>
-                    <!--end::Notifications Dropdown Menu-->
-                    <!--begin::Fullscreen Toggle-->
-                    <li class="nav-item">
-                        <a
-                            class="nav-link"
-                            href="#"
-                            data-lte-toggle="fullscreen"
-                        >
-                            <i
-                                data-lte-icon="maximize"
-                                class="bi bi-arrows-fullscreen"
-                            ></i>
-                            <i
-                                data-lte-icon="minimize"
-                                class="bi bi-fullscreen-exit"
-                                style="display: none"
-                            ></i>
-                        </a>
-                    </li>
-                    <!--end::Fullscreen Toggle-->
-                    <!--begin::User Menu Dropdown-->
-                    <li class="nav-item dropdown user-menu">
-                        <a
-                            href="#"
-                            class="nav-link dropdown-toggle"
-                            data-bs-toggle="dropdown"
-                        >
-                            {{-- <img
-                                src="../LTE/dist/assets/img/user2-160x160.jpg"
-                                class="user-image rounded-circle shadow"
-                                alt="User Image"
-                            /> --}}
-                            <span class="d-none d-md-inline">{{ auth()->user()->nama }}</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                            <!--begin::User Image-->
-                            <li class="user-header text-bg-primary">
-                                <img
-                                    src="../lte/dist/assets/img/user2-160x160.jpg"
-                                    class="rounded-circle shadow"
-                                    alt="User Image"
-                                />
-                                <p>
-                                    {{ auth()->user()->username }} - {{ ucfirst(auth()->user()->role) }}
-                                    <small>Member since
-                                        {{ auth()->user()->created_at ? auth()->user()->created_at->format('M. Y') : 'N/A' }}</small>
-                                </p>
-                            </li>
-                            <!--end::User Image-->
-                            <!--begin::Menu Body-->
-                            {{-- <li class="user-body">
-                                <!--begin::Row-->
-                                <div class="row">
-                                    <div class="col-4 text-center"><a href="#">Followers</a></div>
-                                    <div class="col-4 text-center"><a href="#">Sales</a></div>
-                                    <div class="col-4 text-center"><a href="#">Friends</a></div>
-                                </div>
-                                <!--end::Row-->
-                            </li>
-                            <!--end::Menu Body-->
-                            <!--begin::Menu Footer-->
-                            <li class="user-footer">
-                                <a
-                                    href="#"
-                                    class="btn btn-default btn-flat"
-                                >Profile</a>
-                                <a
-                                    href="#"
-                                    class="btn btn-default btn-flat float-end"
-                                >Sign out</a>
-                            </li> --}}
-                            <!--end::Menu Footer-->
-                        </ul>
-                    </li>
-                    <!--end::User Menu Dropdown-->
-                </ul>
+
                 <!--end::End Navbar Links-->
             </div>
             <!--end::Container-->
         </nav>
         <!--end::Header-->
+
         <!--begin::Sidebar-->
         <aside
-            class="app-sidebar bg-body-secondary shadow"
-            data-bs-theme="dark"
+            class="app-sidebar bg-white shadow"
+            id="sidebar"
         >
             <!--begin::Sidebar Brand-->
-            <div class="sidebar-brand">
+            <div class="sidebar-brand d-flex align-items-center justify-content-center py-3">
                 <!--begin::Brand Link-->
                 <a
                     href="/"
-                    class="brand-link"
+                    class="brand-link text-decoration-none d-flex align-items-center"
                 >
-                    <!--begin::Brand Image-->
-                    {{-- <img
-                        src="../lte/dist/assets/img/AdminLTELogo.png"
-                        alt="AdminLTE Logo"
-                        class="brand-image opacity-75 shadow"
-                    /> --}}
-                    <!--end::Brand Image-->
-                    <!--begin::Brand Text-->
-                    <span class="brand-text fw-light">SPMB</span>
-                    <!--end::Brand Text-->
+                    <!-- You can add a logo here if needed -->
+                    <span class="brand-text fw-bold fs-4 text-primary">SPMB</span>
                 </a>
                 <!--end::Brand Link-->
+                <button class="btn btn-sm btn-link d-lg-none ms-auto text-dark sidebar-close">
+                    <i class="bi bi-x-lg"></i>
+                </button>
             </div>
             <!--end::Sidebar Brand-->
+
+            <!--begin::Sidebar User Profile-->
+            <div class="user-profile text-center py-4 border-bottom mb-2">
+                <div class="user-avatar mb-2">
+                    <img
+                        src="{{ asset('img/user.png') }}"
+                        class="rounded-circle shadow"
+                        alt="User Image"
+                        width="70"
+                        height="70"
+                    />
+                </div>
+                <div class="user-info">
+                    <h6 class="mb-0 text-dark">{{ auth()->user()->nama }}</h6>
+                    <small class="text-muted">{{ ucfirst(auth()->user()->role) }}</small>
+                </div>
+            </div>
+            <!--end::Sidebar User Profile-->
+
             <!--begin::Sidebar Wrapper-->
             @auth
-                <div class="sidebar-wrapper">
+                <div class="sidebar-wrapper px-2">
                     <nav class="mt-2">
                         <ul
                             class="nav sidebar-menu flex-column"
-                            data-lte-toggle="treeview"
                             role="menu"
-                            data-accordion="false"
                         >
-                            <li class="nav-item">
+                            <!-- Dashboard -->
+                            <li class="nav-item mb-1">
                                 <a
                                     href="{{ route('home') }}"
-                                    class="nav-link {{ Request::is('/') ? 'active' : '' }}"
+                                    class="nav-link rounded-pill py-2 {{ Request::is('/') ? 'active bg-light text-primary' : 'text-dark' }}"
                                 >
-                                    <i class="nav-icon bi bi-speedometer"></i>
-                                    <p>
-                                        Dashboard
-                                        <i class="nav-arrow bi bi-chevron-right"></i>
-                                    </p>
+                                    <i class="nav-icon bi bi-speedometer2 me-2"></i>
+                                    <span>Dashboar</span>
                                 </a>
                             </li>
 
                             <!-- Student Management (Guest & Admin) -->
-                            @if (auth()->user()->isAdmin() || auth()->user()->isGuest() || auth()->user()->isTeller())
-                                <li class="nav-item">
+                            @if (auth()->user()->isAdmin() ||
+                                    auth()->user()->isGuest() ||
+                                    auth()->user()->isTeller() ||
+                                    auth()->user()->isSelektor())
+                                <li class="nav-item mb-1">
                                     <a
                                         href="{{ route('tabelsiswa') }}"
-                                        class="nav-link {{ Request::routeIs('tabelsiswa*', 'siswa.*') ? 'active' : '' }}"
+                                        class="nav-link rounded-pill py-2 {{ Request::routeIs('tabelsiswa*', 'siswa.*') ? 'active bg-light text-primary' : 'text-dark' }}"
                                     >
-                                        <i class="nav-icon bi bi-people"></i>
-                                        <p>Data Siswa</p>
+                                        <i class="nav-icon bi bi-people-fill me-2"></i>
+                                        <span>Data Siswa</span>
+                                    </a>
+                                </li>
+                            @endif
+
+                            <!-- Seleksi Siswa (Selektor & Admin) -->
+                            @if (auth()->user()->isSelektor() || auth()->user()->isAdmin())
+                                <li class="nav-item mb-1">
+                                    <a
+                                        href="{{ route('seleksi.index') }}"
+                                        class="nav-link rounded-pill py-2 {{ Request::routeIs('seleksi.*') ? 'active bg-light text-primary' : 'text-dark' }}"
+                                    >
+                                        <i class="nav-icon bi bi-clipboard-check me-2"></i>
+                                        <span>Seleksi Siswa</span>
                                     </a>
                                 </li>
                             @endif
 
                             <!-- Payment Management (Teller & Admin) -->
                             @if (auth()->user()->isAdmin() || auth()->user()->isTeller())
-                                <li class="nav-item">
+                                <li class="nav-item mb-1">
                                     <a
                                         href="{{ route('payments.index') }}"
-                                        class="nav-link {{ Request::routeIs('payments.*', 'tabelbayar') ? 'active' : '' }}"
+                                        class="nav-link rounded-pill py-2 {{ Request::routeIs('payments.*', 'tabelbayar') ? 'active bg-light text-primary' : 'text-dark' }}"
                                     >
-                                        <i class="nav-icon bi bi-cash-coin"></i>
-                                        <p>Pembayaran</p>
+                                        <i class="nav-icon bi bi-cash-coin me-2"></i>
+                                        <span>Pembayaran</span>
                                     </a>
                                 </li>
                             @endif
 
                             <!-- Backup Database (Admin Only) -->
                             @if (auth()->user()->isAdmin())
-                                <li class="nav-item">
+                                <li class="nav-item mb-1">
                                     <a
                                         href="{{ route('admin.backup.index') }}"
-                                        class="nav-link {{ Request::routeIs('admin.backup.*') ? 'active' : '' }}"
+                                        class="nav-link rounded-pill py-2 {{ Request::routeIs('admin.backup.*') ? 'active bg-light text-primary' : 'text-dark' }}"
                                     >
-                                        <i class="nav-icon bi bi-database-down"></i>
-                                        <p>Backup Database</p>
+                                        <i class="nav-icon bi bi-database-down me-2"></i>
+                                        <span>Backup Database</span>
                                     </a>
                                 </li>
                             @endif
 
                             <!-- Logout -->
-                            <li class="nav-item">
+                            <li class="nav-item mt-3">
                                 <form
                                     action="{{ route('logout') }}"
                                     method="POST"
@@ -459,9 +240,9 @@
                                     @csrf
                                     <button
                                         type="submit"
-                                        class="nav-link btn btn-link"
+                                        class="nav-link btn btn-outline-danger w-100 rounded-pill"
                                     >
-                                        <i class="bi bi-box-arrow-right"></i> Logout
+                                        <i class="bi bi-box-arrow-right me-2"></i> Logout
                                     </button>
                                 </form>
                             </li>
@@ -471,34 +252,40 @@
             @endauth
         </aside>
         <!--end::Sidebar-->
-        @yield('isihome')
-        @yield('content')
-        @yield('isisiswa')
-        @yield('editisisiswa')
-        @yield('indexbayar')
-        @yield('editsiswa')
-        @yield('tabelpembayaran')
-        @yield('tambahbayar')
-        @yield('welcome')
-        @yield('editbayar')
-        {{-- <p>INI KONTENNN pada master</p> --}}
+        <main class="dashboard-main">
+            <!-- Header Section -->
+            <header class="dashboard-header sticky-top">
+                <div class="container-fluid">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h1 class="school-title">SMK COKROAMINOTO WANADADI</h1>
+                            <p class="app-subtitle">Aplikasi Pendaftaran Siswa Baru</p>
+                        </div>
+                        <div class="col-md-6">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb justify-content-md-end mb-0">
+                                    <li class="breadcrumb-item"><strong>{{ auth()->user()->nama }}</strong></li>
 
-        <!--begin::Footer-->
-        <footer class="app-footer">
-            <!--begin::To the end-->
-            <div class="float-end d-none d-sm-inline">SMK Cokroaminoto Wanadadi</div>
-            <!--end::To the end-->
-            <!--begin::Copyright-->
-            <strong>
-                Copyright &copy; 2025&nbsp; Dev Tampan
-                {{-- <a
-                    href="https://adminlte.io"
-                    class="text-decoration-none"
-                ></a>. --}}
-            </strong>
-            <!--end::Copyright-->
-        </footer>
-        <!--end::Footer-->
+                                    <a href="{{ route('home') }}"class="breadcrumb-item active">Home</a>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            @yield('content')
+            @yield('isihome')
+            @yield('isisiswa')
+            @yield('editisisiswa')
+            @yield('indexbayar')
+            @yield('editsiswa')
+            @yield('tabelpembayaran')
+            @yield('tambahbayar')
+            @yield('welcome')
+            @yield('editbayar')
+            {{-- <p>INI KONTENNN pada master</p> --}}
+
     </div>
     <!--end::App Wrapper-->
     <!--begin::Script-->
@@ -521,7 +308,7 @@
         crossorigin="anonymous"
     ></script>
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-    <script src="../../dist/js/adminlte.js"></script>
+    {{-- <script src="../../dist/js/adminlte.js"></script> --}}
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>
         const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
@@ -742,7 +529,55 @@
         const sparkline3 = new ApexCharts(document.querySelector('#sparkline-3'), option_sparkline3);
         sparkline3.render();
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggler = document.getElementById('sidebarToggler');
+            const body = document.body;
+
+            // Create overlay element
+            const overlay = document.createElement('div');
+            overlay.className = 'sidebar-overlay';
+            body.appendChild(overlay);
+
+            // Toggle sidebar
+            function toggleSidebar() {
+                sidebar.classList.toggle('show');
+                overlay.classList.toggle('show');
+            }
+
+            // Event listeners
+            sidebarToggler.addEventListener('click', toggleSidebar);
+            overlay.addEventListener('click', toggleSidebar);
+
+            // Close sidebar when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!sidebar.contains(e.target) &&
+                    !sidebarToggler.contains(e.target) &&
+                    sidebar.classList.contains('show')) {
+                    toggleSidebar();
+                }
+            });
+
+            // Close sidebar on mobile when clicking a link
+            const sidebarLinks = sidebar.querySelectorAll('a');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth < 992) {
+                        toggleSidebar();
+                    }
+                });
+            });
+        });
+    </script>
+    <!-- Add this at the bottom of your file, before </body> -->
+    <script src="{{ asset('js/dashboard.js') }}"></script>
+    <script src="{{ asset('js/sidebar.js') }}"></script>
     <!--end::Script-->
+    <!-- At the bottom of your master layout, before </body> -->
+    @stack('scripts')
+
 </body>
 <!--end::Body-->
 

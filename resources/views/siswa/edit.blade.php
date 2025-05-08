@@ -114,7 +114,7 @@
 
                                                         {{-- batas --}}
 
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-3">
                                                             <label
                                                                 for="validationCustom03"
                                                                 class="form-label"
@@ -139,7 +139,35 @@
                                                             <div class="invalid-feedback">Masukan Gender</div>
                                                         </div>
 
+
+                                                        <div class="col-md-3">
+                                                            <label
+                                                                for="asrama_tahfidz"
+                                                                class="form-label"
+                                                            >Asrama Tahfidz</label>
+                                                            <select
+                                                                name="asrama_tahfidz"
+                                                                class="form-select"
+                                                                required
+                                                            >
+                                                                <option selected>
+                                                                    {{ old('asrama_tahfidz', $datasiswa->asrama_tahfidz) }}
+
+                                                                </option>
+                                                                <option
+                                                                    value="Bersedia"
+                                                                    {{ old('asrama_tahfidz', $datasiswa->asrama_tahfidz) == 'Bersedia' ? 'selected' : '' }}
+                                                                >Bersedia</option>
+                                                                <option
+                                                                    value="Tidak"
+                                                                    {{ old('asrama_tahfidz', $datasiswa->asrama_tahfidz) == 'Tidak' ? 'selected' : '' }}
+                                                                >Tidak</option>
+                                                            </select>
+                                                            <div class="invalid-feedback">Pilih status asrama tahfidz</div>
+                                                        </div>
+
                                                         {{-- batas --}}
+
 
                                                         <div class="col-md-6">
                                                             <label

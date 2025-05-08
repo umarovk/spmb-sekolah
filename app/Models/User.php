@@ -56,6 +56,11 @@ class User extends Authenticatable
         return $this->role === 'teller';
     }
 
+    public function isSelektor(): bool
+    {
+        return $this->role === 'selektor';
+    }
+
     public function isGuest(): bool
     {
         return $this->role === 'guest';

@@ -36,7 +36,7 @@ class LoginController extends Controller
         
         if(Auth::attempt([$fieldType => $input['login'], 'password' => $input['password']])) {
             $request->session()->regenerate();
-            return redirect()->route('siswa.index');
+            return redirect()->route('home');
         }
 
         return back()->withErrors([

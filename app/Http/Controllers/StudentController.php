@@ -119,6 +119,7 @@ class StudentController extends Controller
             'alamat_wali' => 'nullable',
             'nomor_wali' => 'nullable',
             'penghasilan_wali' => 'nullable',
+            'asrama_tahfidz' => 'required|in:Bersedia,Tidak'
         ]);
 
         siswa::create([
@@ -181,7 +182,8 @@ class StudentController extends Controller
             'alamat_wali' => $request->alamat_wali,
 
             'nomor_wali' => $request->nomor_wali, 
-            'penghasilan_wali' => $request->penghasilan_wali
+            'penghasilan_wali' => $request->penghasilan_wali,
+            'asrama_tahfidz' => $request->asrama_tahfidz,
         ]);
 
         return redirect()->route('tabelsiswa')
@@ -268,6 +270,7 @@ class StudentController extends Controller
             'alamat_wali' => 'nullable',
             'nomor_wali' => 'nullable',
             'penghasilan_wali' => 'nullable',
+            'asrama_tahfidz' => 'required|in:Bersedia,Tidak',
         ]);
 
         $datasiswa = Siswa::findOrFail($id);
@@ -332,6 +335,7 @@ class StudentController extends Controller
 
             $datasiswa->nomor_wali = $request->nomor_wali; 
             $datasiswa->penghasilan_wali = $request->penghasilan_wali;
+            $datasiswa->asrama_tahfidz = $request->asrama_tahfidz;
 
         $datasiswa->save();
 
@@ -372,8 +376,12 @@ class StudentController extends Controller
         $perPage = $request->input('perPage', 10);
 
         $datasiswa = Siswa::when($search, function($query) use ($search) {
-                return $query->where('namasiswa', 'LIKE', "%{$search}%");
-            })
+            return $query->where('namasiswa', 'LIKE', "%{$search}%")
+                        ->orWhere('jurusan', 'LIKE', "%{$search}%")
+                        ->orWhere('jeniskelamin', 'LIKE', "%{$search}%")
+                        ->orWhere('agama', 'LIKE', "%{$search}%")
+                        ->orWhere('asrama_tahfidz', 'LIKE', "%{$search}%");
+        })
             ->latest()
             ->paginate($perPage);
 
