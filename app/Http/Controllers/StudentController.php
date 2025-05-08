@@ -119,7 +119,7 @@ class StudentController extends Controller
             'alamat_wali' => 'nullable',
             'nomor_wali' => 'nullable',
             'penghasilan_wali' => 'nullable',
-            'asrama_tahfidz' => 'required|in:Bersedia,Tidak',
+            'asrama_tahfidz' => 'required|in:Bersedia,Tidak'
         ]);
 
         siswa::create([

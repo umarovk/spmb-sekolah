@@ -20,7 +20,8 @@ class SiswaExport
                 'Agama',
                 'Tempat Lahir',
                 'Tanggal Lahir',
-                'asrama_tahfidz',
+                'Status Asrama',  // Changed label
+                'Status Seleksi', // Added new column
                 'Tahun Masuk',
                 'NIK',
                 'NISN',
@@ -81,6 +82,7 @@ class SiswaExport
                 $s->tempatlahir,
                 $s->tanggallahir,
                 $s->asrama_tahfidz,
+                $s->status_seleksi, // Added new field
                 $s->tahunmasuk,
                 $s->nik,
                 $s->nisn,

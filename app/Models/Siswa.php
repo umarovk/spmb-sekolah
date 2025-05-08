@@ -23,7 +23,7 @@ class Siswa extends Model
         'penghasilan_ayah', 'nomor_ayah', 'nama_ibu', 'pendidikan_ibu',
         'tempat_lahir_ibu', 'tanggal_lahir_ibu', 'alamat_ibu', 'pekerjaan_ibu',
         'penghasilan_ibu', 'nomor_ibu', 'nama_wali', 'alamat_wali',
-        'nomor_wali', 'penghasilan_wali', 'asrama_tahfidz'
+        'nomor_wali', 'penghasilan_wali', 'asrama_tahfidz', 'status_seleksi'
     ];
 
     protected $dates = ['created_at', 'updated_at'];
@@ -31,6 +31,11 @@ class Siswa extends Model
     public function pembayarans()
     {
         return $this->hasMany(Pembayaran::class, 'siswa_id');
+    }
+
+    public function getStatusSeleksiAttribute($value)
+    {
+        return $value ?? 'pending';
     }
 
     protected static function boot()

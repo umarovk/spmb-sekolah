@@ -5,16 +5,9 @@
         <div class="container py-4">
             <div class="row mb-4 align-items-center">
                 <div class="col-md-8">
-                    <h1 class="fw-light text-primary mb-0 fs-3">Data Calon Siswa Baru</h1>
+                    <h1 class="fw-light text-primary mb-0 fs-3">Data Seleksi Siswa Baru</h1>
                 </div>
-                <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                    <button
-                        class="btn btn-success rounded-pill shadow-sm"
-                        onclick="window.location.href='{{ route('siswa.create') }}'"
-                    >
-                        <i class="bi bi-plus-circle me-1"></i> Input Data Siswa
-                    </button>
-                </div>
+
             </div>
 
             <div class="card shadow-sm border-0 rounded-3 mb-4">
@@ -22,7 +15,7 @@
                     <div class="row align-items-center">
                         <div class="col-lg-8 col-md-6 mb-3 mb-md-0">
                             <form
-                                action="{{ route('tabelsiswa') }}"
+                                action="{{ route('seleksi.index') }}"
                                 method="GET"
                             >
                                 <div class="input-group">
@@ -89,7 +82,6 @@
                                 <th class="ps-3">No</th>
                                 <th>Nama</th>
                                 <th>Jurusan</th>
-                                <th class="d-none d-md-table-cell">Agama</th>
                                 <th class="d-none d-md-table-cell">Gender</th>
                                 <th>Status</th>
                                 <th class="text-end pe-3">Aksi</th>
@@ -105,91 +97,60 @@
                                         <span class="fw-medium">{{ $dt->namasiswa }}</span>
                                     </td>
                                     <td>{{ $dt->jurusan }}</td>
-                                    <td class="d-none d-md-table-cell">{{ $dt->agama ?? '-' }}</td>
                                     <td class="d-none d-md-table-cell">{{ $dt->jeniskelamin }}</td>
                                     <td>
-                                        <span
-                                            class="badge {{ $dt->status_seleksi === 'diterima'
-                                                ? 'bg-success'
-                                                : ($dt->status_seleksi === 'ditolak'
-                                                    ? 'bg-danger'
-                                                    : ($dt->status_seleksi === 'dipertimbangkan'
-                                                        ? 'bg-warning'
-                                                        : 'bg-secondary')) }}"
-                                        >
-                                            {{ ucfirst($dt->status_seleksi) }}
-                                        </span>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span
+                                                class="badge {{ $dt->status_seleksi === 'diterima'
+                                                    ? 'bg-success'
+                                                    : ($dt->status_seleksi === 'ditolak'
+                                                        ? 'bg-danger'
+                                                        : ($dt->status_seleksi === 'dipertimbangkan'
+                                                            ? 'bg-warning'
+                                                            : 'bg-secondary')) }}"
+                                            >
+                                                {{ ucfirst($dt->status_seleksi) }}
+                                            </span>
+                                            <select
+                                                class="form-select form-select-sm status-select"
+                                                data-siswa-id="{{ $dt->id }}"
+                                                style="width: 140px;"
+                                            >
+                                                <option
+                                                    value="pending"
+                                                    {{ $dt->status_seleksi == 'pending' ? 'selected' : '' }}
+                                                >
+                                                    Pending
+                                                </option>
+                                                <option
+                                                    value="diterima"
+                                                    {{ $dt->status_seleksi == 'diterima' ? 'selected' : '' }}
+                                                >
+                                                    Diterima
+                                                </option>
+                                                <option
+                                                    value="ditolak"
+                                                    {{ $dt->status_seleksi == 'ditolak' ? 'selected' : '' }}
+                                                >
+                                                    Ditolak
+                                                </option>
+                                                <option
+                                                    value="dipertimbangkan"
+                                                    {{ $dt->status_seleksi == 'dipertimbangkan' ? 'selected' : '' }}
+                                                >
+                                                    Dipertimbangkan
+                                                </option>
+                                            </select>
+                                        </div>
                                     </td>
                                     <td>
                                         <div class="d-flex justify-content-end gap-2 pe-3">
-                                            <a
-                                                href="{{ route('siswa.print.surat-keterangan', $dt->id) }}"
-                                                class="btn btn-sm btn-outline-info rounded-pill"
-                                                target="_blank"
-                                                title="Cetak Surat Keterangan"
-                                            >
-                                                <i class="bi bi-printer"></i><span
-                                                    class="d-none d-lg-inline ms-1">Daftar</span>
-                                            </a>
-
-                                            <a
-                                                href="{{ route('siswa.editdata', $dt->id) }}"
-                                                class="btn btn-sm btn-outline-primary rounded-pill"
-                                                title="Edit Data"
-                                            >
-                                                <i class="bi bi-pencil"></i>
-                                            </a>
-
-
-
-                                            @if ($dt->pembayarans()->exists())
-                                                <button
-                                                    class="btn btn-sm btn-outline-danger rounded-pill opacity-50"
-                                                    disabled
-                                                    title="Tidak dapat dihapus karena memiliki pembayaran"
-                                                >
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            @else
-                                                <form
-                                                    action="{{ route('siswa.destroy', $dt->id) }}"
-                                                    method="POST"
-                                                    class="d-inline"
-                                                    onsubmit="return confirm('Yakin ingin menghapus data siswa ini?')"
-                                                >
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button
-                                                        type="submit"
-                                                        class="btn btn-sm btn-outline-danger rounded-pill"
-                                                        title="Hapus Data"
-                                                    >
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </form>
-                                            @endif
-
                                             <button
                                                 type="button"
-                                                class="btn btn-sm btn-outline-success rounded-pill {{ $dt->status_seleksi !== 'diterima' ? 'disabled opacity-50' : '' }}"
-                                                data-bs-toggle="popover"
-                                                data-bs-trigger="click"
-                                                data-bs-html="true"
-                                                data-bs-content="
-                                                    <p class='mb-2'>Apakah <strong>{{ $dt->namasiswa }}</strong> sudah mengikuti seleksi dan diterima?</p>
-                                                    <div class='d-flex justify-content-between gap-2'>
-                                                        <button type='button' class='btn btn-outline-secondary btn-sm dismiss-popover'>Batal</button>
-                                                        <a href='{{ route('siswa.print.surat-diterima', $dt->id) }}' class='btn btn-success btn-sm' target='_blank'>
-                                                            <i class='bi bi-printer'></i> Ya, Cetak
-                                                        </a>
-                                                    </div>
-                                                "
-                                                title="{{ $dt->status_seleksi !== 'diterima' ? 'Siswa belum diterima dalam seleksi' : 'Konfirmasi Cetak' }}"
-                                                data-bs-placement="left"
-                                                {{ $dt->status_seleksi !== 'diterima' ? 'disabled' : '' }}
+                                                class="btn btn-sm btn-primary rounded-pill update-status"
+                                                data-siswa-id="{{ $dt->id }}"
                                             >
-                                                <i class="bi bi-check-circle"></i>
-                                                <span class="d-none d-lg-inline ms-1">Terima</span>
+                                                <i class="bi bi-save me-1"></i> Simpan
                                             </button>
                                         </div>
                                     </td>
@@ -271,6 +232,22 @@
                 justify-content: flex-start !important;
             }
         }
+
+        .form-select option[value="diterima"] {
+            background-color: #d1e7dd;
+        }
+
+        .form-select option[value="ditolak"] {
+            background-color: #f8d7da;
+        }
+
+        .form-select option[value="dipertimbangkan"] {
+            background-color: #fff3cd;
+        }
+
+        .form-select option[value="pending"] {
+            background-color: #e2e3e5;
+        }
     </style>
 @endpush
 
@@ -313,6 +290,73 @@
                 setTimeout(() => {
                     row.style.opacity = '1';
                 }, 50 * index);
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle status updates
+            document.querySelectorAll('.update-status').forEach(button => {
+                button.addEventListener('click', async function() {
+                    const siswaId = this.dataset.siswaId;
+                    const statusSelect = document.querySelector(
+                        `.status-select[data-siswa-id="${siswaId}"]`);
+                    const newStatus = statusSelect.value;
+
+                    // Show loading state
+                    button.disabled = true;
+                    button.innerHTML =
+                        '<span class="spinner-border spinner-border-sm"></span> Menyimpan...';
+
+                    try {
+                        const response = await fetch(`/seleksi/${siswaId}/update-status`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                status: newStatus
+                            })
+                        });
+
+                        const data = await response.json();
+
+                        if (data.success) {
+                            // Update the badge immediately
+                            const badgeColor = {
+                                'diterima': 'bg-success',
+                                'ditolak': 'bg-danger',
+                                'dipertimbangkan': 'bg-warning',
+                                'pending': 'bg-secondary'
+                            } [newStatus];
+
+                            const badge = statusSelect.previousElementSibling;
+                            badge.className = `badge ${badgeColor}`;
+                            badge.textContent = newStatus.charAt(0).toUpperCase() + newStatus
+                                .slice(1);
+
+                            // Show success toast
+                            const toast = document.createElement('div');
+                            toast.className = 'toast position-fixed bottom-0 end-0 m-3';
+                            toast.innerHTML = `
+                                <div class="toast-body bg-success text-white">
+                                    Status berhasil diupdate
+                                </div>
+                            `;
+                            document.body.appendChild(toast);
+                            new bootstrap.Toast(toast).show();
+                        } else {
+                            throw new Error(data.message);
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan: ' + error.message);
+                    } finally {
+                        button.disabled = false;
+                        button.innerHTML = '<i class="bi bi-save me-1"></i> Simpan';
+                    }
+                });
             });
         });
     </script>

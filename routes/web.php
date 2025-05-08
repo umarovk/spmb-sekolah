@@ -5,6 +5,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\spmbcontroller;
 use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\SeleksiController;
 use Faker\Provider\ar_EG\Payment;
 use Illuminate\Support\Facades\Route;
 
@@ -38,7 +39,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', [StudentController::class, 'index'])->name('home');
 
     // Guest & Admin Routes (Student Management)
-    Route::middleware(['role:guest,admin,teller'])->group(function () {
+    Route::middleware(['role:guest,admin,teller,selektor'])->group(function () {
         Route::resource('siswa', StudentController::class)->names([
             'index'   => 'siswa.index',
             'create'  => 'siswa.create',
@@ -74,18 +75,30 @@ Route::middleware(['auth'])->group(function () {
             ->name('payments.print.kwitansi');
         Route::get('/payments/{payment}/print/pdf', [PaymentController::class, 'printPdf'])
             ->name('payments.print.pdf');
-            Route::get('/export-payments', [PaymentController::class, 'export'])
-                ->name('payments.export')
-                ->middleware(['auth', 'role:admin,teller']);
+        Route::get('/payments/{payment}/edit', [PaymentController::class, 'edit'])->name('payments.edit');
+        Route::delete('/payments/{payment}', [PaymentController::class, 'destroy'])->name('payments.destroy');
+        Route::put('/payments/{id}', [PaymentController::class, 'update'])->name('payments.update');
+        Route::get('/export-payments', [PaymentController::class, 'export'])
+            ->name('payments.export')
+            ->middleware(['auth', 'role:admin,teller']);
     });
 
-
+    
     // Routes untuk backup database
     Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/backup', [App\Http\Controllers\DatabaseBackupController::class, 'index'])->name('admin.backup.index');
         Route::get('/admin/backup/generate', [App\Http\Controllers\DatabaseBackupController::class, 'generateBackup'])->name('admin.backup.generate');
         Route::get('/admin/backup/generate-php', [App\Http\Controllers\DatabaseBackupController::class, 'downloadBackupUsingPHP'])->name('admin.backup.generate-php');
+        
+        
+        
     });
-
+    
+    // Selection routes
+    Route::middleware(['auth', 'role:selektor,admin'])->group(function () {
+        Route::get('/seleksi', [SeleksiController::class, 'index'])->name('seleksi.index');
+        Route::post('/seleksi/{id}/update-status', [SeleksiController::class, 'updateStatus'])
+            ->name('seleksi.updateStatus');
+    });
 });
 

@@ -14,6 +14,7 @@
         content="width=device-width, initial-scale=1.0"
     />
 
+
     <!--end::Primary Meta Tags-->
     <!--begin::Fonts-->
     <link
@@ -78,7 +79,11 @@
     />
 
 
-    <!-- Add this below your other CSS links -->
+
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <!-- This is where styles pushed from individual views will appear -->
     <link
         rel="stylesheet"
         href="{{ asset('css/sidebar.css') }}"
@@ -88,10 +93,6 @@
         rel="stylesheet"
         href="{{ asset('css/dashboard.css') }}"
     >
-
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-
-    <!-- This is where styles pushed from individual views will appear -->
     @stack('styles')
 
 </head>
@@ -171,12 +172,15 @@
                                     class="nav-link rounded-pill py-2 {{ Request::is('/') ? 'active bg-light text-primary' : 'text-dark' }}"
                                 >
                                     <i class="nav-icon bi bi-speedometer2 me-2"></i>
-                                    <span>Dashboard</span>
+                                    <span>Dashboar</span>
                                 </a>
                             </li>
 
                             <!-- Student Management (Guest & Admin) -->
-                            @if (auth()->user()->isAdmin() || auth()->user()->isGuest() || auth()->user()->isTeller())
+                            @if (auth()->user()->isAdmin() ||
+                                    auth()->user()->isGuest() ||
+                                    auth()->user()->isTeller() ||
+                                    auth()->user()->isSelektor())
                                 <li class="nav-item mb-1">
                                     <a
                                         href="{{ route('tabelsiswa') }}"
@@ -184,6 +188,19 @@
                                     >
                                         <i class="nav-icon bi bi-people-fill me-2"></i>
                                         <span>Data Siswa</span>
+                                    </a>
+                                </li>
+                            @endif
+
+                            <!-- Seleksi Siswa (Selektor & Admin) -->
+                            @if (auth()->user()->isSelektor() || auth()->user()->isAdmin())
+                                <li class="nav-item mb-1">
+                                    <a
+                                        href="{{ route('seleksi.index') }}"
+                                        class="nav-link rounded-pill py-2 {{ Request::routeIs('seleksi.*') ? 'active bg-light text-primary' : 'text-dark' }}"
+                                    >
+                                        <i class="nav-icon bi bi-clipboard-check me-2"></i>
+                                        <span>Seleksi Siswa</span>
                                     </a>
                                 </li>
                             @endif
@@ -248,7 +265,8 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-content-md-end mb-0">
                                     <li class="breadcrumb-item"><strong>{{ auth()->user()->nama }}</strong></li>
-                                    <li class="breadcrumb-item active">Dashboard</li>
+
+                                    <a href="{{ route('home') }}"class="breadcrumb-item active">Home</a>
                                 </ol>
                             </nav>
                         </div>
@@ -256,8 +274,8 @@
                 </div>
             </header>
 
-            @yield('isihome')
             @yield('content')
+            @yield('isihome')
             @yield('isisiswa')
             @yield('editisisiswa')
             @yield('indexbayar')

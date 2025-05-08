@@ -145,93 +145,173 @@
     </style>
 </head>
 
-<body>
-    <div class="header">
-        <div class="logo-container">
-            <img
-                src="{{ asset('img/logo smk cokro.png') }}"
-                alt="Logo"
-                class="logo"
-            >
+<div class="no-print">
+    <button
+        onclick="window.print()"
+        style="position: fixed; bottom: 20px; right: 20px; padding: 10px 20px;"
+    >
+        Cetak Surat
+    </button>
+</div>
+
+
+<section class="sheet padding-10mm">
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <img
+                    src="{{ asset('img/cop-header.jpg') }}"
+                    class="img-fluid"
+                    alt="cop surat"
+                    style="width: 180mm"
+                >
+
+            </div>
         </div>
-        <div class="school-info">
-            <h1>SMK COKROAMINOTO WANADADI</h1>
-            <p>Jl. Hos. Cokroaminoto No. 02 Wanadadi Banjarnegara</p>
-            <p>Jawa Tengah 53461 Telp. 0812 2645 3837</p>
+        <div class="row">
+            <br>
+            <div class="col">
+                <label for="nosurat">No &emsp;&emsp; :
+                    ID{{ $siswa->id }}/SPMB-A3/SMK.C/WND/{{ now()->year }}</label>
+            </div>
         </div>
-    </div>
 
-    <hr style="border-top: 2px solid black; margin: 0;">
-    <hr style="border-top: 1px solid black; margin: 2px 0;">
-    <br>
-    <div class="title">
-        SURAT KETERANGAN DITERIMA
-    </div>
+        <div class="row">
+            <div class="col">
+                <label for="nosurat">Lamp &emsp;: -</label>
+            </div>
+        </div>
 
-    <div class="content">
-        <!-- ...existing content... -->
-        <p>Yang bertanda tangan di bawah ini, menerangkan bahwa:</p>
-        <table class="info">
-            <tr>
-                <td>Nama</td>
-                <td>: {{ $siswa->namasiswa }}</td>
-            </tr>
-            <tr>
-                <td>Jurusan</td>
-                <td>: {{ $siswa->jurusan }}</td>
-            </tr>
-            <tr>
-                <td>Tempat, Tanggal Lahir</td>
-                <td>: {{ $siswa->tempatlahir }},
-                    {{ $siswa->tanggallahir ? \Carbon\Carbon::parse($siswa->tanggallahir)->translatedFormat('d F Y') : '-' }}
-                </td>
-            </tr>
-            <tr>
-                <td>Asal Sekolah</td>
-                <td>: {{ $siswa->sekolah_asal ?? '-' }}</td>
-            </tr>
-        </table>
-        <strong>
+        <div class="row">
+            <div class="col">
+                <label for="nosurat">Hal &emsp;&emsp;: <b>Pengumuman</b></label>
+            </div>
+        </div>
 
-        </strong>
-        <p class="text-indent">Dengan ini dinyatakan <strong>telah diterima</strong> sebagai <strong>peserta didik baru
-                di SMK Cokroaminoto Wanadadi</strong> Tahun Ajaran
-            {{ now()->year }}/{{ now()->addYear()->year }}</strong>, sesuai jurusan yang telah dipilih. <br> <br>
-            Diharapkan kepada siswa yang bersangkutan untuk <strong>melunasi administrasi daftar ulang
-                selambat-lambatnya 2
-                (dua) pekan setelah surat ini diberikan.</strong> Apabila hingga batas waktu tersebut belum melunasi,
-            maka dianggap
-            mengundurkan diri.</p>
-        <p>
-            Demikian surat keterangan ini dibuat untuk dapat digunakan sebagaimana mestinya.
-        </p>
-        <br>
-        <br>
-        <br><br>
-        <br>
-        <br>
-        <br>
-        <div class="footer">
-            <p>Wanadadi, {{ $tanggal }}</p>
-            <p>Kepala Sekolah
+        <div class="row">
+            <P style="margin-left:2em">
+                Kepada Yth.<b>
+                    <br>Bpk/Ibu Wali Calon siswa Baru
+                    <br>SMK Cokroaminoto Wanadadi {{ now()->year }}/{{ now()->addYear()->year }}
+                    <br>di Tempat</b>
                 <br>
-                SMK Cokroaminoto Wanadadi
             </p>
-            <br><br><br>
-            <p><u></u></p>
-            {{-- <p>( {{ auth()->user()->nama }} )</p> --}}
-            <p>Soeprijadi, S.Kom</p>
+
+            <img
+                src="{{ asset('img/salam-open.jpg') }}"
+                alt="Assalamu'alaikum Wr. Wb."
+                style="width:180px; margin-left:2em;"
+            >
+
+            {{-- <h3 style="margin-left:2em;">Assalamu'alaikum Wr. Wb.</h3> --}}
+            <p style="margin-left:2em; margin-right:4em; text-align: justify;">
+                Disampaikan dengan hormat, berkenaan dengan hasil penilaian oleh tim seleksi
+                calon pesera didik baru SMK Cokroaminoto Wanadadi Tahun Pelajaran
+                {{ now()->year }}/{{ now()->addYear()->year }},
+                kami beritahukan bahwa :
+
+            </P>
+        </div>
+        <div class="row">
+            <div
+                class="col"
+                style="margin-left:2em"
+            >
+                <label for="nama"><b> Nama &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;:</b></label>
+                <label for="isinama"><b> {{ $siswa->namasiswa }}</b></label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div
+                class="col"
+                style="margin-left:2em"
+            >
+                <label for="jurusan"><b> Program keahlian&emsp;:</b></label>
+                <label for="jurusan"><b>{{ $siswa->jurusan }}</b></label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div
+                class="col"
+                style="margin-left:2em"
+            >
+                <label for="sekolah"><b> Sekolah Asal&emsp;&emsp;&emsp;&nbsp;:</b></label>
+                <label for="sekolah"><b>{{ $siswa->sekolah_asal }}</b></label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div
+                class="col"
+                style="text-align: center; width:200mm"
+            >
+                <p><br>Dinyatakan :</p><br>
+                <p style="font-size:25px; margin-top:-30px; text-decoration-line: underline;"><b>DITERIMA / </b><b
+                        style="text-decoration-line: line-through"
+                    >DITOLAK</b></p>
+                <p style="margin-top: -20px;">
+                    Menjadi siswa SMK Cokroaminoto Wanadadi
+                    <br>Tahun Pelajaran {{ now()->year }}/{{ now()->addYear()->year }}
+
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <p style="text-align: justify; margin-left:2em; margin-right:4em">
+                    <br>Bersama ini kami ucapkan selamat dan kami berharap kesempatan ini dapat dimanfaatkan dengan
+                    sebaik-baiknya sebagai jalan menuju sukses meraih cita-cita dan masa depan putra-putri
+                    Bapak/Ibu.
+
+                    <br><br>Adapun proses selanjutnya setelah diterima menjadi siswa SMK Cokroaminoto Wanadadi
+                    adalah melakukan daftar ulang dengan ketentuan sebagaimana terlampir.
+
+                    <br><br>Demikian pemberitahuan ini kami sampaikan, atas perhatiannya kami sampaikan terima
+                    kasih.
+
+                    <br><br>Billaahi fie Sabilil Haq
+
+                </P>
+            </div>
+            <img
+                src="{{ asset('img/salam-close.png') }}"
+                alt="Assalamu'alaikum Wr. Wb."
+                style="width:180px; margin-left:2em;"
+            >
+
+        </div>
+
+
+    </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div
+                class="col"
+                style="margin-left:100mm; text-align: center;"
+            >
+                <p>Wanadadi, {{ $tanggal }}</p>
+                <p style="margin-top: -10px;">Kepala SMK Cokroaminoto Wanadadi</p>
+                <img
+                    src="{{ asset('img/ttd-kepsek.png') }}"
+                    alt=""
+                    style="width:150px; margin-top:-20px;"
+                >
+                <p style="text-decoration: underline; margin-top:-10px;"><b>Soeprijadi, S.Kom</b></p>
+                <p style="margin-top: -10px;">NPPY. 20080714181</p>
+
+            </div>
         </div>
     </div>
+</section>
 
-    <div class="no-print">
-        <button
-            onclick="window.print()"
-            style="position: fixed; bottom: 20px; right: 20px; padding: 10px 20px;"
-        >
-            Cetak Surat
-        </button>
-    </div>
+
+
+
 </body>
 
 </html>
