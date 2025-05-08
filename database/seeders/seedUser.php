@@ -26,7 +26,7 @@ class seedUser extends Seeder
             ['username' => 'nikmatun', 'nama' => 'Nikmatun Khasanah, S.Sos.I', 'email' => 'nikmatun@smk.com', 'password' => bcrypt ('guru12345'), 'role' => 'selektor'],
             ['username' => 'samsiyah', 'nama' => 'Samsiyah, S.Kom', 'email' => 'samsiyahamir09@gmail.com', 'password' => bcrypt ('sam54321'), 'role' => 'teller'],
             ['username' => 'faisal', 'nama' => 'Faisal Nur Hidayat, S.Pd.I', 'email' => 'faisalnurhidayat1989@gmail.com', 'password' => bcrypt ('guru12345'), 'role' => 'selektor'],
-            ['username' => 'fitri', 'nama' => 'Fitri Mujiati, S.Pd', 'email' => 'fitrimujiati91@gmail.com', 'password' => bcrypt ('admin123'), 'role' => 'admin'],
+            ['username' => 'fitri', 'nama' => 'Fitri Mujiati, S.Pd', 'email' => 'fitrimujiati91@gmail.com', 'password' => bcrypt ('guru12345'), 'role' => 'guest'],
             ['username' => 'tofik', 'nama' => 'Tofik Hidayatulloh, S.Pd.I', 'email' => 'tofik@smk.com', 'password' => bcrypt ('guru12345'), 'role' => 'guest'],
             ['username' => 'siti', 'nama' => 'Siti Maghfiroh, S.Pd', 'email' => 'sitimaghfirroh@gmail.com', 'password' => bcrypt ('guru12345'), 'role' => 'guest'],
             ['username' => 'septi', 'nama' => 'Septi Melani, S.Pd', 'email' => 'septimelanie@gmail.com', 'password' => bcrypt ('guru12345'), 'role' => 'guest'],
