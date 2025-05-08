@@ -11,6 +11,7 @@ class seedUser extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
+            ['username' => 'admin', 'nama' => 'Administrator', 'email' => 'admin@smk.com', 'password' => bcrypt ('dasaradaasad'), 'role' => 'admin'],
             ['username' => 'soeprijadi', 'nama' => 'Soeprijadi, S.Kom.', 'email' => 'sorprijadi@smk.com', 'password' => bcrypt ('admin123'), 'role' => 'admin'],
             ['username' => 'tutug', 'nama' => 'Tutug Ujiyanto, A.Kep', 'email' => 'ujiyantotutug91@gmail.com', 'password' => bcrypt ('guru12345'), 'role' => 'guest'],
             ['username' => 'nugraha', 'nama' => 'Nugraha Priatmaja, S.Pd', 'email' => 'nugr22@gmail.com', 'password' => bcrypt ('guru12345'), 'role' => 'guest'],
