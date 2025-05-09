@@ -147,4 +147,128 @@ class DatabaseBackupController extends Controller
             return redirect()->back()->with('error', 'Gagal membuat backup database: ' . $e->getMessage());
         }
     }
+
+    public function generateBackupWithToken(Request $request)
+    {
+        // Check if token is provided and valid
+        if (!$request->has('token') || $request->token !== 'umar') {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid or missing token'
+            ], 401);
+        }
+
+        try {
+            // Get database configuration
+            $dbConnection = Config::get('database.default');
+            $dbConfig = Config::get('database.connections.' . $dbConnection);
+            
+            // Create MySQL connection
+            $mysqli = new \mysqli(
+                $dbConfig['host'],
+                $dbConfig['username'],
+                $dbConfig['password'],
+                $dbConfig['database'],
+                $dbConfig['port'] ?? 3306
+            );
+            
+            // Check connection
+            if ($mysqli->connect_error) {
+                throw new \Exception("Database connection failed: " . $mysqli->connect_error);
+            }
+            
+            // Start output buffering
+            ob_start();
+            
+            // Header backup file
+            echo "-- Database Backup for " . $dbConfig['database'] . "\n";
+            echo "-- Generated on " . date('Y-m-d H:i:s') . "\n\n";
+            
+            // Get all tables
+            $tables = [];
+            $result = $mysqli->query("SHOW TABLES");
+            while ($row = $result->fetch_array()) {
+                $tables[] = $row[0];
+            }
+            
+            // Dump structure and data for each table
+            foreach ($tables as $table) {
+                // Table structure
+                echo "\n-- Structure for table `$table`\n\n";
+                echo "DROP TABLE IF EXISTS `$table`;\n";
+                
+                $res = $mysqli->query("SHOW CREATE TABLE `$table`");
+                $row = $res->fetch_row();
+                echo $row[1] . ";\n\n";
+                
+                // Table data
+                echo "-- Data for table `$table`\n\n";
+                
+                $result = $mysqli->query("SELECT * FROM `$table`");
+                $num_fields = $result->field_count;
+                
+                while ($row = $result->fetch_row()) {
+                    echo "INSERT INTO `$table` VALUES (";
+                    for ($i = 0; $i < $num_fields; $i++) {
+                        if (isset($row[$i])) {
+                            echo "'" . $mysqli->real_escape_string($row[$i]) . "'";
+                        } else {
+                            echo "NULL";
+                        }
+                        
+                        if ($i < ($num_fields - 1)) {
+                            echo ", ";
+                        }
+                    }
+                    echo ");\n";
+                }
+                
+                echo "\n";
+            }
+            
+            $mysqli->close();
+            
+            // Get content from buffer
+            $content = ob_get_clean();
+            
+            // Create backup directory if it doesn't exist
+            $storagePath = storage_path('app/backups');
+            if (!file_exists($storagePath)) {
+                mkdir($storagePath, 0755, true);
+            }
+            
+            // Save backup file
+            $timestamp = Carbon::now()->format('Y-m-d_H-i-s');
+            $filename = "backup_" . $timestamp . ".sql";
+            $fullPath = $storagePath . '/' . $filename;
+            
+            file_put_contents($fullPath, $content);
+            
+            // Return file download response
+            return response()->download($fullPath, $filename, [
+                'Content-Type' => 'application/sql',
+                'Content-Disposition' => 'attachment; filename="' . $filename . '"'
+            ])->deleteFileAfterSend(true);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to generate backup: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function downloadBackup($filename)
+    {
+        $file = storage_path('app/backups/' . $filename);
+        
+        if (!file_exists($file)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Backup file not found'
+            ], 404);
+        }
+        
+        return response()->download($file)->deleteFileAfterSend(true);
+    }
 }
