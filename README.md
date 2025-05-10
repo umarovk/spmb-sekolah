@@ -1,66 +1,161 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SPMB Sekolah - Sistem Penerimaan Murid Baru
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem Penerimaan Murid Baru (SPMB) adalah aplikasi web yang dikembangkan spesial request untuk SMK Cokroaminoto Wanadadi menggunakan Laravel v10 untuk mengelola proses penerimaan siswa baru di sekolah. Aplikasi ini menyediakan fitur-fitur untuk manajemen data siswa, pembayaran, dan proses seleksi.
 
-## About Laravel
+## Persyaratan Sistem
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Software Requirements
+- PHP >= 8.1
+- Composer
+- Node.js & NPM
+- MySQL/MariaDB
+- Web Server (Apache/Nginx)
+- git
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Ekstensi PHP yang Diperlukan
+- BCMath PHP Extension
+- Ctype PHP Extension
+- cURL PHP Extension
+- DOM PHP Extension
+- Fileinfo PHP Extension
+- JSON PHP Extension
+- Mbstring PHP Extension
+- OpenSSL PHP Extension
+- PDO PHP Extension
+- Tokenizer PHP Extension
+- XML PHP Extension
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Instalasi
 
-## Learning Laravel
+1. Clone repository ini:
+```bash
+git clone [repository-url]
+cd spmb-sekolah
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+2. Install dependencies PHP:
+```bash
+composer install
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+3. Install dependencies Node.js:
+```bash
+npm install
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+4. Salin file .env.example menjadi .env:
+```bash
+cp .env.example .env
+```
 
-## Laravel Sponsors
+5. Generate application key:
+```bash
+php artisan key:generate
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+6. Konfigurasi database di file .env:
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=spmb_sekolah
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-### Premium Partners
+7. Jalankan migrasi database:
+```bash
+php artisan migrate
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+8. Jalankan seeder untuk data awal:
+```bash
+php artisan db:seed
+```
 
-## Contributing
+9. Compile assets:
+```bash
+npm run dev
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+10. Jalankan server development:
+```bash
+php artisan serve
 
-## Code of Conduct
+untuk lebih detail bagaimana cara deploy Laravel10 di VPS Linux, sila kunjungi link berikut:
+https://github.com/umarovk/deploy-laravel.git
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Fitur-fitur Aplikasi
 
-## Security Vulnerabilities
+### 1. Manajemen Siswa (CRUD)
+- Pendaftaran siswa baru
+- Pengelolaan data siswa
+- Cetak surat keterangan
+- Cetak surat diterima
+- Export data siswa ke Excel
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 2. Manajemen Pembayaran (CRUD)
+- Pencatatan pembayaran
+- Cetak kwitansi
+- Cetak PDF pembayaran
+- Export data pembayaran ke Excel
+- Detail pembayaran per siswa
 
-## License
+### 3. Proses Seleksi
+- Pengelolaan status seleksi siswa
+- Update status seleksi
+- Monitoring proses seleksi
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 4. Backup Database
+- Generate backup database
+- Download backup database
+- API endpoint untuk backup otomatis
+- Script auto backup untuk CLI (Terminal/CMD/Termux)
+
+## Role Pengguna
+
+Aplikasi memiliki beberapa role pengguna dengan hak akses yang berbeda:
+
+1. **Admin**
+   - Akses penuh ke semua fitur
+   - Manajemen pengguna
+   - Backup database
+   - CRUD data siswa
+   - CRUD data pembayaran
+   - Update hasil seleksi
+
+2. **Teller**
+   - Input data siswa 
+   - Input data pembayaran (tanpa update/delete)
+   - Cetak kwitansi
+   - Lihat data siswa
+
+3. **Selektor**
+   - Input data siswa 
+   - Input hasil ujian seleksi
+   - Lihat data siswa
+
+4. **Guest**
+   - Input data siswa baru
+   - Akses terbatas
+
+## Endpoint API
+
+### Backup Database
+- GET `/admin/backup` - Halaman backup database
+- GET `/admin/backup/generate` - Generate backup database
+- GET `/admin/backup/generate-php` - Download backup menggunakan PHP
+- GET `/api/backup/generate?token={token}` - API endpoint untuk backup otomatis
+
+### Auto Backup Script
+Untuk mengatur backup otomatis, Anda dapat menggunakan script CLI yang tersedia di:
+```
+https://github.com/eexvuu/spmb-auto-backup.git
+```
+
+Script ini dapat dijalankan melalui:
+- Terminal Linux/Mac
+- Command Prompt Windows
+- Termux (Android)
+
