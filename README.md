@@ -83,7 +83,7 @@ npm run dev
 php artisan serve
 
 untuk lebih detail bagaimana cara deploy Laravel10 di VPS Linux, sila kunjungi link berikut:
-https://github.com/umarovk/deploy-laravel.git
+https://github.com/umarovk/VPS-Ubuntu-Web-Apps.git
 ```
 
 ## Fitur-fitur Aplikasi
