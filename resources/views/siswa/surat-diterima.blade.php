@@ -145,14 +145,7 @@
     </style>
 </head>
 
-<div class="no-print">
-    <button
-        onclick="window.print()"
-        style="position: fixed; bottom: 20px; right: 20px; padding: 10px 20px;"
-    >
-        Cetak Surat
-    </button>
-</div>
+
 
 
 <section class="sheet padding-10mm">

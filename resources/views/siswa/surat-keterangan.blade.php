@@ -10,7 +10,7 @@
     <title>Surat Keterangan Pendaftaran</title>
     <style>
         @page {
-            size: 210mm 148mm;
+            size: 148mm 210mm;
             /* A4 landscape divided by 2 */
             margin: 0;
         }
