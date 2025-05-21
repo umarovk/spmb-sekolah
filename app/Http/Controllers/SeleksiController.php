@@ -29,17 +29,19 @@ class SeleksiController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:pending,diterima,ditolak,dipertimbangkan'
+            'status' => 'required|in:pending,diterima,ditolak,dipertimbangkan',
+            'tanggal_seleksi' => 'nullable|date'
         ]);
 
         try {
             $siswa = Siswa::findOrFail($id);
             $siswa->status_seleksi = $request->status;
+            $siswa->tanggalseleksi = $request->tanggal_seleksi;
             $siswa->save();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Status berhasil diupdate'
+                'message' => 'Status dan tanggal seleksi berhasil diupdate'
             ]);
         } catch (\Exception $e) {
             Log::error('Status update error: ' . $e->getMessage());

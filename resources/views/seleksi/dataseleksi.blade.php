@@ -110,6 +110,11 @@
                                                             : 'bg-secondary')) }}"
                                             >
                                                 {{ ucfirst($dt->status_seleksi) }}
+                                                @if ($dt->tanggalseleksi)
+                                                    <span class="ms-1 text-white">
+                                                        ({{ date('d/m/Y', strtotime($dt->tanggalseleksi)) }})
+                                                    </span>
+                                                @endif
                                             </span>
                                             <select
                                                 class="form-select form-select-sm status-select"
@@ -248,6 +253,27 @@
         .form-select option[value="pending"] {
             background-color: #e2e3e5;
         }
+
+        .date-select.border-success {
+            border-color: #198754 !important;
+        }
+
+        .date-select.border-secondary {
+            border-color: #6c757d !important;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.35em 0.65em;
+            font-size: 0.75em;
+            font-weight: 700;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: 0.25rem;
+        }
     </style>
 @endpush
 
@@ -302,6 +328,8 @@
                     const statusSelect = document.querySelector(
                         `.status-select[data-siswa-id="${siswaId}"]`);
                     const newStatus = statusSelect.value;
+                    const currentDate = new Date().toISOString().split('T')[
+                        0]; // Get current date in YYYY-MM-DD format
 
                     // Show loading state
                     button.disabled = true;
@@ -316,7 +344,8 @@
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
                             },
                             body: JSON.stringify({
-                                status: newStatus
+                                status: newStatus,
+                                tanggal_seleksi: currentDate
                             })
                         });
 
@@ -333,8 +362,19 @@
 
                             const badge = statusSelect.previousElementSibling;
                             badge.className = `badge ${badgeColor}`;
-                            badge.textContent = newStatus.charAt(0).toUpperCase() + newStatus
-                                .slice(1);
+
+                            // Update badge text with current date
+                            let badgeText = newStatus.charAt(0).toUpperCase() + newStatus.slice(
+                                1);
+                            if (newStatus !== 'pending') {
+                                const formattedDate = new Date().toLocaleDateString('id-ID', {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: 'numeric'
+                                });
+                                badgeText += ` (${formattedDate})`;
+                            }
+                            badge.textContent = badgeText;
 
                             // Show success toast
                             const toast = document.createElement('div');

@@ -74,6 +74,7 @@ class CreateSiswasTable extends Migration
             $table->text('alamat_wali')->nullable();
             $table->string('nomor_wali')->nullable();
             $table->string('penghasilan_wali')->nullable();
+            $table->date('tanggalseleksi')->nullable();
 
             $table->timestamps();
         });
