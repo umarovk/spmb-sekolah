@@ -118,7 +118,7 @@ if (!function_exists('terbilang')) {
             overflow: hidden;
             position: relative;
             box-sizing: border-box;
-            padding: 10mm;
+            padding: 1mm;
         }
 
         @media print {
@@ -171,7 +171,7 @@ if (!function_exists('terbilang')) {
         <!-- ...existing receipt content... -->
         <div class="container">
 
-            <div class="row mt-1">
+            <div class="row mt-5">
                 <div class="col-2">
                     <img
                         src="{{ asset('img/logo smk cokro.png') }}"
@@ -279,7 +279,7 @@ if (!function_exists('terbilang')) {
         <!-- ...existing receipt content... -->
         <div class="container">
 
-            <div class="row mt-1">
+            <div class="row mt-5">
                 <div class="col-2">
                     <img
                         src="{{ asset('img/logo smk cokro.png') }}"
