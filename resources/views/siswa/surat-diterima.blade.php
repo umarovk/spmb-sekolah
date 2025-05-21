@@ -166,7 +166,21 @@
             <br>
             <div class="col">
                 <label for="nosurat">No &emsp;&emsp; :
-                    ID{{ $siswa->id }}/SPMB-A3/SMK.C/WND/{{ now()->year }}</label>
+                    ID{{ $siswa->id }}/SPMB-A3/SMK.C/WND/{{ match (now()->month) {
+                        1 => 'I',
+                        2 => 'II',
+                        3 => 'III',
+                        4 => 'IV',
+                        5 => 'V',
+                        6 => 'VI',
+                        7 => 'VII',
+                        8 => 'VIII',
+                        9 => 'IX',
+                        10 => 'X',
+                        11 => 'XI',
+                        12 => 'XII',
+                        default => now()->month,
+                    } }}/{{ now()->year }}</label>
             </div>
         </div>
 
@@ -200,7 +214,7 @@
             {{-- <h3 style="margin-left:2em;">Assalamu'alaikum Wr. Wb.</h3> --}}
             <p style="margin-left:2em; margin-right:4em; text-align: justify;">
                 Disampaikan dengan hormat, berkenaan dengan hasil penilaian oleh tim seleksi
-                calon pesera didik baru SMK Cokroaminoto Wanadadi Tahun Pelajaran
+                calon peserta didik baru SMK Cokroaminoto Wanadadi Tahun Pelajaran
                 {{ now()->year }}/{{ now()->addYear()->year }},
                 kami beritahukan bahwa :
 
