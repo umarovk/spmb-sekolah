@@ -171,7 +171,7 @@ if (!function_exists('terbilang')) {
         <!-- ...existing receipt content... -->
         <div class="container">
 
-            <div class="row mt-5">
+            <div class="row mt-2">
                 <div class="col-2">
                     <img
                         src="{{ asset('img/logo smk cokro.png') }}"
@@ -279,7 +279,7 @@ if (!function_exists('terbilang')) {
         <!-- ...existing receipt content... -->
         <div class="container">
 
-            <div class="row mt-5">
+            <div class="row mt-2">
                 <div class="col-2">
                     <img
                         src="{{ asset('img/logo smk cokro.png') }}"
@@ -385,7 +385,7 @@ if (!function_exists('terbilang')) {
         <!-- ...existing receipt content... -->
         <div class="container">
 
-            <div class="row mt-5">
+            <div class="row mt-2">
                 <div class="col-2">
                     <img
                         src="{{ asset('img/logo smk cokro.png') }}"
