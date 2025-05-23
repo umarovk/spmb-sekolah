@@ -1,0 +1,43 @@
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+    box-shadow: none;
+    border-color: #dee2e6;
+}
+
+.btn-outline-secondary {
+    color: #6c757d;
+    border-color: #dee2e6;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border-color: #dee2e6;
+}
+
+/* Smooth transitions */
+.btn,
+.form-control,
+.table tr {
+    transition: all 0.2s ease;
+}
+
+/* Make table rows more readable with subtle hover */
+.table tr:hover {
+    background-color: rgba(0, 123, 255, 0.03);
+}
+
+@media (max-width: 768px) {
+    .card-header .row {
+        flex-direction: column;
+    }
+
+    .justify-content-md-end {
+        justify-content: flex-start !important;
+    }
+
+    .d-flex.justify-content-end {
+        flex-wrap: wrap;
+    }
+} 

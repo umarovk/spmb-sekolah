@@ -3,6 +3,7 @@
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\bahanController;
 use App\Http\Controllers\spmbcontroller;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\SeleksiController;
@@ -95,7 +96,15 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth', 'role:selektor,admin'])->group(function () {
         Route::get('/seleksi', [SeleksiController::class, 'index'])->name('seleksi.index');
         Route::post('/seleksi/{id}/update-status', [SeleksiController::class, 'updateStatus'])
-            ->name('seleksi.updateStatus');
+            ->name('seleksi.update-status');
+        Route::get('/seleksi-export', [SeleksiController::class, 'export'])->name('seleksi.export');
+    });
+
+
+    // pengambilan bahan routes
+    Route::middleware(['auth', 'role:selektor,admin,guest,teller'])->group(function () {
+        Route::resource('bahan', BahanController::class);
+        Route::get('/bahan-export', [BahanController::class, 'export'])->name('bahan.export');
     });
 });
 
