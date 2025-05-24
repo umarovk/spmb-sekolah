@@ -172,7 +172,7 @@
                                     class="nav-link rounded-pill py-2 {{ Request::is('/') ? 'active bg-light text-primary' : 'text-dark' }}"
                                 >
                                     <i class="nav-icon bi bi-speedometer2 me-2"></i>
-                                    <span>Dashboar</span>
+                                    <span>Dashboard</span>
                                 </a>
                             </li>
 
@@ -218,8 +218,37 @@
                                 </li>
                             @endif
 
-                            <!-- Backup Database (Admin Only) -->
+                            <!-- Student Management (Guest & Admin) -->
+                            @if (auth()->user()->isAdmin() ||
+                                    auth()->user()->isGuest() ||
+                                    auth()->user()->isTeller() ||
+                                    auth()->user()->isSelektor())
+                                <li class="nav-item mb-1">
+                                    <a
+                                        href="{{ route('bahan.index') }}"
+                                        class="nav-link rounded-pill py-2 {{ Request::routeIs('bahan.*', 'index') ? 'active bg-light text-primary' : 'text-dark' }}"
+                                    >
+                                        <i class="nav-icon bi bi-people-fill me-2"></i>
+                                        <span>Pengambilan Bahan</span>
+                                    </a>
+                                </li>
+                            @endif
+
+
                             @if (auth()->user()->isAdmin())
+                                <!-- User Management (Admin Only) -->
+                                <li class="nav-item mb-1">
+                                    <a
+                                        href="{{ route('users.index') }}"
+                                        class="nav-link rounded-pill py-2 {{ Request::routeIs('users.*') ? 'active bg-light text-primary' : 'text-dark' }}"
+                                    >
+                                        <i class="nav-icon bi bi-people me-2"></i>
+                                        <span>Manajemen User</span>
+                                    </a>
+                                </li>
+
+
+                                <!-- Backup Database (Admin Only) -->
                                 <li class="nav-item mb-1">
                                     <a
                                         href="{{ route('admin.backup.index') }}"
@@ -361,10 +390,6 @@
     ></script>
     <!-- ChartJS -->
     <script>
-        // NOTICE!! DO NOT USE ANY OF THIS JAVASCRIPT
-        // IT'S ALL JUST JUNK FOR DEMO
-        // ++++++++++++++++++++++++++++++++++++++++++
-
         const sales_chart_options = {
             series: [{
                     name: 'Digital Goods',

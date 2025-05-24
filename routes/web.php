@@ -3,9 +3,11 @@
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\BahanController;
 use App\Http\Controllers\spmbcontroller;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\SeleksiController;
+use App\Http\Controllers\UserController;
 use Faker\Provider\ar_EG\Payment;
 use Illuminate\Support\Facades\Route;
 
@@ -95,7 +97,26 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth', 'role:selektor,admin'])->group(function () {
         Route::get('/seleksi', [SeleksiController::class, 'index'])->name('seleksi.index');
         Route::post('/seleksi/{id}/update-status', [SeleksiController::class, 'updateStatus'])
-            ->name('seleksi.updateStatus');
+            ->name('seleksi.update-status');
+        Route::get('/seleksi-export', [SeleksiController::class, 'export'])->name('seleksi.export');
+    });
+
+
+    // pengambilan bahan routes
+    Route::middleware(['auth', 'role:selektor,admin'])->group(function () {
+        Route::resource('bahan', BahanController::class);
+        Route::get('/bahan-export', [BahanController::class, 'export'])->name('bahan.export');
+        Route::get('/{bahan}/ubah', [BahanController::class, 'ubah'])->name('bahan.ubah');
+    });
+
+    // User Management Routes
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+        Route::post('/users', [UserController::class, 'store'])->name('users.store');
+        Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     });
 });
 

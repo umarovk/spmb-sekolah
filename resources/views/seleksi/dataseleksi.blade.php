@@ -8,6 +8,16 @@
                     <h1 class="fw-light text-primary mb-0 fs-3">Data Seleksi Siswa Baru</h1>
                 </div>
 
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <!-- Add any global action button here if needed -->
+                    <a
+                        href="{{ route('seleksi.export') }}"
+                        class="btn btn-success transaction-action w-50"
+                    >
+                        Download Data <i class="bi bi-download"></i>
+                    </a>
+                </div>
+
             </div>
 
             <div class="card shadow-sm border-0 rounded-3 mb-4">
@@ -18,21 +28,50 @@
                                 action="{{ route('seleksi.index') }}"
                                 method="GET"
                             >
-                                <div class="input-group">
-                                    <input
-                                        type="text"
-                                        name="search"
-                                        class="form-control border-end-0"
-                                        placeholder="Cari nama siswa..."
-                                        value="{{ $search ?? '' }}"
-                                        aria-label="Cari nama siswa"
-                                    >
-                                    <button
-                                        class="btn btn-outline-secondary border-start-0 bg-white"
-                                        type="submit"
-                                    >
-                                        <i class="bi bi-search text-muted"></i>
-                                    </button>
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            <input
+                                                type="text"
+                                                name="search"
+                                                class="form-control border-end-0"
+                                                placeholder="Cari nama siswa..."
+                                                value="{{ $search ?? '' }}"
+                                                aria-label="Cari nama siswa"
+                                            >
+                                            <button
+                                                class="btn btn-outline-secondary border-start-0 bg-white"
+                                                type="submit"
+                                            >
+                                                <i class="bi bi-search text-muted"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select
+                                            name="status_filter"
+                                            class="form-select"
+                                            onchange="this.form.submit()"
+                                        >
+                                            <option value="">Semua Status</option>
+                                            <option
+                                                value="pending"
+                                                {{ ($status_filter ?? '') == 'pending' ? 'selected' : '' }}
+                                            >Pending</option>
+                                            <option
+                                                value="diterima"
+                                                {{ ($status_filter ?? '') == 'diterima' ? 'selected' : '' }}
+                                            >Diterima</option>
+                                            <option
+                                                value="ditolak"
+                                                {{ ($status_filter ?? '') == 'ditolak' ? 'selected' : '' }}
+                                            >Ditolak</option>
+                                            <option
+                                                value="dipertimbangkan"
+                                                {{ ($status_filter ?? '') == 'dipertimbangkan' ? 'selected' : '' }}
+                                            >Dipertimbangkan</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </form>
                         </div>

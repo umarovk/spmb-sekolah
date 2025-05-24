@@ -44,6 +44,30 @@ class StudentController extends Controller
             'belum_bayar' => Siswa::whereDoesntHave('pembayarans')->count()
         ];
 
+        // Get all daily registration data
+        $dailyRegistrations = Siswa::selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'date' => $item->date,
+                    'count' => $item->count
+                ];
+            });
+
+        // Get all daily payment data
+        $dailyPayments = Pembayaran::selectRaw('DATE(tanggal_bayar) as date, SUM(nominal) as total')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'date' => $item->date,
+                    'total' => $item->total
+                ];
+            });
+
         return view('home', compact(
             'jumlahData', 
             'datasiswa', 
@@ -52,7 +76,9 @@ class StudentController extends Controller
             'totalPembayaran',
             'jurusanData',
             'genderData',
-            'paymentStatusData'
+            'paymentStatusData',
+            'dailyRegistrations',
+            'dailyPayments'
         ));
     }
 
