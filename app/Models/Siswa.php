@@ -33,6 +33,11 @@ class Siswa extends Model
         return $this->hasMany(Pembayaran::class, 'siswa_id');
     }
 
+    public function pengambilanBahans()
+    {
+        return $this->hasMany(PengambilanBahan::class, 'siswa_id');
+    }
+
     public function getStatusSeleksiAttribute($value)
     {
         return $value ?? 'pending';

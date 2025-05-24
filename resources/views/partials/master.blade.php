@@ -218,6 +218,23 @@
                                 </li>
                             @endif
 
+                            <!-- Student Management (Guest & Admin) -->
+                            @if (auth()->user()->isAdmin() ||
+                                    auth()->user()->isGuest() ||
+                                    auth()->user()->isTeller() ||
+                                    auth()->user()->isSelektor())
+                                <li class="nav-item mb-1">
+                                    <a
+                                        href="{{ route('bahan.index') }}"
+                                        class="nav-link rounded-pill py-2 {{ Request::routeIs('bahan.*', 'index') ? 'active bg-light text-primary' : 'text-dark' }}"
+                                    >
+                                        <i class="nav-icon bi bi-people-fill me-2"></i>
+                                        <span>Pengambilan Bahan</span>
+                                    </a>
+                                </li>
+                            @endif
+
+
                             <!-- Backup Database (Admin Only) -->
                             @if (auth()->user()->isAdmin())
                                 <li class="nav-item mb-1">
