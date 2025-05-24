@@ -162,6 +162,83 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Daily Stats Row -->
+            <div class="row stats-row">
+                <!-- Daily Registration Card -->
+                <div class="col-lg-6 col-md-6 mb-4">
+                    <div class="stats-card">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h2 class="stats-number">{{ $dailyRegistrations->sum('count') }}</h2>
+                                <p class="stats-label">Total Pendaftar Keseluruhan</p>
+                            </div>
+                            <div class="stats-icon">
+                                <i class="bi bi-person-plus-fill text-success"></i>
+                            </div>
+                        </div>
+                        <div class="stats-details mt-3">
+                            <h5>Detail per Hari:</h5>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Tanggal</th>
+                                            <th>Jumlah Pendaftar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($dailyRegistrations as $registration)
+                                            <tr>
+                                                <td>{{ \Carbon\Carbon::parse($registration['date'])->format('d M Y') }}
+                                                </td>
+                                                <td>{{ $registration['count'] }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily Payment Card -->
+                <div class="col-lg-6 col-md-6 mb-4">
+                    <div class="stats-card">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h2 class="stats-number">
+                                    {{ \App\Helpers\FormatHelper::formatRupiah($dailyPayments->sum('total')) }}</h2>
+                                <p class="stats-label">Total Pembayaran keseluruhan</p>
+                            </div>
+                            <div class="stats-icon">
+                                <i class="bi bi-cash-stack text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="stats-details mt-3">
+                            <h5>Detail per Hari:</h5>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Tanggal</th>
+                                            <th>Total Pembayaran</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($dailyPayments as $payment)
+                                            <tr>
+                                                <td>{{ \Carbon\Carbon::parse($payment['date'])->format('d M Y') }}</td>
+                                                <td>{{ \App\Helpers\FormatHelper::formatRupiah($payment['total']) }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

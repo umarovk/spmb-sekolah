@@ -172,7 +172,7 @@
                                     class="nav-link rounded-pill py-2 {{ Request::is('/') ? 'active bg-light text-primary' : 'text-dark' }}"
                                 >
                                     <i class="nav-icon bi bi-speedometer2 me-2"></i>
-                                    <span>Dashboar</span>
+                                    <span>Dashboard</span>
                                 </a>
                             </li>
 
