@@ -235,8 +235,20 @@
                             @endif
 
 
-                            <!-- Backup Database (Admin Only) -->
                             @if (auth()->user()->isAdmin())
+                                <!-- User Management (Admin Only) -->
+                                <li class="nav-item mb-1">
+                                    <a
+                                        href="{{ route('users.index') }}"
+                                        class="nav-link rounded-pill py-2 {{ Request::routeIs('users.*') ? 'active bg-light text-primary' : 'text-dark' }}"
+                                    >
+                                        <i class="nav-icon bi bi-people me-2"></i>
+                                        <span>Manajemen User</span>
+                                    </a>
+                                </li>
+
+
+                                <!-- Backup Database (Admin Only) -->
                                 <li class="nav-item mb-1">
                                     <a
                                         href="{{ route('admin.backup.index') }}"

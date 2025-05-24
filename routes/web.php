@@ -7,6 +7,7 @@ use App\Http\Controllers\BahanController;
 use App\Http\Controllers\spmbcontroller;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\SeleksiController;
+use App\Http\Controllers\UserController;
 use Faker\Provider\ar_EG\Payment;
 use Illuminate\Support\Facades\Route;
 
@@ -102,10 +103,20 @@ Route::middleware(['auth'])->group(function () {
 
 
     // pengambilan bahan routes
-    Route::middleware(['auth', 'role:selektor,admin,guest,teller'])->group(function () {
+    Route::middleware(['auth', 'role:selektor,admin'])->group(function () {
         Route::resource('bahan', BahanController::class);
         Route::get('/bahan-export', [BahanController::class, 'export'])->name('bahan.export');
         Route::get('/{bahan}/ubah', [BahanController::class, 'ubah'])->name('bahan.ubah');
+    });
+
+    // User Management Routes
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+        Route::post('/users', [UserController::class, 'store'])->name('users.store');
+        Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     });
 });
 
