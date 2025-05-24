@@ -378,10 +378,6 @@
     ></script>
     <!-- ChartJS -->
     <script>
-        // NOTICE!! DO NOT USE ANY OF THIS JAVASCRIPT
-        // IT'S ALL JUST JUNK FOR DEMO
-        // ++++++++++++++++++++++++++++++++++++++++++
-
         const sales_chart_options = {
             series: [{
                     name: 'Digital Goods',

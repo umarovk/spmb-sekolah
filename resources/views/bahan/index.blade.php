@@ -1,11 +1,18 @@
 @extends('partials.master')
 
 @section('content')
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
+
+
+                {{-- CARD --}}
                 <div class="card">
+
+                    {{-- CARD HEADER --}}
                     <div class="card-header">
+                        {{-- JUDUL  PENGAMBILAN DAN EXPORT DATA --}}
                         <div class="container py-4">
                             <div class="row mb-4 align-items-center">
                                 <div class="col-md-8">
@@ -21,9 +28,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                        </div>
                     </div>
+
+                    {{-- CARD BODY --}}
                     <div class="card-body">
                         <!-- Form Pencarian -->
                         <form
@@ -211,7 +218,7 @@
                                                         role="group"
                                                     >
                                                         <a
-                                                            href="{{ route('bahan.edit', $siswa->pengambilanBahans->first()) }}"
+                                                            href="{{ route('bahan.ubah', $siswa->pengambilanBahans->first()) }}"
                                                             class="btn btn-warning btn-sm"
                                                         >
                                                             <i class="bi bi-pencil"></i>
@@ -248,6 +255,8 @@
                         </div>
                     </div>
                 </div>
+
+
             </div>
         </div>
     </div>

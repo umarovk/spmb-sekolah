@@ -105,6 +105,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth', 'role:selektor,admin,guest,teller'])->group(function () {
         Route::resource('bahan', BahanController::class);
         Route::get('/bahan-export', [BahanController::class, 'export'])->name('bahan.export');
+        Route::get('/{bahan}/ubah', [BahanController::class, 'ubah'])->name('bahan.ubah');
     });
 });
 

@@ -67,10 +67,10 @@ class BahanController extends Controller
             ->with('success', 'Data pengambilan bahan berhasil disimpan.');
     }
 
-    public function edit(PengambilanBahan $bahan)
+    public function ubah(PengambilanBahan $bahan)
     {
         $siswas = Siswa::orderBy('namasiswa')->get();
-        return view('bahan.edit', compact('bahan', 'siswas'));
+        return view('bahan.ubah', compact('bahan', 'siswas'));
     }
 
     public function update(Request $request, PengambilanBahan $bahan)
