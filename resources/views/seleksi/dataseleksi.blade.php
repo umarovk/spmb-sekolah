@@ -28,21 +28,50 @@
                                 action="{{ route('seleksi.index') }}"
                                 method="GET"
                             >
-                                <div class="input-group">
-                                    <input
-                                        type="text"
-                                        name="search"
-                                        class="form-control border-end-0"
-                                        placeholder="Cari nama siswa..."
-                                        value="{{ $search ?? '' }}"
-                                        aria-label="Cari nama siswa"
-                                    >
-                                    <button
-                                        class="btn btn-outline-secondary border-start-0 bg-white"
-                                        type="submit"
-                                    >
-                                        <i class="bi bi-search text-muted"></i>
-                                    </button>
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            <input
+                                                type="text"
+                                                name="search"
+                                                class="form-control border-end-0"
+                                                placeholder="Cari nama siswa..."
+                                                value="{{ $search ?? '' }}"
+                                                aria-label="Cari nama siswa"
+                                            >
+                                            <button
+                                                class="btn btn-outline-secondary border-start-0 bg-white"
+                                                type="submit"
+                                            >
+                                                <i class="bi bi-search text-muted"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select
+                                            name="status_filter"
+                                            class="form-select"
+                                            onchange="this.form.submit()"
+                                        >
+                                            <option value="">Semua Status</option>
+                                            <option
+                                                value="pending"
+                                                {{ ($status_filter ?? '') == 'pending' ? 'selected' : '' }}
+                                            >Pending</option>
+                                            <option
+                                                value="diterima"
+                                                {{ ($status_filter ?? '') == 'diterima' ? 'selected' : '' }}
+                                            >Diterima</option>
+                                            <option
+                                                value="ditolak"
+                                                {{ ($status_filter ?? '') == 'ditolak' ? 'selected' : '' }}
+                                            >Ditolak</option>
+                                            <option
+                                                value="dipertimbangkan"
+                                                {{ ($status_filter ?? '') == 'dipertimbangkan' ? 'selected' : '' }}
+                                            >Dipertimbangkan</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </form>
                         </div>

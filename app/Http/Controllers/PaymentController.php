@@ -20,13 +20,25 @@ class PaymentController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $siswas = Siswa::when($search, function($query) use ($search) {
-                return $query->where('namasiswa', 'LIKE', "%{$search}%");
-            })
-            ->with('pembayarans')
-            ->get();
-        
-        return view('payments.index', compact('siswas', 'search'));
+        $payment_status = $request->input('payment_status');
+
+        $siswas = Siswa::with(['pembayarans' => function($query) {
+            $query->latest();
+        }])
+        ->when($search, function($query) use ($search) {
+            return $query->where('namasiswa', 'like', "%{$search}%")
+                        ->orWhere('nisn', 'like', "%{$search}%");
+        })
+        ->when($payment_status === 'has_payment', function($query) {
+            return $query->whereHas('pembayarans');
+        })
+        ->when($payment_status === 'no_payment', function($query) {
+            return $query->whereDoesntHave('pembayarans');
+        })
+        ->orderBy('namasiswa')
+        ->paginate(10);
+
+        return view('payments.index', compact('siswas', 'search', 'payment_status'));
     }
 
     

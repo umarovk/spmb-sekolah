@@ -11,7 +11,7 @@ class SeleksiController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $status = $request->input('status');
+        $status_filter = $request->input('status_filter');
         $perPage = $request->input('perPage', 10);
 
         $datasiswa = Siswa::when($search, function($query) use ($search) {
@@ -22,13 +22,13 @@ class SeleksiController extends Controller
                         ->orWhere('agama', 'LIKE', "%{$search}%")
                         ->orWhere('asrama_tahfidz', 'LIKE', "%{$search}%");
             })
-            ->when($status, function($query) use ($status) {
-                return $query->where('status_seleksi', $status);
+            ->when($status_filter, function($query) use ($status_filter) {
+                return $query->where('status_seleksi', $status_filter);
             })
             ->orderBy('namasiswa')
             ->paginate($perPage);
 
-        return view('seleksi.dataseleksi', compact('datasiswa', 'search', 'status', 'perPage'));
+        return view('seleksi.dataseleksi', compact('datasiswa', 'search', 'status_filter', 'perPage'));
     }
 
     public function updateStatus(Request $request, $id)

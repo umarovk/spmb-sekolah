@@ -26,29 +26,50 @@
                                 action="{{ route('payments.index') }}"
                                 method="GET"
                             >
-                                <div class="input-group">
-                                    <input
-                                        type="text"
-                                        name="search"
-                                        class="form-control border-end-0"
-                                        placeholder="Cari nama siswa..."
-                                        value="{{ $search ?? '' }}"
-                                        aria-label="Cari nama siswa"
-                                    >
-                                    <button
-                                        class="btn btn-outline-secondary border-start-0 bg-white"
-                                        type="submit"
-                                    >
-                                        <i class="bi bi-search text-muted"></i>
-                                    </button>
-                                    @if ($search)
-                                        <a
-                                            href="{{ route('payments.index') }}"
-                                            class="btn btn-outline-secondary"
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            <input
+                                                type="text"
+                                                name="search"
+                                                class="form-control border-end-0"
+                                                placeholder="Cari nama siswa..."
+                                                value="{{ $search ?? '' }}"
+                                                aria-label="Cari nama siswa"
+                                            >
+                                            <button
+                                                class="btn btn-outline-secondary border-start-0 bg-white"
+                                                type="submit"
+                                            >
+                                                <i class="bi bi-search text-muted"></i>
+                                            </button>
+                                            @if ($search || $payment_status)
+                                                <a
+                                                    href="{{ route('payments.index') }}"
+                                                    class="btn btn-outline-secondary"
+                                                >
+                                                    <i class="bi bi-x-lg"></i>
+                                                </a>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select
+                                            name="payment_status"
+                                            class="form-select"
+                                            onchange="this.form.submit()"
                                         >
-                                            <i class="bi bi-x-lg"></i>
-                                        </a>
-                                    @endif
+                                            <option value="">Semua Status</option>
+                                            <option
+                                                value="has_payment"
+                                                {{ ($payment_status ?? '') == 'has_payment' ? 'selected' : '' }}
+                                            >Sudah Bayar</option>
+                                            <option
+                                                value="no_payment"
+                                                {{ ($payment_status ?? '') == 'no_payment' ? 'selected' : '' }}
+                                            >Belum Bayar</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -137,7 +158,7 @@
                         <!-- If pagination is implemented, render it here -->
                         @if (isset($siswas) && method_exists($siswas, 'links'))
                             <div>
-                                {{ $siswas->appends(['search' => $search ?? ''])->links('vendor.pagination.custom') }}
+                                {{ $siswas->appends(['search' => $search ?? '', 'payment_status' => $payment_status ?? ''])->links('vendor.pagination.custom') }}
                             </div>
                         @endif
                     </div>
