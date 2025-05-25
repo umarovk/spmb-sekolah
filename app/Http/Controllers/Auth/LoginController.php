@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\LoginLog;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -36,6 +37,26 @@ class LoginController extends Controller
         
         if(Auth::attempt([$fieldType => $input['login'], 'password' => $input['password']])) {
             $request->session()->regenerate();
+            
+            // Record login time
+            $user = Auth::user();
+            try {
+                $lastLoginNumber = $user->loginLogs()->max('login_number') ?? 0;
+                $user->loginLogs()->create([
+                    'ip_address' => $request->ip(),
+                    'user_agent' => $request->userAgent(),
+                    'login_at' => now(),
+                    'login_number' => $lastLoginNumber + 1
+                ]);
+            } catch (\Exception $e) {
+                // If login_number column doesn't exist yet, create log without it
+                $user->loginLogs()->create([
+                    'ip_address' => $request->ip(),
+                    'user_agent' => $request->userAgent(),
+                    'login_at' => now()
+                ]);
+            }
+            
             return redirect()->route('home');
         }
 

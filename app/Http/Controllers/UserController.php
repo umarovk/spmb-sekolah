@@ -15,16 +15,19 @@ class UserController extends Controller
         $perPage = $request->input('perPage', 10);
         $role = $request->input('role');
 
-        $users = User::when($search, function($query) use ($search) {
-            return $query->where('nama', 'LIKE', "%{$search}%")
-                        ->orWhere('username', 'LIKE', "%{$search}%");
-        })
-        ->when($role, function($query) use ($role) {
-            return $query->where('role', $role);
-        })
-        ->latest()
-        ->paginate($perPage)
-        ->withQueryString();
+        $users = User::with(['loginLogs' => function($query) {
+                $query->latest('login_at');
+            }])
+            ->when($search, function($query) use ($search) {
+                return $query->where('nama', 'LIKE', "%{$search}%")
+                            ->orWhere('username', 'LIKE', "%{$search}%");
+            })
+            ->when($role, function($query) use ($role) {
+                return $query->where('role', $role);
+            })
+            ->latest()
+            ->paginate($perPage)
+            ->withQueryString();
 
         return view('user.index', compact('users', 'search', 'perPage', 'role'));
     }
