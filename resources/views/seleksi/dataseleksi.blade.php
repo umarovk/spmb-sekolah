@@ -75,42 +75,7 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="col-lg-4 col-md-6">
-                            <form
-                                action="{{ route('tabelsiswa') }}"
-                                method="GET"
-                                class="d-flex justify-content-md-end"
-                            >
-                                <div
-                                    class="input-group input-group-sm"
-                                    style="max-width: 200px;"
-                                >
-                                    <label class="input-group-text bg-white text-muted">Tampilkan</label>
-                                    <select
-                                        class="form-select border-start-0"
-                                        name="perPage"
-                                        onchange="this.form.submit()"
-                                    >
-                                        <option
-                                            value="10"
-                                            {{ ($perPage ?? 10) == 10 ? 'selected' : '' }}
-                                        >10</option>
-                                        <option
-                                            value="25"
-                                            {{ ($perPage ?? 10) == 25 ? 'selected' : '' }}
-                                        >25</option>
-                                        <option
-                                            value="50"
-                                            {{ ($perPage ?? 10) == 50 ? 'selected' : '' }}
-                                        >50</option>
-                                        <option
-                                            value="100"
-                                            {{ ($perPage ?? 10) == 100 ? 'selected' : '' }}
-                                        >100</option>
-                                    </select>
-                                </div>
-                            </form>
-                        </div>
+
                     </div>
                 </div>
 
@@ -130,7 +95,7 @@
                             @forelse ($datasiswa as $dt)
                                 <tr>
                                     <td class="ps-3">
-                                        {{ ($datasiswa->currentPage() - 1) * $datasiswa->perPage() + $loop->iteration }}
+                                        {{ $loop->iteration }}
                                     </td>
                                     <td>
                                         <span class="fw-medium">{{ $dt->namasiswa }}</span>
@@ -217,12 +182,8 @@
                 <div class="card-footer bg-white border-top border-light py-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <p class="text-muted small mb-0">
-                            Menampilkan {{ $datasiswa->firstItem() ?? 0 }} - {{ $datasiswa->lastItem() ?? 0 }} dari
-                            {{ $datasiswa->total() }} data
+                            Total data: {{ $datasiswa->count() }}
                         </p>
-                        <div>
-                            {{ $datasiswa->appends(['search' => $search, 'perPage' => $perPage])->links('vendor.pagination.custom') }}
-                        </div>
                     </div>
                 </div>
             </div>

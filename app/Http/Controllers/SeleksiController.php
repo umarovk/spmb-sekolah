@@ -12,7 +12,6 @@ class SeleksiController extends Controller
     {
         $search = $request->input('search');
         $status_filter = $request->input('status_filter');
-        $perPage = $request->input('perPage', 10);
 
         $datasiswa = Siswa::when($search, function($query) use ($search) {
                 return $query->where('namasiswa', 'like', "%{$search}%")
@@ -26,9 +25,9 @@ class SeleksiController extends Controller
                 return $query->where('status_seleksi', $status_filter);
             })
             ->orderBy('namasiswa')
-            ->paginate($perPage);
+            ->get();
 
-        return view('seleksi.dataseleksi', compact('datasiswa', 'search', 'status_filter', 'perPage'));
+        return view('seleksi.dataseleksi', compact('datasiswa', 'search', 'status_filter'));
     }
 
     public function updateStatus(Request $request, $id)
