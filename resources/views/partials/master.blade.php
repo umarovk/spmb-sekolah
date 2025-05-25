@@ -219,10 +219,7 @@
                             @endif
 
                             <!-- Student Management (Guest & Admin) -->
-                            @if (auth()->user()->isAdmin() ||
-                                    auth()->user()->isGuest() ||
-                                    auth()->user()->isTeller() ||
-                                    auth()->user()->isSelektor())
+                            @if (auth()->user()->isAdmin() || auth()->user()->isSelektor())
                                 <li class="nav-item mb-1">
                                     <a
                                         href="{{ route('bahan.index') }}"

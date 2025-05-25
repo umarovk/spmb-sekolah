@@ -147,77 +147,99 @@
                         </div>
 
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped">
-                                <thead>
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
                                     <tr>
-                                        <th>No</th>
-                                        <th>Username</th>
+                                        <th class="ps-3">No</th>
                                         <th>Nama</th>
+                                        <th>Username</th>
                                         <th>Email</th>
                                         <th>Role</th>
+                                        <th>Login Terakhir</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($users as $user)
+                                    @forelse ($users as $user)
                                         <tr>
-                                            <td>{{ $loop->iteration + ($users->currentPage() - 1) * $users->perPage() }}
+                                            <td class="ps-3">
+                                                {{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}
                                             </td>
-                                            <td>{{ $user->username }}</td>
                                             <td>{{ $user->nama }}</td>
+                                            <td>{{ $user->username }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td>
                                                 <span
-                                                    class="badge bg-{{ $user->role === 'admin' ? 'danger' : ($user->role === 'teller' ? 'primary' : ($user->role === 'selektor' ? 'success' : 'warning')) }}"
+                                                    class="badge bg-{{ $user->role === 'admin' ? 'danger' : ($user->role === 'teller' ? 'success' : ($user->role === 'selektor' ? 'warning' : 'secondary')) }}"
                                                 >
                                                     {{ ucfirst($user->role) }}
                                                 </span>
                                             </td>
                                             <td>
-                                                <a
-                                                    href="{{ route('users.edit', $user->id) }}"
-                                                    class="btn btn-warning btn-sm"
-                                                >
-                                                    <i class="bi bi-pencil"></i>
-                                                </a>
-                                                @if (auth()->user()->isAdmin() && $user->id !== auth()->id())
-                                                    <form
-                                                        action="{{ route('users.destroy', $user->id) }}"
-                                                        method="POST"
-                                                        class="d-inline"
-                                                    >
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button
-                                                            type="submit"
-                                                            class="btn btn-danger btn-sm"
-                                                            onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?')"
-                                                        >
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </form>
+                                                @if ($user->lastLogin())
+                                                    @if (isset($user->lastLogin()->login_number))
+                                                        Login #{{ $user->lastLogin()->login_number }}
+                                                        <br>
+                                                    @endif
+                                                    {{ $user->lastLogin()->login_at->setTimezone('Asia/Jakarta')->format('d/m/Y H:i') }}
+                                                    WIB
+                                                    <small class="text-muted d-block">
+                                                        IP: {{ $user->lastLogin()->ip_address }}
+                                                    </small>
+                                                @else
+                                                    <span class="text-muted">Belum pernah login</span>
                                                 @endif
+                                            </td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a
+                                                        href="{{ route('users.edit', $user->id) }}"
+                                                        class="btn btn-sm btn-outline-primary"
+                                                    >
+                                                        <i class="bi bi-pencil"></i>
+                                                    </a>
+                                                    @if (auth()->user()->isAdmin() && $user->id !== auth()->id())
+                                                        <form
+                                                            action="{{ route('users.destroy', $user->id) }}"
+                                                            method="POST"
+                                                            class="d-inline"
+                                                        >
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button
+                                                                type="submit"
+                                                                class="btn btn-sm btn-outline-danger"
+                                                                onclick="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')"
+                                                            >
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                </div>
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
                                             <td
                                                 colspan="6"
-                                                class="text-center"
-                                            >Tidak ada data</td>
+                                                class="text-center py-4"
+                                            >
+                                                <i class="bi bi-inbox fs-4 d-block mb-2"></i>
+                                                Tidak ada data pengguna
+                                            </td>
                                         </tr>
                                     @endforelse
                                 </tbody>
                             </table>
                         </div>
-                        <div class="mt-3">
+
+                        <div class="card-footer bg-white border-top border-light py-3">
                             <div class="d-flex justify-content-between align-items-center">
+                                <p class="text-muted small mb-0">
+                                    Total: {{ $users->total() }} pengguna
+                                </p>
                                 <div>
-                                    Menampilkan {{ $users->firstItem() ?? 0 }} sampai {{ $users->lastItem() ?? 0 }} dari
-                                    {{ $users->total() }} data
-                                </div>
-                                <div>
-                                    {{ $users->links('pagination::bootstrap-5') }}
+                                    {{ $users->appends(['search' => $search])->links('vendor.pagination.custom') }}
                                 </div>
                             </div>
                         </div>

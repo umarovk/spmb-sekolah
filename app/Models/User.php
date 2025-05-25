@@ -65,4 +65,14 @@ class User extends Authenticatable
     {
         return $this->role === 'guest';
     }
+
+    public function loginLogs()
+    {
+        return $this->hasMany(LoginLog::class);
+    }
+
+    public function lastLogin()
+    {
+        return $this->loginLogs()->latest('login_at')->first();
+    }
 }
