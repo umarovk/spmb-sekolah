@@ -291,8 +291,14 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-content-md-end mb-0">
                                     <li class="breadcrumb-item"><strong>{{ auth()->user()->nama }}</strong></li>
-
-                                    <a href="{{ route('home') }}"class="breadcrumb-item active">Home</a>
+                                    <li class="breadcrumb-item">
+                                        <a
+                                            href="{{ route('home') }}"
+                                            class="btn btn-primary btn-sm rounded-pill px-3 py-1 text-white"
+                                        >
+                                            <i class="bi bi-house-door-fill me-1"></i>Home
+                                        </a>
+                                    </li>
                                 </ol>
                             </nav>
                         </div>
