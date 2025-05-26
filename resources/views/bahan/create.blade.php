@@ -60,7 +60,7 @@
                                             class="form-control @error('nama_bahan') is-invalid @enderror"
                                             id="nama_bahan"
                                             name="nama_bahan"
-                                            value="Bahan Osis, Pramuka, Atribut, dasi, topi, badge"
+                                            value="Bahan Osis, Pramuka, Atribut, dasi, topi, badge & Seragam Olahraga"
                                             required
                                         >
                                         @error('nama_bahan')
@@ -99,7 +99,7 @@
                                             class="form-control @error('tanggal_pengambilan') is-invalid @enderror"
                                             id="tanggal_pengambilan"
                                             name="tanggal_pengambilan"
-                                            value="{{ old('tanggal_pengambilan', date('Y-m-d')) }}"
+                                            value="{{ old('tanggal_pengambilan', date('Y-m-d', strtotime(now()))) }}"
                                             required
                                         >
                                         @error('tanggal_pengambilan')
