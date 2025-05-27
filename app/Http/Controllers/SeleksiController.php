@@ -33,12 +33,14 @@ class SeleksiController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:pending,diterima,ditolak,dipertimbangkan'
+            'status' => 'required|in:pending,diterima,ditolak,dipertimbangkan',
+            'tanggal_seleksi' => 'required|date'
         ]);
 
         try {
             $siswa = Siswa::findOrFail($id);
             $siswa->status_seleksi = $request->status;
+            $siswa->tanggalseleksi = $request->tanggal_seleksi;
             $siswa->save();
 
             return response()->json([

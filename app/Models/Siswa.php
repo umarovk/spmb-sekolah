@@ -23,7 +23,7 @@ class Siswa extends Model
         'penghasilan_ayah', 'nomor_ayah', 'nama_ibu', 'pendidikan_ibu',
         'tempat_lahir_ibu', 'tanggal_lahir_ibu', 'alamat_ibu', 'pekerjaan_ibu',
         'penghasilan_ibu', 'nomor_ibu', 'nama_wali', 'alamat_wali',
-        'nomor_wali', 'penghasilan_wali', 'asrama_tahfidz', 'status_seleksi'
+        'nomor_wali', 'penghasilan_wali', 'asrama_tahfidz', 'status_seleksi', 'tanggalseleksi'
     ];
 
     protected $dates = ['created_at', 'updated_at'];
