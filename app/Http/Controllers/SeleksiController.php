@@ -24,7 +24,7 @@ class SeleksiController extends Controller
             ->when($status_filter, function($query) use ($status_filter) {
                 return $query->where('status_seleksi', $status_filter);
             })
-            ->orderBy('namasiswa')
+            ->latest()
             ->get();
 
         return view('seleksi.dataseleksi', compact('datasiswa', 'search', 'status_filter'));

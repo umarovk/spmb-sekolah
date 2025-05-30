@@ -4,7 +4,8 @@
     <main class="app-main">
         <div class="app-content-header">
             <div class="container-fluid">
-                <h1>edit Data Siswa</h1>
+                <h1>Edit Data Siswa</h1>
+
                 <div class="card card-info card-outline mb-4">
                     <div class="card-header">
                         <div class="card-title">Formm edit Siswa</div>
@@ -244,6 +245,7 @@
                                                                     class="form-control"
                                                                     id="validationCustom01"
                                                                     placeholder="Berat Badan"
+                                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                                     name="beratbadan"
                                                                 />
                                                                 <div class="invalid-feedback">Berat Badan</div>
@@ -263,6 +265,7 @@
                                                                     class="form-control"
                                                                     id="validationCustom01"
                                                                     placeholder="Tinggi Badan"
+                                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                                     name="tinggibadan"
                                                                 />
                                                                 <div class="invalid-feedback">Tinggi Badan</div>

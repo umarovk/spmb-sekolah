@@ -216,6 +216,7 @@
                                                             class="form-control"
                                                             id="beratbadan"
                                                             placeholder="Contoh: 60"
+                                                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                             name="beratbadan"
                                                         >
                                                     </div>
@@ -230,6 +231,7 @@
                                                             class="form-control"
                                                             id="tinggibadan"
                                                             placeholder="Contoh: 170"
+                                                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                             name="tinggibadan"
                                                         >
                                                     </div>
