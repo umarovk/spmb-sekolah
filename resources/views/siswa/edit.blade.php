@@ -244,6 +244,7 @@
                                                                     class="form-control"
                                                                     id="validationCustom01"
                                                                     placeholder="Berat Badan"
+                                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                                     name="beratbadan"
                                                                 />
                                                                 <div class="invalid-feedback">Berat Badan</div>
@@ -263,6 +264,7 @@
                                                                     class="form-control"
                                                                     id="validationCustom01"
                                                                     placeholder="Tinggi Badan"
+                                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                                     name="tinggibadan"
                                                                 />
                                                                 <div class="invalid-feedback">Tinggi Badan</div>

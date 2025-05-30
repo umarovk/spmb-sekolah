@@ -35,7 +35,13 @@ class PaymentController extends Controller
         ->when($payment_status === 'no_payment', function($query) {
             return $query->whereDoesntHave('pembayarans');
         })
-        ->orderBy('namasiswa')
+        ->orderByDesc(function($query) {
+            $query->select('created_at')
+                  ->from('pembayarans')
+                  ->whereColumn('siswa_id', 'siswas.id')
+                  ->latest()
+                  ->limit(1);
+        })
         ->paginate(10);
 
         return view('payments.index', compact('siswas', 'search', 'payment_status'));
