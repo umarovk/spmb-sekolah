@@ -133,7 +133,7 @@
                                             </a>
 
                                             <a
-                                                href="{{ route('siswa.edit', $dt->id) }}"
+                                                href="{{ route('siswa.ubah', $dt->id) }}"
                                                 class="btn btn-sm btn-outline-primary rounded-pill"
                                                 title="Edit Data"
                                             >

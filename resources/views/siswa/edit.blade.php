@@ -4,7 +4,8 @@
     <main class="app-main">
         <div class="app-content-header">
             <div class="container-fluid">
-                <h1>edit Data Siswa</h1>
+                <h1>Edit Data Siswa</h1>
+
                 <div class="card card-info card-outline mb-4">
                     <div class="card-header">
                         <div class="card-title">Formm edit Siswa</div>

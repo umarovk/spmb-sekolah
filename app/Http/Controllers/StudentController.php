@@ -228,17 +228,12 @@ class StudentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
-    {
-        $datasiswa = siswa::findOrFail($id);
-        return view('siswa.edit', compact('datasiswa'));    
-    }
 
     public function ubah($id)
     {
     $datasiswa = Siswa::findOrFail($id);
     // return view('siswa.editsiswa', compact('datasiswa'));
-    return view('siswa.ubah', compact('datasiswa'));
+    return view('siswa.edit', compact('datasiswa'));
     }
 
     /**

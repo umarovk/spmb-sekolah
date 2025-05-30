@@ -140,6 +140,8 @@ if (!function_exists('terbilang')) {
             body {
                 margin: 0;
                 padding: 0;
+                transform: scale(0.96);
+                transform-origin: top center;
             }
 
             /* Hide browser's default header and footer */
@@ -251,7 +253,7 @@ if (!function_exists('terbilang')) {
                 >
                     <div class="d-flex align-items-center mb-2">
                         <div class="manual-checkbox me-2"></div>
-                        <span>Bahan Osis</span>
+                        <span>Bahan Osis, Seragam Olahraga</span>
                     </div>
                     <div class="d-flex align-items-center mb-2">
                         <div class="manual-checkbox me-2"></div>

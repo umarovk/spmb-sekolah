@@ -47,12 +47,11 @@ Route::middleware(['auth'])->group(function () {
             'create'  => 'siswa.create',
             'store'   => 'siswa.store',
             'show'    => 'siswa.show',
-            'edit'    => 'siswa.edit',
             'update'  => 'siswa.update',
             'destroy' => 'siswa.destroy',
         ]);
         Route::get('/tabelsiswa', [StudentController::class, 'tabelsiswa'])->name('tabelsiswa');
-        Route::get('/{id}/edit', [StudentController::class, 'edit'])->name('siswa.editdata');
+        Route::get('/{id}/editsiswa', [StudentController::class, 'ubah'])->name('siswa.ubah');
         Route::get('/siswa/{siswa}/print/surat-keterangan', [StudentController::class, 'printSuratKeterangan'])
             ->name('siswa.print.surat-keterangan');
         Route::get('/siswa/{siswa}/print/surat-diterima', [StudentController::class, 'printSuratDiterima'])
