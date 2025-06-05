@@ -57,6 +57,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/siswa/{siswa}/print/surat-diterima', [StudentController::class, 'printSuratDiterima'])
             ->name('siswa.print.surat-diterima');
         Route::get('/export-siswa', [StudentController::class, 'export'])->name('siswa.export');
+        Route::get('/rangkuman', [StudentController::class, 'rangkuman'])->name('siswa.rangkuman');
     });
 
     // Teller & Admin Routes (Payment Management)

@@ -145,7 +145,8 @@ class StudentController extends Controller
             'alamat_wali' => 'nullable',
             'nomor_wali' => 'nullable',
             'penghasilan_wali' => 'nullable',
-            'asrama_tahfidz' => 'required|in:Bersedia,Tidak'
+            'asrama_tahfidz' => 'required|in:Bersedia,Tidak',
+            'jalurdaftar' => 'required|in:Reguler,Prestasi'
         ]);
 
         siswa::create([
@@ -210,6 +211,7 @@ class StudentController extends Controller
             'nomor_wali' => $request->nomor_wali, 
             'penghasilan_wali' => $request->penghasilan_wali,
             'asrama_tahfidz' => $request->asrama_tahfidz,
+            'jalurdaftar' => $request->jalurdaftar,
         ]);
 
         return redirect()->route('tabelsiswa')
@@ -292,6 +294,7 @@ class StudentController extends Controller
             'nomor_wali' => 'nullable',
             'penghasilan_wali' => 'nullable',
             'asrama_tahfidz' => 'required|in:Bersedia,Tidak',
+            'jalurdaftar' => 'required|in:Reguler,Prestasi'
         ]);
 
         $datasiswa = Siswa::findOrFail($id);
@@ -357,6 +360,7 @@ class StudentController extends Controller
             $datasiswa->nomor_wali = $request->nomor_wali; 
             $datasiswa->penghasilan_wali = $request->penghasilan_wali;
             $datasiswa->asrama_tahfidz = $request->asrama_tahfidz;
+            $datasiswa->jalurdaftar = $request->jalurdaftar;
 
         $datasiswa->save();
 
@@ -457,5 +461,71 @@ class StudentController extends Controller
         return response()->download($filepath, $filename, [
             'Content-Type' => 'text/csv',
         ])->deleteFileAfterSend();
+    }
+
+    public function rangkuman()
+    {
+        // Total Pendaftar
+        $totalPendaftar = [
+            'total' => Siswa::count(),
+            'tkj' => Siswa::where('jurusan', 'Teknik Komputer Jaringan')->count(),
+            'tsm' => Siswa::where('jurusan', 'Teknik Sepeda Motor')->count()
+        ];
+
+        // Siswa Diterima
+        $siswaDiterima = [
+            'total' => Siswa::where('status_seleksi', 'diterima')->count(),
+            'tkj' => Siswa::where('jurusan', 'Teknik Komputer Jaringan')
+                         ->where('status_seleksi', 'diterima')
+                         ->count(),
+            'tsm' => Siswa::where('jurusan', 'Teknik Sepeda Motor')
+                         ->where('status_seleksi', 'diterima')
+                         ->count()
+        ];
+
+        // Siswa Ditolak
+        $siswaDitolak = [
+            'total' => Siswa::where('status_seleksi', 'ditolak')->count(),
+            'tkj' => Siswa::where('jurusan', 'Teknik Komputer Jaringan')
+                         ->where('status_seleksi', 'ditolak')
+                         ->count(),
+            'tsm' => Siswa::where('jurusan', 'Teknik Sepeda Motor')
+                         ->where('status_seleksi', 'ditolak')
+                         ->count()
+        ];
+
+        // Siswa Belum Seleksi
+        $siswaBelumSeleksi = [
+            'total' => Siswa::where('status_seleksi', 'pending')->count(),
+            'tkj' => Siswa::where('jurusan', 'Teknik Komputer Jaringan')
+                         ->where('status_seleksi', 'pending')
+                         ->count(),
+            'tsm' => Siswa::where('jurusan', 'Teknik Sepeda Motor')
+                         ->where('status_seleksi', 'pending')
+                         ->count()
+        ];
+
+        // Siswa Sudah DU
+        $siswaSudahDU = [
+            'total' => Siswa::whereHas('pembayarans')->count(),
+            'tkj' => Siswa::where('jurusan', 'Teknik Komputer Jaringan')
+                         ->whereHas('pembayarans')
+                         ->count(),
+            'tsm' => Siswa::where('jurusan', 'Teknik Sepeda Motor')
+                         ->whereHas('pembayarans')
+                         ->count()
+        ];
+
+        // Total Transaksi DU
+        $totalTransaksiDU = Pembayaran::sum('nominal');
+
+        return view('siswa.rangkuman', compact(
+            'totalPendaftar',
+            'siswaDiterima',
+            'siswaDitolak',
+            'siswaBelumSeleksi',
+            'siswaSudahDU',
+            'totalTransaksiDU'
+        ));
     }
 }
