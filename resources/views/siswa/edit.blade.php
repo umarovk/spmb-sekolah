@@ -648,8 +648,6 @@
                                                                 <input
                                                                     value="{{ old('akta_lahir', $datasiswa->akta_lahir) }}"
                                                                     type="text"
-                                                                    min="0"
-                                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                                     class="form-control"
                                                                     id="validationCustom01"
                                                                     placeholder="Tulis akta_lahir"

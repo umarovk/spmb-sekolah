@@ -484,7 +484,6 @@
                                                             id="akta_lahir"
                                                             placeholder="Masukkan nomor akta lahir"
                                                             name="akta_lahir"
-                                                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                         >
                                                     </div>
 
