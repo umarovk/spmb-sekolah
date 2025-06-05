@@ -231,6 +231,15 @@
                                 </li>
                             @endif
 
+                            <li class="nav-item mb-1">
+                                <a
+                                    href="{{ route('siswa.rangkuman') }}"
+                                    class="nav-link rounded-pill py-2 {{ Request::routeIs('users.*') ? 'active bg-light text-primary' : 'text-dark' }}"
+                                >
+                                    <i class="nav-icon bi bi-people me-2"></i>
+                                    <span>Rangkuman SPMB</span>
+                                </a>
+                            </li>
 
                             @if (auth()->user()->isAdmin())
                                 <!-- User Management (Admin Only) -->
@@ -256,6 +265,8 @@
                                     </a>
                                 </li>
                             @endif
+
+
 
                             <!-- Logout -->
                             <li class="nav-item mt-3">

@@ -462,4 +462,70 @@ class StudentController extends Controller
             'Content-Type' => 'text/csv',
         ])->deleteFileAfterSend();
     }
+
+    public function rangkuman()
+    {
+        // Total Pendaftar
+        $totalPendaftar = [
+            'total' => Siswa::count(),
+            'tkj' => Siswa::where('jurusan', 'Teknik Komputer Jaringan')->count(),
+            'tsm' => Siswa::where('jurusan', 'Teknik Sepeda Motor')->count()
+        ];
+
+        // Siswa Diterima
+        $siswaDiterima = [
+            'total' => Siswa::where('status_seleksi', 'diterima')->count(),
+            'tkj' => Siswa::where('jurusan', 'Teknik Komputer Jaringan')
+                         ->where('status_seleksi', 'diterima')
+                         ->count(),
+            'tsm' => Siswa::where('jurusan', 'Teknik Sepeda Motor')
+                         ->where('status_seleksi', 'diterima')
+                         ->count()
+        ];
+
+        // Siswa Ditolak
+        $siswaDitolak = [
+            'total' => Siswa::where('status_seleksi', 'ditolak')->count(),
+            'tkj' => Siswa::where('jurusan', 'Teknik Komputer Jaringan')
+                         ->where('status_seleksi', 'ditolak')
+                         ->count(),
+            'tsm' => Siswa::where('jurusan', 'Teknik Sepeda Motor')
+                         ->where('status_seleksi', 'ditolak')
+                         ->count()
+        ];
+
+        // Siswa Belum Seleksi
+        $siswaBelumSeleksi = [
+            'total' => Siswa::where('status_seleksi', 'pending')->count(),
+            'tkj' => Siswa::where('jurusan', 'Teknik Komputer Jaringan')
+                         ->where('status_seleksi', 'pending')
+                         ->count(),
+            'tsm' => Siswa::where('jurusan', 'Teknik Sepeda Motor')
+                         ->where('status_seleksi', 'pending')
+                         ->count()
+        ];
+
+        // Siswa Sudah DU
+        $siswaSudahDU = [
+            'total' => Siswa::whereHas('pembayarans')->count(),
+            'tkj' => Siswa::where('jurusan', 'Teknik Komputer Jaringan')
+                         ->whereHas('pembayarans')
+                         ->count(),
+            'tsm' => Siswa::where('jurusan', 'Teknik Sepeda Motor')
+                         ->whereHas('pembayarans')
+                         ->count()
+        ];
+
+        // Total Transaksi DU
+        $totalTransaksiDU = Pembayaran::sum('nominal');
+
+        return view('siswa.rangkuman', compact(
+            'totalPendaftar',
+            'siswaDiterima',
+            'siswaDitolak',
+            'siswaBelumSeleksi',
+            'siswaSudahDU',
+            'totalTransaksiDU'
+        ));
+    }
 }
