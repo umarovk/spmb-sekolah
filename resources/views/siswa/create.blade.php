@@ -65,7 +65,7 @@
                                                     </div>
 
                                                     <!-- Jurusan -->
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-3">
                                                         <label
                                                             for="jurusan"
                                                             class="form-label"
@@ -82,6 +82,25 @@
                                                                 Jaringan</option>
                                                         </select>
                                                         <div class="invalid-feedback">Pilih jurusan</div>
+                                                    </div>
+
+                                                    <!-- Gender -->
+                                                    <div class="col-md-3">
+                                                        <label
+                                                            for="jalurdaftar"
+                                                            class="form-label"
+                                                        >Jalur Pendaftaran</label>
+                                                        <select
+                                                            name="jalurdaftar"
+                                                            class="form-select"
+                                                            id="jalurdaftar"
+                                                            required
+                                                        >
+                                                            <option value="">Pilih Jalur</option>
+                                                            <option value="Reguler">Reguler</option>
+                                                            <option value="Prestasi">Prestasi</option>
+                                                        </select>
+                                                        <div class="invalid-feedback">Pilih Jalur Prestasi</div>
                                                     </div>
 
                                                     <!-- Sekolah Asal -->

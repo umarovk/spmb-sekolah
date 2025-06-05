@@ -69,7 +69,7 @@
 
                                                         {{-- batas --}}
 
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-3">
                                                             <label
                                                                 for="validationCustom03"
                                                                 class="form-label"
@@ -93,6 +93,33 @@
 
                                                             </select>
                                                             <div class="invalid-feedback">Pilih Jurusan</div>
+                                                        </div>
+
+                                                        {{-- JALUR PRESTASI --}}
+
+                                                        <div class="col-md-3">
+                                                            <label
+                                                                for="validationCustom03"
+                                                                class="form-label"
+                                                            >Jalur Pendaftaran</label>
+                                                            <select
+                                                                name="jalurdaftar"
+                                                                class="form-select"
+                                                                required
+                                                            >
+                                                                <option selected>
+                                                                    {{ old('jalurdaftar', $datasiswa->jalurdaftar) }}
+                                                                </option>
+                                                                <option
+                                                                    value="Reguler"
+                                                                    {{ old('jalurdaftar', $datasiswa->jalurdaftar) == 'Reguler' ? 'selected' : '' }}
+                                                                >Reguler</option>
+                                                                <option
+                                                                    value="Prestasi"
+                                                                    {{ old('jalurdaftar', $datasiswa->jalurdaftar) == 'Prestasi' ? 'selected' : '' }}
+                                                                >Prestasi</option>
+                                                            </select>
+                                                            <div class="invalid-feedback">Masukan Jalur Pendaftaran</div>
                                                         </div>
 
                                                         {{-- batas --}}
