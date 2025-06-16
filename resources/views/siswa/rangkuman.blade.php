@@ -10,11 +10,17 @@
 @section('content')
     <main class="app-main">
         <div class="app-content-header">
-            <div class="container-fluid px-3 px-md-4">
+            <div class="container-fluid px-3 px-md-2">
                 <!-- Header Section -->
-                <div class="header-section mb-5">
+                <div class="header-section">
                     <h1 class="page-title">Dashboard Penerimaan Siswa</h1>
                     <p class="page-subtitle">Rangkuman data penerimaan siswa tahun ajaran 2025/2026</p>
+                    <div
+                        class="text-center"
+                        style="color:#303030; font-size:1rem;"
+                    >
+                        Data saat ini pada {{ \Carbon\Carbon::now('Asia/Jakarta')->format('d F Y, H:i') }} WIB
+                    </div>
                 </div>
 
                 <!-- Stats Grid -->
@@ -64,6 +70,23 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Siswa Dipertimbangkan -->
+                    <div class="stats-card bg-gradient-blue">
+                        <div class="stats-content">
+                            <h3 class="stats-title">Siswa Dipertimbangkan</h3>
+                            <div class="stats-numbers-row">
+                                <div class="main-number">{{ $siswaDipertimbangkan['total'] }}</div>
+                                <div class="sub-numbers">
+                                    <span class="sub-number tkj">{{ $siswaDipertimbangkan['tkj'] }}<div class="sub-label">
+                                            TKJ</div>
+                                    </span>
+                                    <span class="sub-number tsm">{{ $siswaDipertimbangkan['tsm'] }}<div class="sub-label">
+                                            TSM</div>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- Siswa Belum Seleksi -->
                     <div class="stats-card bg-gradient-blue">
                         <div class="stats-content">
@@ -96,6 +119,8 @@
                             </div>
                         </div>
                     </div>
+
+
                     <!-- Total Transaksi DU -->
                     <div class="stats-card bg-gradient-blue">
                         <div class="stats-content">
@@ -109,12 +134,7 @@
                         </div>
                     </div>
                 </div>
-                <div
-                    class="text-center mt-4"
-                    style="color:#303030; font-size:1rem;"
-                >
-                    Data saat ini pada {{ \Carbon\Carbon::now('Asia/Jakarta')->format('d F Y, H:i') }} WIB
-                </div>
+
             </div>
         </div>
     </main>
