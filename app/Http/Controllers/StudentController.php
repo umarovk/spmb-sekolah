@@ -494,6 +494,17 @@ class StudentController extends Controller
                          ->count()
         ];
 
+        // Siswa Dipertimbangkan
+        $siswaDipertimbangkan = [
+            'total' => Siswa::where('status_seleksi', 'dipertimbangkan')->count(),
+            'tkj' => Siswa::where('jurusan', 'Teknik Komputer Jaringan')
+                         ->where('status_seleksi', 'dipertimbangkan')
+                         ->count(),
+            'tsm' => Siswa::where('jurusan', 'Teknik Sepeda Motor')
+                         ->where('status_seleksi', 'dipertimbangkan')
+                         ->count()
+        ];
+
         // Siswa Belum Seleksi
         $siswaBelumSeleksi = [
             'total' => Siswa::where('status_seleksi', 'pending')->count(),
@@ -523,6 +534,7 @@ class StudentController extends Controller
             'totalPendaftar',
             'siswaDiterima',
             'siswaDitolak',
+            'siswaDipertimbangkan',
             'siswaBelumSeleksi',
             'siswaSudahDU',
             'totalTransaksiDU'
