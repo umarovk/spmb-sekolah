@@ -83,6 +83,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export-payments', [PaymentController::class, 'export'])
             ->name('payments.export')
             ->middleware(['auth', 'role:admin,teller']);
+
+        Route::get('/export-payments2', [PaymentController::class, 'export2'])
+            ->name('payments.export2')
+            ->middleware(['auth', 'role:admin,teller']);
     });
 
     
