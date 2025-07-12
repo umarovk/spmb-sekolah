@@ -68,6 +68,22 @@ class StudentController extends Controller
                 ];
             });
 
+        // Get top 5 SMP with most registered students (only accepted students)
+        $topSmpData = Siswa::selectRaw('sekolah_asal, COUNT(*) as total_siswa')
+            ->whereNotNull('sekolah_asal')
+            ->where('sekolah_asal', '!=', '')
+            ->where('status_seleksi', 'diterima')
+            ->groupBy('sekolah_asal')
+            ->orderByDesc('total_siswa')
+            ->limit(5)
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'sekolah_asal' => $item->sekolah_asal,
+                    'total_siswa' => $item->total_siswa
+                ];
+            });
+
         return view('home', compact(
             'jumlahData', 
             'datasiswa', 
@@ -78,7 +94,8 @@ class StudentController extends Controller
             'genderData',
             'paymentStatusData',
             'dailyRegistrations',
-            'dailyPayments'
+            'dailyPayments',
+            'topSmpData'
         ));
     }
 
