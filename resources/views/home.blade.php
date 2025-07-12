@@ -392,19 +392,25 @@
 
         .scorecard-item h6 {
             font-size: 0.9rem;
-            line-height: 1.2;
+            line-height: 1.3;
             overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            word-wrap: break-word;
+            white-space: normal;
+            min-height: 2.6em;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
 
         @media (max-width: 768px) {
             .scorecard-item {
-                min-height: 100px;
+                min-height: 120px;
             }
 
             .scorecard-item h6 {
                 font-size: 0.8rem;
+                min-height: 2.4em;
+                -webkit-line-clamp: 3;
             }
         }
     </style>
