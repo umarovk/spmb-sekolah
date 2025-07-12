@@ -22,6 +22,7 @@ class PaymentController extends Controller
     {
         $search = $request->input('search');
         $payment_status = $request->input('payment_status');
+        $per_page = $request->input('per_page', 10);
 
         $siswas = Siswa::with(['pembayarans' => function($query) {
             $query->latest();
@@ -43,9 +44,9 @@ class PaymentController extends Controller
                   ->latest()
                   ->limit(1);
         })
-        ->paginate(10);
+        ->paginate($per_page);
 
-        return view('payments.index', compact('siswas', 'search', 'payment_status'));
+        return view('payments.index', compact('siswas', 'search', 'payment_status', 'per_page'));
     }
 
     

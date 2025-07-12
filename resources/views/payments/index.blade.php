@@ -34,7 +34,7 @@
                                 method="GET"
                             >
                                 <div class="row align-items-center">
-                                    <div class="col-md-8">
+                                    <div class="col-md-6">
                                         <div class="input-group">
                                             <input
                                                 type="text"
@@ -50,7 +50,7 @@
                                             >
                                                 <i class="bi bi-search text-muted"></i>
                                             </button>
-                                            @if ($search || $payment_status)
+                                            @if ($search || $payment_status || $per_page != 10)
                                                 <a
                                                     href="{{ route('payments.index') }}"
                                                     class="btn btn-outline-secondary"
@@ -60,7 +60,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <select
                                             name="payment_status"
                                             class="form-select"
@@ -75,6 +75,34 @@
                                                 value="no_payment"
                                                 {{ ($payment_status ?? '') == 'no_payment' ? 'selected' : '' }}
                                             >Belum Bayar</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select
+                                            name="per_page"
+                                            class="form-select"
+                                            onchange="this.form.submit()"
+                                        >
+                                            <option
+                                                value="10"
+                                                {{ ($per_page ?? 10) == 10 ? 'selected' : '' }}
+                                            >10 Siswa</option>
+                                            <option
+                                                value="25"
+                                                {{ ($per_page ?? 10) == 25 ? 'selected' : '' }}
+                                            >25 Siswa</option>
+                                            <option
+                                                value="50"
+                                                {{ ($per_page ?? 10) == 50 ? 'selected' : '' }}
+                                            >50 Siswa</option>
+                                            <option
+                                                value="100"
+                                                {{ ($per_page ?? 10) == 100 ? 'selected' : '' }}
+                                            >100 Siswa</option>
+                                            <option
+                                                value="999999"
+                                                {{ ($per_page ?? 10) == 999999 ? 'selected' : '' }}
+                                            >Semua</option>
                                         </select>
                                     </div>
                                 </div>
@@ -165,7 +193,7 @@
                         <!-- If pagination is implemented, render it here -->
                         @if (isset($siswas) && method_exists($siswas, 'links'))
                             <div>
-                                {{ $siswas->appends(['search' => $search ?? '', 'payment_status' => $payment_status ?? ''])->links('vendor.pagination.custom') }}
+                                {{ $siswas->appends(['search' => $search ?? '', 'payment_status' => $payment_status ?? '', 'per_page' => $per_page ?? 10])->links('vendor.pagination.custom') }}
                             </div>
                         @endif
                     </div>
