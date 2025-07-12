@@ -6,6 +6,7 @@ use App\Models\Payment;
 use App\Models\Pembayaran;
 use App\Models\Siswa;
 use App\Exports\PaymentExport;
+use App\Exports\PaymentExport2;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -223,4 +224,24 @@ class PaymentController extends Controller
         ])->deleteFileAfterSend();
     }
 
+    public function export2() 
+    {
+        $exporter = new PaymentExport2();
+        $data = $exporter->export();
+        
+        $filename = 'data-pembayaran-' . date('Y-m-d') . '.csv';
+        $filepath = storage_path('app/public/' . $filename);
+        
+        // Create CSV file
+        $fp = fopen($filepath, 'w');
+        foreach ($data as $row) {
+            fputcsv($fp, $row);
+        }
+        fclose($fp);
+        
+        // Return download response
+        return response()->download($filepath, $filename, [
+            'Content-Type' => 'text/csv',
+        ])->deleteFileAfterSend();
+    }
 }

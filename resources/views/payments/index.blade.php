@@ -8,13 +8,20 @@
                     <h1 class="fw-light text-primary mb-0 fs-3">Data Pembayaran Siswa</h1>
                 </div>
                 <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                    <!-- Add any global action button here if needed -->
-                    <a
-                        href="{{ route('payments.export') }}"
-                        class="btn btn-success transaction-action w-50"
-                    >
-                        Download Data <i class="bi bi-download"></i>
-                    </a>
+                    <div class="d-flex gap-2 justify-content-md-end">
+                        <a
+                            href="{{ route('payments.export') }}"
+                            class="btn btn-success transaction-action"
+                        >
+                            Detail Data <i class="bi bi-download"></i>
+                        </a>
+                        <a
+                            href="{{ route('payments.export2') }}"
+                            class="btn btn-success transaction-action"
+                        >
+                            Rangkuman <i class="bi bi-download"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
 
