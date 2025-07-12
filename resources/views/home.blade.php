@@ -205,6 +205,58 @@
                 </div>
             </div>
 
+            <!-- Top SMP Scorecard Row -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card shadow-sm border-0 rounded-3">
+                        <div class="card-header bg-white py-3 border-bottom border-light">
+                            <h5 class="card-title mb-0 text-primary">
+                                <i class="bi bi-trophy me-2"></i>
+                                Top 5 SMP Terbanyak Pendaftar
+                            </h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="row g-0">
+                                @foreach ($topSmpData as $index => $smp)
+                                    <div class="col-lg-2 col-md-4 col-sm-6">
+                                        <div
+                                            class="scorecard-item p-3 border-end border-bottom {{ $index == 0 ? 'bg-warning bg-opacity-10' : '' }}">
+                                            <div class="d-flex align-items-center mb-2">
+                                                @if ($index == 0)
+                                                    <span class="badge bg-warning text-dark me-2">
+                                                        <i class="bi bi-trophy-fill"></i>
+                                                    </span>
+                                                @elseif($index == 1)
+                                                    <span class="badge bg-secondary me-2">
+                                                        <i class="bi bi-award"></i>
+                                                    </span>
+                                                @elseif($index == 2)
+                                                    <span
+                                                        class="badge bg-bronze me-2"
+                                                        style="background-color: #cd7f32;"
+                                                    >
+                                                        <i class="bi bi-award"></i>
+                                                    </span>
+                                                @else
+                                                    <span class="badge bg-light text-dark me-2">
+                                                        {{ $index + 1 }}
+                                                    </span>
+                                                @endif
+                                                <h6 class="mb-0 fw-bold">{{ $smp['sekolah_asal'] }}</h6>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="fs-4 fw-bold text-primary">{{ $smp['total_siswa'] }}</span>
+                                                <small class="text-muted">siswa</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Charts Row -->
             <div class="row charts-row">
                 <div class="col-lg-4 col-md-6 mb-4">
@@ -320,6 +372,43 @@
         </div>
     </div>
 @endsection
+
+@push('styles')
+    <style>
+        .scorecard-item {
+            transition: all 0.3s ease;
+            min-height: 120px;
+        }
+
+        .scorecard-item:hover {
+            background-color: rgba(0, 123, 255, 0.05) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .scorecard-item:last-child {
+            border-right: none !important;
+        }
+
+        .scorecard-item h6 {
+            font-size: 0.9rem;
+            line-height: 1.2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .scorecard-item {
+                min-height: 100px;
+            }
+
+            .scorecard-item h6 {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+@endpush
 
 @push('scripts')
     <script>
