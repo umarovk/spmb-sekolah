@@ -93,6 +93,7 @@
         rel="stylesheet"
         href="{{ asset('css/dashboard.css') }}"
     >
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 
 </head>
@@ -259,6 +260,7 @@
                                 <form
                                     action="{{ route('logout') }}"
                                     method="POST"
+                                    onsubmit="return confirm('Apakah yakin ingin keluar?')"
                                 >
                                     @csrf
                                     <button
@@ -351,7 +353,7 @@
         </a>
         @endif
 
-        <form action="{{ route('logout') }}" method="POST" class="mobile-nav-logout-form">
+        <form action="{{ route('logout') }}" method="POST" class="mobile-nav-logout-form" onsubmit="return confirm('Apakah yakin ingin keluar?')">
             @csrf
             <button type="submit" class="mobile-nav-item mobile-nav-logout">
                 <i class="bi bi-box-arrow-right"></i>
