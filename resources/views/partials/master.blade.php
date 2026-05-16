@@ -99,27 +99,12 @@
 <!--end::Head-->
 <!--begin::Body-->
 
-<body class="layout-fixed bg-body-tertiary">
+<body class="layout-fixed" style="background-color: #f4f6f9;">
     <!--begin::App Wrapper-->
     <div class="app-wrapper">
-        <!--begin::Header-->
-        <nav class="app-header navbar navbar-expand bg-body">
-            <!--begin::Container-->
-            <div class="container-fluid">
-                <!--begin::Start Navbar Links-->
-                <!--end::Start Navbar Links-->
-
-                <!--begin::End Navbar Links-->
-
-                <!--end::End Navbar Links-->
-            </div>
-            <!--end::Container-->
-        </nav>
-        <!--end::Header-->
-
         <!--begin::Sidebar-->
         <aside
-            class="app-sidebar bg-white shadow"
+            class="app-sidebar"
             id="sidebar"
         >
             <!--begin::Sidebar Brand-->
@@ -139,15 +124,16 @@
             </div>
             <!--end::Sidebar Brand-->
 
-            <!--begin::Sidebar User Profile-->
+            <!--begin::Sidebar School Logo-->
             <div class="user-profile text-center py-4 border-bottom mb-2">
                 <div class="user-avatar mb-2">
                     <img
-                        src="{{ asset('img/user.png') }}"
+                        src="{{ asset(config('app.school_logo')) }}"
                         class="rounded-circle shadow"
-                        alt="User Image"
+                        alt="Logo Sekolah"
                         width="70"
                         height="70"
+                        onerror="this.src='{{ asset('img/user.png') }}'"
                     />
                 </div>
                 <div class="user-info">
@@ -155,7 +141,7 @@
                     <small class="text-muted">{{ ucfirst(auth()->user()->role) }}</small>
                 </div>
             </div>
-            <!--end::Sidebar User Profile-->
+            <!--end::Sidebar School Logo-->
 
             <!--begin::Sidebar Wrapper-->
             @auth
@@ -290,33 +276,6 @@
         </aside>
         <!--end::Sidebar-->
         <main class="dashboard-main">
-            <!-- Header Section -->
-            <header class="dashboard-header sticky-top">
-                <div class="container-fluid">
-                    <div class="row align-items-center">
-                        <div class="col-md-6">
-                            <h1 class="school-title">SMK COKROAMINOTO WANADADI</h1>
-                            <p class="app-subtitle">Aplikasi Pendaftaran Siswa Baru</p>
-                        </div>
-                        <div class="col-md-6">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb justify-content-md-end mb-0">
-                                    <li class="breadcrumb-item"><strong>{{ auth()->user()->nama }}</strong></li>
-                                    <li class="breadcrumb-item">
-                                        <a
-                                            href="{{ route('home') }}"
-                                            class="btn btn-primary btn-sm rounded-pill px-3 py-1 text-white"
-                                        >
-                                            <i class="bi bi-house-door-fill me-1"></i>Home
-                                        </a>
-                                    </li>
-                                </ol>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
             @yield('content')
             @yield('isihome')
             @yield('isisiswa')
@@ -331,6 +290,78 @@
 
     </div>
     <!--end::App Wrapper-->
+
+    <!--begin::Mobile Bottom Navigation-->
+    @auth
+    <nav class="mobile-bottom-nav d-lg-none">
+        <a href="{{ route('home') }}"
+           class="mobile-nav-item {{ Request::is('/') ? 'active' : '' }}">
+            <i class="bi bi-speedometer2"></i>
+            <span>Dashboard</span>
+        </a>
+
+        @if (auth()->user()->isAdmin() || auth()->user()->isGuest() || auth()->user()->isTeller() || auth()->user()->isSelektor())
+        <a href="{{ route('tabelsiswa') }}"
+           class="mobile-nav-item {{ Request::routeIs('tabelsiswa*', 'siswa.*') ? 'active' : '' }}">
+            <i class="bi bi-people-fill"></i>
+            <span>Siswa</span>
+        </a>
+        @endif
+
+        @if (auth()->user()->isSelektor() || auth()->user()->isAdmin())
+        <a href="{{ route('seleksi.index') }}"
+           class="mobile-nav-item {{ Request::routeIs('seleksi.*') ? 'active' : '' }}">
+            <i class="bi bi-clipboard-check"></i>
+            <span>Seleksi</span>
+        </a>
+        @endif
+
+        @if (auth()->user()->isAdmin() || auth()->user()->isTeller())
+        <a href="{{ route('payments.index') }}"
+           class="mobile-nav-item {{ Request::routeIs('payments.*', 'tabelbayar') ? 'active' : '' }}">
+            <i class="bi bi-cash-coin"></i>
+            <span>Bayar</span>
+        </a>
+        @endif
+
+        @if (auth()->user()->isAdmin() || auth()->user()->isSelektor())
+        <a href="{{ route('bahan.index') }}"
+           class="mobile-nav-item {{ Request::routeIs('bahan.*') ? 'active' : '' }}">
+            <i class="bi bi-box-seam"></i>
+            <span>Bahan</span>
+        </a>
+        @endif
+
+        <a href="{{ route('siswa.rangkuman') }}"
+           class="mobile-nav-item {{ Request::routeIs('siswa.rangkuman') ? 'active' : '' }}">
+            <i class="bi bi-bar-chart-fill"></i>
+            <span>Rekap</span>
+        </a>
+
+        @if (auth()->user()->isAdmin())
+        <a href="{{ route('users.index') }}"
+           class="mobile-nav-item {{ Request::routeIs('users.*') ? 'active' : '' }}">
+            <i class="bi bi-person-gear"></i>
+            <span>Users</span>
+        </a>
+        <a href="{{ route('admin.backup.index') }}"
+           class="mobile-nav-item {{ Request::routeIs('admin.backup.*') ? 'active' : '' }}">
+            <i class="bi bi-database-down"></i>
+            <span>Backup</span>
+        </a>
+        @endif
+
+        <form action="{{ route('logout') }}" method="POST" class="mobile-nav-logout-form">
+            @csrf
+            <button type="submit" class="mobile-nav-item mobile-nav-logout">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Keluar</span>
+            </button>
+        </form>
+    </nav>
+    @endauth
+    <!--end::Mobile Bottom Navigation-->
+
     <!--begin::Script-->
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
     <script

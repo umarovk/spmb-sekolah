@@ -19,7 +19,7 @@
 
 /* Main layout */
 .dashboard-main {
-    background-color: var(--gray-100);
+    background-color: #f4f6f9;
     min-height: 100vh;
 }
 

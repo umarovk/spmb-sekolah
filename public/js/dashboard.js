@@ -271,21 +271,85 @@ document.addEventListener('DOMContentLoaded', function() {
         ]
     };
 
+    // Jalur Pendaftaran Chart
+    const jalurOptions = {
+        series: [chartData.jalur.prestasi, chartData.jalur.reguler, chartData.jalur.belum],
+        labels: ['Prestasi', 'Reguler', 'Belum Diisi'],
+        chart: {
+            type: 'donut',
+            height: '100%',
+            fontFamily: 'Inter, sans-serif',
+            toolbar: { show: false }
+        },
+        colors: ['#f59e0b', '#6366f1', '#d1d5db'],
+        legend: {
+            position: 'bottom',
+            horizontalAlign: 'center',
+            fontSize: '14px',
+            markers: { width: 10, height: 10, radius: 5 },
+            itemMargin: { horizontal: 10, vertical: 0 }
+        },
+        plotOptions: {
+            pie: {
+                donut: {
+                    size: '60%',
+                    labels: {
+                        show: true,
+                        name: {
+                            fontSize: '14px',
+                            fontWeight: 500,
+                            color: '#6b7280'
+                        },
+                        value: {
+                            fontSize: '20px',
+                            fontWeight: 600,
+                            color: '#1f2937',
+                            formatter: function (val) { return val; }
+                        },
+                        total: {
+                            show: true,
+                            label: 'Total',
+                            fontSize: '14px',
+                            fontWeight: 500,
+                            color: '#6b7280',
+                            formatter: function (w) {
+                                return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        dataLabels: { enabled: false },
+        tooltip: { enabled: true, theme: 'light', style: { fontSize: '14px' } },
+        stroke: { width: 2, colors: ['#fff'] },
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: { height: 200 },
+                legend: { position: 'bottom' }
+            }
+        }]
+    };
+
     // Initialize charts
     const jurusanChart = new ApexCharts(document.querySelector("#jurusanChart"), jurusanOptions);
     const genderChart = new ApexCharts(document.querySelector("#genderChart"), genderOptions);
     const paymentStatusChart = new ApexCharts(document.querySelector("#paymentChart"), paymentOptions);
+    const jalurChart = new ApexCharts(document.querySelector("#jalurChart"), jalurOptions);
 
     // Render charts
     jurusanChart.render();
     genderChart.render();
     paymentStatusChart.render();
+    jalurChart.render();
 
     // Handle responsive behavior
     window.addEventListener('resize', function() {
         jurusanChart.render();
         genderChart.render();
         paymentStatusChart.render();
+        jalurChart.render();
     });
 
     // Initialize tooltips if Bootstrap 5 is used

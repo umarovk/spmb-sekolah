@@ -18,6 +18,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'school_logo' => env('SCHOOL_LOGO', 'img/user.png'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

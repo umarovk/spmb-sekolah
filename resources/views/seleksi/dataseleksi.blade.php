@@ -1,8 +1,8 @@
 @extends('partials.master')
 
 @section('isisiswa')
-    <main class="app-main bg-light">
-        <div class="container py-4">
+    <div class="dashboard-content">
+        <div class="container-fluid py-4">
             <div class="row mb-4 align-items-center">
                 <div class="col-md-8">
                     <h1 class="fw-light text-primary mb-0 fs-3">Data Seleksi Siswa Baru</h1>
@@ -188,7 +188,7 @@
                 </div>
             </div>
         </div>
-    </main>
+    </div>
 @endsection
 
 @push('styles')

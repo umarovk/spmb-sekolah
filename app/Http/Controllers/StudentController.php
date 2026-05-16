@@ -44,6 +44,13 @@ class StudentController extends Controller
             'belum_bayar' => Siswa::whereDoesntHave('pembayarans')->count()
         ];
 
+        // Jalur pendaftaran chart data
+        $jalurData = [
+            'prestasi' => Siswa::where('jalurdaftar', 'Prestasi')->count(),
+            'reguler'  => Siswa::where('jalurdaftar', 'Reguler')->count(),
+            'belum'    => Siswa::whereNull('jalurdaftar')->orWhere('jalurdaftar', '')->count(),
+        ];
+
         // Get all daily registration data
         $dailyRegistrations = Siswa::selectRaw('DATE(created_at) as date, COUNT(*) as count')
             ->groupBy('date')
@@ -85,14 +92,15 @@ class StudentController extends Controller
             });
 
         return view('home', compact(
-            'jumlahData', 
-            'datasiswa', 
-            'databayar', 
-            'pembayaran', 
+            'jumlahData',
+            'datasiswa',
+            'databayar',
+            'pembayaran',
             'totalPembayaran',
             'jurusanData',
             'genderData',
             'paymentStatusData',
+            'jalurData',
             'dailyRegistrations',
             'dailyPayments',
             'topSmpData'
@@ -416,18 +424,24 @@ class StudentController extends Controller
     {
         $search = $request->input('search');
         $perPage = $request->input('perPage', 10);
+        $filter = $request->input('filter');
 
         $datasiswa = Siswa::when($search, function($query) use ($search) {
-            return $query->where('namasiswa', 'LIKE', "%{$search}%")
-                        ->orWhere('jurusan', 'LIKE', "%{$search}%")
-                        ->orWhere('jeniskelamin', 'LIKE', "%{$search}%")
-                        ->orWhere('agama', 'LIKE', "%{$search}%")
-                        ->orWhere('asrama_tahfidz', 'LIKE', "%{$search}%");
-        })
+                return $query->where(function($q) use ($search) {
+                    $q->where('namasiswa', 'LIKE', "%{$search}%")
+                      ->orWhere('jurusan', 'LIKE', "%{$search}%")
+                      ->orWhere('jeniskelamin', 'LIKE', "%{$search}%")
+                      ->orWhere('agama', 'LIKE', "%{$search}%")
+                      ->orWhere('asrama_tahfidz', 'LIKE', "%{$search}%");
+                });
+            })
+            ->when($filter === 'prestasi', fn($q) => $q->where('jalurdaftar', 'Prestasi'))
+            ->when($filter === 'tahfidz', fn($q) => $q->where('asrama_tahfidz', 'Bersedia'))
+            ->when($filter === 'both', fn($q) => $q->where('jalurdaftar', 'Prestasi')->where('asrama_tahfidz', 'Bersedia'))
             ->latest()
             ->paginate($perPage);
 
-        return view('siswa.siswa', compact('datasiswa', 'search', 'perPage'));
+        return view('siswa.siswa', compact('datasiswa', 'search', 'perPage', 'filter'));
     }
 
     public function test(Request $request)

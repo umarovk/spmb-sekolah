@@ -4,84 +4,6 @@
     <!-- Content Section -->
     <div class="dashboard-content">
         <div class="container-fluid">
-            <!-- Feature Buttons Row - Mobile Only -->
-            <div class="row mb-4 d-block d-md-none">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex flex-wrap gap-2">
-                                <!-- Student Management -->
-                                @if (auth()->user()->isAdmin() ||
-                                        auth()->user()->isGuest() ||
-                                        auth()->user()->isTeller() ||
-                                        auth()->user()->isSelektor())
-                                    <a
-                                        href="{{ route('tabelsiswa') }}"
-                                        class="btn btn-outline-primary rounded-pill"
-                                    >
-                                        <i class="bi bi-people-fill me-2"></i>
-                                        Data Siswa
-                                    </a>
-                                @endif
-
-                                <!-- Seleksi Siswa -->
-                                @if (auth()->user()->isSelektor() || auth()->user()->isAdmin())
-                                    <a
-                                        href="{{ route('seleksi.index') }}"
-                                        class="btn btn-outline-primary rounded-pill"
-                                    >
-                                        <i class="bi bi-clipboard-check me-2"></i>
-                                        Seleksi
-                                    </a>
-                                @endif
-
-                                <!-- Payment Management -->
-                                @if (auth()->user()->isAdmin() || auth()->user()->isTeller())
-                                    <a
-                                        href="{{ route('payments.index') }}"
-                                        class="btn btn-outline-primary rounded-pill"
-                                    >
-                                        <i class="bi bi-cash-coin me-2"></i>
-                                        Bayar
-                                    </a>
-                                @endif
-
-                                <!-- Pengambilan Bahan -->
-                                @if (auth()->user()->isAdmin() || auth()->user()->isSelektor())
-                                    <a
-                                        href="{{ route('bahan.index') }}"
-                                        class="btn btn-outline-primary rounded-pill"
-                                    >
-                                        <i class="bi bi-box-seam me-2"></i>
-                                        Bahan
-                                    </a>
-                                @endif
-
-                                <!-- User Management -->
-                                @if (auth()->user()->isAdmin())
-                                    <a
-                                        href="{{ route('users.index') }}"
-                                        class="btn btn-outline-primary rounded-pill"
-                                    >
-                                        <i class="bi bi-people me-2"></i>
-                                        Manj. User
-                                    </a>
-
-                                    <!-- Backup Database -->
-                                    <a
-                                        href="{{ route('admin.backup.index') }}"
-                                        class="btn btn-outline-primary rounded-pill"
-                                    >
-                                        <i class="bi bi-database-down me-2"></i>
-                                        Backup
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Stats Cards Row -->
             <div class="row stats-row">
                 <!-- Siswa Card -->
@@ -291,6 +213,17 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="chart-card h-100">
+                        <div class="chart-header">
+                            <h3>Jalur Pendaftaran</h3>
+                        </div>
+                        <div class="chart-body">
+                            <div id="jalurChart"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Daily Stats Row -->
@@ -430,6 +363,11 @@
             payment: {
                 sudah_bayar: {{ $paymentStatusData['sudah_bayar'] }},
                 belum_bayar: {{ $paymentStatusData['belum_bayar'] }}
+            },
+            jalur: {
+                prestasi: {{ $jalurData['prestasi'] }},
+                reguler: {{ $jalurData['reguler'] }},
+                belum: {{ $jalurData['belum'] }}
             }
         };
     </script>

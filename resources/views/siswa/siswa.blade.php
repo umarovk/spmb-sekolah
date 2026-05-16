@@ -1,8 +1,8 @@
 @extends('partials.master')
 
 @section('isisiswa')
-    <main class="app-main bg-light">
-        <div class="container py-4">
+    <div class="dashboard-content">
+        <div class="container-fluid py-4">
             <div class="row mb-4 align-items-center">
                 <div class="col-md-8">
                     <h1 class="fw-light text-primary mb-0 fs-3">Data Calon Siswa Baru</h1>
@@ -19,12 +19,37 @@
 
             <div class="card shadow-sm border-0 rounded-3 mb-4">
                 <div class="card-header bg-white py-3 border-bottom border-light">
+                    {{-- Filter Tabs --}}
+                    <div class="mb-3">
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="{{ route('tabelsiswa', array_filter(['search' => $search, 'perPage' => $perPage])) }}"
+                               class="btn btn-sm rounded-pill {{ !$filter ? 'btn-primary' : 'btn-outline-secondary' }}">
+                                <i class="bi bi-people me-1"></i> Semua
+                            </a>
+                            <a href="{{ route('tabelsiswa', array_filter(['filter' => 'prestasi', 'search' => $search, 'perPage' => $perPage])) }}"
+                               class="btn btn-sm rounded-pill {{ $filter === 'prestasi' ? 'btn-warning text-dark' : 'btn-outline-warning' }}">
+                                <i class="bi bi-trophy me-1"></i> Jalur Prestasi
+                            </a>
+                            <a href="{{ route('tabelsiswa', array_filter(['filter' => 'tahfidz', 'search' => $search, 'perPage' => $perPage])) }}"
+                               class="btn btn-sm rounded-pill {{ $filter === 'tahfidz' ? 'btn-success' : 'btn-outline-success' }}">
+                                <i class="bi bi-book me-1"></i> Asrama Tahfidz
+                            </a>
+                            <a href="{{ route('tabelsiswa', array_filter(['filter' => 'both', 'search' => $search, 'perPage' => $perPage])) }}"
+                               class="btn btn-sm rounded-pill {{ $filter === 'both' ? 'btn-purple' : 'btn-outline-purple' }}">
+                                <i class="bi bi-stars me-1"></i> Prestasi + Tahfidz
+                            </a>
+                        </div>
+                    </div>
                     <div class="row align-items-center">
                         <div class="col-lg-8 col-md-6 mb-3 mb-md-0">
                             <form
                                 action="{{ route('tabelsiswa') }}"
                                 method="GET"
                             >
+                                @if($filter)
+                                    <input type="hidden" name="filter" value="{{ $filter }}">
+                                @endif
+                                <input type="hidden" name="perPage" value="{{ $perPage }}">
                                 <div class="input-group">
                                     <input
                                         type="text"
@@ -49,6 +74,12 @@
                                 method="GET"
                                 class="d-flex justify-content-md-end"
                             >
+                                @if($filter)
+                                    <input type="hidden" name="filter" value="{{ $filter }}">
+                                @endif
+                                @if($search)
+                                    <input type="hidden" name="search" value="{{ $search }}">
+                                @endif
                                 <div
                                     class="input-group input-group-sm"
                                     style="max-width: 200px;"
@@ -91,6 +122,8 @@
                                 <th>Jurusan</th>
                                 <th class="d-none d-md-table-cell">Agama</th>
                                 <th class="d-none d-md-table-cell">Gender</th>
+                                <th class="d-none d-lg-table-cell">Jalur</th>
+                                <th class="d-none d-lg-table-cell">Tahfidz</th>
                                 <th>Status</th>
                                 <th class="text-end pe-3">Aksi</th>
                             </tr>
@@ -107,6 +140,28 @@
                                     <td>{{ $dt->jurusan }}</td>
                                     <td class="d-none d-md-table-cell">{{ $dt->agama ?? '-' }}</td>
                                     <td class="d-none d-md-table-cell">{{ $dt->jeniskelamin }}</td>
+                                    <td class="d-none d-lg-table-cell">
+                                        @if($dt->jalurdaftar === 'Prestasi')
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="bi bi-trophy-fill me-1"></i>Prestasi
+                                            </span>
+                                        @elseif($dt->jalurdaftar)
+                                            <span class="badge bg-light text-secondary border">{{ $dt->jalurdaftar }}</span>
+                                        @else
+                                            <span class="text-muted small">-</span>
+                                        @endif
+                                    </td>
+                                    <td class="d-none d-lg-table-cell">
+                                        @if($dt->asrama_tahfidz === 'Bersedia')
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-check-circle-fill me-1"></i>Bersedia
+                                            </span>
+                                        @elseif($dt->asrama_tahfidz === 'Tidak')
+                                            <span class="text-muted small">Tidak</span>
+                                        @else
+                                            <span class="text-muted small">-</span>
+                                        @endif
+                                    </td>
                                     <td>
                                         <span
                                             class="badge {{ $dt->status_seleksi === 'diterima'
@@ -197,7 +252,7 @@
                             @empty
                                 <tr>
                                     <td
-                                        colspan="7"
+                                        colspan="9"
                                         class="text-center py-4 text-muted"
                                     >
                                         <i class="bi bi-inbox fs-4 d-block mb-2"></i>
@@ -216,13 +271,13 @@
                             {{ $datasiswa->total() }} data
                         </p>
                         <div>
-                            {{ $datasiswa->appends(['search' => $search, 'perPage' => $perPage])->links('vendor.pagination.custom') }}
+                            {{ $datasiswa->appends(['search' => $search, 'perPage' => $perPage, 'filter' => $filter])->links('vendor.pagination.custom') }}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
 @endsection
 
 @push('styles')
@@ -232,6 +287,26 @@
         .form-select:focus {
             box-shadow: none;
             border-color: #dee2e6;
+        }
+
+        .btn-purple {
+            background-color: #6f42c1;
+            border-color: #6f42c1;
+            color: #fff;
+        }
+        .btn-purple:hover {
+            background-color: #5a32a3;
+            border-color: #5a32a3;
+            color: #fff;
+        }
+        .btn-outline-purple {
+            color: #6f42c1;
+            border-color: #6f42c1;
+        }
+        .btn-outline-purple:hover {
+            background-color: #6f42c1;
+            border-color: #6f42c1;
+            color: #fff;
         }
 
         .btn-outline-secondary {
