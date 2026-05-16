@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\PengambilanBahan;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\BahanExport;
 
 
 class BahanController extends Controller

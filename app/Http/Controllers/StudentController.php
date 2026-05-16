@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Siswa;
 use App\Models\Pembayaran;
 use App\Exports\SiswaExport;
-use Maatwebsite\Excel\Facades\Excel;
-
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
