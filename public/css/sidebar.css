@@ -15,6 +15,19 @@
     z-index: 1040;
     transition: all 0.3s ease;
     border-right: 1px solid #e9ecef;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    }
+    .app-sidebar .sidebar-brand,
+    .app-sidebar .user-profile {
+    flex: 0 0 auto;
+    }
+    .app-sidebar .sidebar-wrapper {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
     }
     /* Main content wrapper */
     .dashboard-main {
