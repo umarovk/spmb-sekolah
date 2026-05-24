@@ -79,7 +79,8 @@
                     </div>
                 </div>
 
-                <div class="table-responsive">
+                {{-- Desktop / tablet table (≥ md) --}}
+                <div class="table-responsive d-none d-md-block">
                     <table class="table table-hover align-middle mb-0">
                         <thead class="table-light text-secondary">
                             <tr>
@@ -93,10 +94,29 @@
                         </thead>
                         <tbody>
                             @forelse ($datasiswa as $dt)
-                                <tr>
-                                    <td class="ps-3">
-                                        {{ $loop->iteration }}
-                                    </td>
+                                @php
+                                    $statusColor = $dt->status_seleksi === 'diterima'
+                                        ? 'bg-success'
+                                        : ($dt->status_seleksi === 'ditolak'
+                                            ? 'bg-danger'
+                                            : ($dt->status_seleksi === 'dipertimbangkan'
+                                                ? 'bg-warning'
+                                                : 'bg-secondary'));
+                                    $statusLabel = ucfirst($dt->status_seleksi);
+                                    if ($dt->status_seleksi !== 'pending' && $dt->selektor_inisial) {
+                                        $statusLabel .= ' ' . $dt->selektor_inisial;
+                                    }
+                                    if ($dt->tanggalseleksi) {
+                                        $statusLabel .= ' (' . date('d/m/Y', strtotime($dt->tanggalseleksi)) . ')';
+                                    }
+                                    $canEdit       = $dt->canBeEditedBy(auth()->user());
+                                    $lockedByName  = $dt->selektor?->nama;
+                                    $lockTooltip   = $canEdit
+                                        ? null
+                                        : 'Status sudah dikunci oleh ' . ($lockedByName ?: 'user lain') . '. Hubungi admin untuk membuka.';
+                                @endphp
+                                <tr data-siswa-id="{{ $dt->id }}" data-can-edit="{{ $canEdit ? '1' : '0' }}">
+                                    <td class="ps-3">{{ $loop->iteration }}</td>
                                     <td>
                                         <span class="fw-medium">{{ $dt->namasiswa }}</span>
                                     </td>
@@ -104,72 +124,56 @@
                                     <td class="d-none d-md-table-cell">{{ $dt->jeniskelamin }}</td>
                                     <td>
                                         <div class="d-flex align-items-center gap-2">
-                                            <span
-                                                class="badge {{ $dt->status_seleksi === 'diterima'
-                                                    ? 'bg-success'
-                                                    : ($dt->status_seleksi === 'ditolak'
-                                                        ? 'bg-danger'
-                                                        : ($dt->status_seleksi === 'dipertimbangkan'
-                                                            ? 'bg-warning'
-                                                            : 'bg-secondary')) }}"
-                                            >
-                                                {{ ucfirst($dt->status_seleksi) }}
-                                                @if ($dt->tanggalseleksi)
-                                                    <span class="ms-1 text-white">
-                                                        ({{ date('d/m/Y', strtotime($dt->tanggalseleksi)) }})
-                                                    </span>
-                                                @endif
+                                            <span class="badge status-badge {{ $statusColor }}"
+                                                  data-siswa-id="{{ $dt->id }}">
+                                                {{ $statusLabel }}
                                             </span>
+                                            @if (! $canEdit)
+                                                <i class="bi bi-lock-fill text-secondary"
+                                                   data-bs-toggle="tooltip"
+                                                   title="{{ $lockTooltip }}"></i>
+                                            @endif
                                             <select
                                                 class="form-select form-select-sm status-select"
                                                 data-siswa-id="{{ $dt->id }}"
                                                 style="width: 140px;"
+                                                @disabled(!$canEdit)
                                             >
-                                                <option
-                                                    value="pending"
-                                                    {{ $dt->status_seleksi == 'pending' ? 'selected' : '' }}
-                                                >
-                                                    Pending
-                                                </option>
-                                                <option
-                                                    value="diterima"
-                                                    {{ $dt->status_seleksi == 'diterima' ? 'selected' : '' }}
-                                                >
-                                                    Diterima
-                                                </option>
-                                                <option
-                                                    value="ditolak"
-                                                    {{ $dt->status_seleksi == 'ditolak' ? 'selected' : '' }}
-                                                >
-                                                    Ditolak
-                                                </option>
-                                                <option
-                                                    value="dipertimbangkan"
-                                                    {{ $dt->status_seleksi == 'dipertimbangkan' ? 'selected' : '' }}
-                                                >
-                                                    Dipertimbangkan
-                                                </option>
+                                                <option value="pending" {{ $dt->status_seleksi == 'pending' ? 'selected' : '' }}>Pending</option>
+                                                <option value="diterima" {{ $dt->status_seleksi == 'diterima' ? 'selected' : '' }}>Diterima</option>
+                                                <option value="ditolak" {{ $dt->status_seleksi == 'ditolak' ? 'selected' : '' }}>Ditolak</option>
+                                                <option value="dipertimbangkan" {{ $dt->status_seleksi == 'dipertimbangkan' ? 'selected' : '' }}>Dipertimbangkan</option>
                                             </select>
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="d-flex justify-content-end gap-2 pe-3">
+                                        <div class="d-flex justify-content-end gap-2 pe-3 flex-wrap">
+                                            <a
+                                                href="{{ route('seleksi.jawaban', $dt->id) }}"
+                                                class="btn btn-sm btn-outline-info rounded-pill"
+                                                title="Lihat jawaban dari spreadsheet"
+                                            >
+                                                <i class="bi bi-journal-text me-1"></i> Lihat Jawaban
+                                            </a>
                                             <button
                                                 type="button"
-                                                class="btn btn-sm btn-primary rounded-pill update-status"
+                                                class="btn btn-sm {{ $canEdit ? 'btn-primary' : 'btn-outline-secondary' }} rounded-pill update-status"
                                                 data-siswa-id="{{ $dt->id }}"
+                                                @disabled(!$canEdit)
+                                                @if (!$canEdit) data-bs-toggle="tooltip" title="{{ $lockTooltip }}" @endif
                                             >
-                                                <i class="bi bi-save me-1"></i> Simpan
+                                                @if ($canEdit)
+                                                    <i class="bi bi-save me-1"></i> Simpan
+                                                @else
+                                                    <i class="bi bi-lock me-1"></i> Terkunci
+                                                @endif
                                             </button>
                                         </div>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td
-                                        colspan="7"
-                                        class="text-center py-4 text-muted"
-                                    >
+                                    <td colspan="6" class="text-center py-4 text-muted">
                                         <i class="bi bi-inbox fs-4 d-block mb-2"></i>
                                         Data siswa tidak ditemukan
                                     </td>
@@ -177,6 +181,101 @@
                             @endforelse
                         </tbody>
                     </table>
+                </div>
+
+                {{-- Mobile card list (< md) --}}
+                <div class="d-block d-md-none p-2">
+                    @forelse ($datasiswa as $dt)
+                        @php
+                            $statusColor = $dt->status_seleksi === 'diterima'
+                                ? 'bg-success'
+                                : ($dt->status_seleksi === 'ditolak'
+                                    ? 'bg-danger'
+                                    : ($dt->status_seleksi === 'dipertimbangkan'
+                                        ? 'bg-warning'
+                                        : 'bg-secondary'));
+                            $statusLabel = ucfirst($dt->status_seleksi);
+                            if ($dt->status_seleksi !== 'pending' && $dt->selektor_inisial) {
+                                $statusLabel .= ' ' . $dt->selektor_inisial;
+                            }
+                            if ($dt->tanggalseleksi) {
+                                $statusLabel .= ' (' . date('d/m/Y', strtotime($dt->tanggalseleksi)) . ')';
+                            }
+                            $canEdit       = $dt->canBeEditedBy(auth()->user());
+                            $lockedByName  = $dt->selektor?->nama;
+                            $lockTooltip   = $canEdit
+                                ? null
+                                : 'Status sudah dikunci oleh ' . ($lockedByName ?: 'user lain') . '. Hubungi admin untuk membuka.';
+                        @endphp
+                        <div class="siswa-card card border-0 shadow-sm rounded-3 mb-2 {{ $canEdit ? '' : 'is-locked' }}"
+                             data-siswa-id="{{ $dt->id }}"
+                             data-can-edit="{{ $canEdit ? '1' : '0' }}">
+                            <div class="card-body p-3">
+                                <div class="d-flex justify-content-between align-items-start mb-2 gap-2">
+                                    <div class="flex-grow-1 min-w-0">
+                                        <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                                            <span class="badge bg-light text-secondary border">#{{ $loop->iteration }}</span>
+                                            <span class="badge status-badge {{ $statusColor }}"
+                                                  data-siswa-id="{{ $dt->id }}">
+                                                {{ $statusLabel }}
+                                            </span>
+                                            @if (! $canEdit)
+                                                <i class="bi bi-lock-fill text-secondary"
+                                                   data-bs-toggle="tooltip"
+                                                   title="{{ $lockTooltip }}"></i>
+                                            @endif
+                                        </div>
+                                        <h6 class="mb-1 fw-semibold text-dark text-break">{{ $dt->namasiswa }}</h6>
+                                        <div class="text-muted small d-flex flex-wrap gap-2">
+                                            <span><i class="bi bi-mortarboard me-1"></i>{{ $dt->jurusan ?: '-' }}</span>
+                                            @if ($dt->jeniskelamin)
+                                                <span class="text-secondary">·</span>
+                                                <span><i class="bi bi-person me-1"></i>{{ $dt->jeniskelamin }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3">
+                                    <label class="form-label small text-muted mb-1">
+                                        Ubah Status
+                                        @if (! $canEdit)
+                                            <span class="text-danger ms-1">
+                                                <i class="bi bi-lock-fill"></i> Terkunci oleh {{ $lockedByName ?: 'user lain' }}
+                                            </span>
+                                        @endif
+                                    </label>
+                                    <div class="d-flex gap-2">
+                                        <select class="form-select form-select-sm status-select flex-grow-1"
+                                                data-siswa-id="{{ $dt->id }}"
+                                                @disabled(!$canEdit)>
+                                            <option value="pending" {{ $dt->status_seleksi == 'pending' ? 'selected' : '' }}>Pending</option>
+                                            <option value="diterima" {{ $dt->status_seleksi == 'diterima' ? 'selected' : '' }}>Diterima</option>
+                                            <option value="ditolak" {{ $dt->status_seleksi == 'ditolak' ? 'selected' : '' }}>Ditolak</option>
+                                            <option value="dipertimbangkan" {{ $dt->status_seleksi == 'dipertimbangkan' ? 'selected' : '' }}>Dipertimbangkan</option>
+                                        </select>
+                                        <button type="button"
+                                                class="btn btn-sm {{ $canEdit ? 'btn-primary' : 'btn-outline-secondary' }} update-status flex-shrink-0 px-3"
+                                                data-siswa-id="{{ $dt->id }}"
+                                                @disabled(!$canEdit)
+                                                title="{{ $canEdit ? 'Simpan status' : $lockTooltip }}">
+                                            <i class="bi {{ $canEdit ? 'bi-save' : 'bi-lock' }}"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <a href="{{ route('seleksi.jawaban', $dt->id) }}"
+                                   class="btn btn-sm btn-outline-info w-100 mt-2 rounded-pill">
+                                    <i class="bi bi-journal-text me-1"></i> Lihat Jawaban
+                                </a>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                            Data siswa tidak ditemukan
+                        </div>
+                    @endforelse
                 </div>
 
                 <div class="card-footer bg-white border-top border-light py-3">
@@ -228,7 +327,7 @@
             background-color: rgba(0, 123, 255, 0.03);
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 767.98px) {
             .card-header .row {
                 flex-direction: column;
             }
@@ -236,6 +335,42 @@
             .justify-content-md-end {
                 justify-content: flex-start !important;
             }
+
+            .dashboard-content .container-fluid {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+        }
+
+        /* Mobile siswa card */
+        .siswa-card {
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .siswa-card:active {
+            transform: scale(0.99);
+        }
+        .siswa-card .badge.status-badge {
+            font-size: 0.7rem;
+        }
+        .min-w-0 {
+            min-width: 0;
+        }
+
+        /* Locked state */
+        .siswa-card.is-locked {
+            background-color: #fafbfc;
+        }
+        .siswa-card.is-locked .siswa-card-name,
+        .siswa-card.is-locked h6 {
+            opacity: 0.85;
+        }
+        .status-select:disabled,
+        .update-status:disabled {
+            cursor: not-allowed;
+            opacity: 0.65;
+        }
+        tr[data-can-edit="0"] {
+            background-color: #fafbfc;
         }
 
         .form-select option[value="diterima"] {
@@ -321,20 +456,28 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Handle status updates
-            document.querySelectorAll('.update-status').forEach(button => {
-                button.addEventListener('click', async function() {
-                    const siswaId = this.dataset.siswaId;
-                    const statusSelect = document.querySelector(
-                        `.status-select[data-siswa-id="${siswaId}"]`);
-                    const newStatus = statusSelect.value;
-                    const currentDate = new Date().toISOString().split('T')[
-                        0]; // Get current date in YYYY-MM-DD format
+            // Init Bootstrap tooltips for lock indicators
+            document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
+                new bootstrap.Tooltip(el);
+            });
 
-                    // Show loading state
+            // Handle status updates (works for both table row and mobile card)
+            document.querySelectorAll('.update-status').forEach(button => {
+                const originalHtml = button.innerHTML;
+
+                button.addEventListener('click', async function() {
+                    if (this.disabled) return;
+                    const siswaId = this.dataset.siswaId;
+                    // Find the select within the same container (tr OR .siswa-card)
+                    const container = this.closest('tr, .siswa-card');
+                    const statusSelect = container
+                        ? container.querySelector('.status-select')
+                        : document.querySelector(`.status-select[data-siswa-id="${siswaId}"]`);
+                    const newStatus = statusSelect.value;
+                    const currentDate = new Date().toISOString().split('T')[0];
+
                     button.disabled = true;
-                    button.innerHTML =
-                        '<span class="spinner-border spinner-border-sm"></span> Menyimpan...';
+                    button.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
 
                     try {
                         const response = await fetch(`/seleksi/${siswaId}/update-status`, {
@@ -352,21 +495,18 @@
                         const data = await response.json();
 
                         if (data.success) {
-                            // Update the badge immediately
                             const badgeColor = {
                                 'diterima': 'bg-success',
                                 'ditolak': 'bg-danger',
                                 'dipertimbangkan': 'bg-warning',
                                 'pending': 'bg-secondary'
-                            } [newStatus];
+                            }[newStatus];
 
-                            const badge = statusSelect.previousElementSibling;
-                            badge.className = `badge ${badgeColor}`;
-
-                            // Update badge text with current date
-                            let badgeText = newStatus.charAt(0).toUpperCase() + newStatus.slice(
-                                1);
+                            let badgeText = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
                             if (newStatus !== 'pending') {
+                                if (data.inisial) {
+                                    badgeText += ` ${data.inisial}`;
+                                }
                                 const formattedDate = new Date().toLocaleDateString('id-ID', {
                                     day: '2-digit',
                                     month: '2-digit',
@@ -374,9 +514,18 @@
                                 });
                                 badgeText += ` (${formattedDate})`;
                             }
-                            badge.textContent = badgeText;
 
-                            // Show success toast
+                            // Sync ALL badges & selects for this siswa (mobile + desktop)
+                            document.querySelectorAll(
+                                `.status-badge[data-siswa-id="${siswaId}"]`
+                            ).forEach(badge => {
+                                badge.className = `badge status-badge ${badgeColor}`;
+                                badge.textContent = badgeText;
+                            });
+                            document.querySelectorAll(
+                                `.status-select[data-siswa-id="${siswaId}"]`
+                            ).forEach(sel => { sel.value = newStatus; });
+
                             const toast = document.createElement('div');
                             toast.className = 'toast position-fixed bottom-0 end-0 m-3';
                             toast.innerHTML = `
@@ -394,7 +543,7 @@
                         alert('Terjadi kesalahan: ' + error.message);
                     } finally {
                         button.disabled = false;
-                        button.innerHTML = '<i class="bi bi-save me-1"></i> Simpan';
+                        button.innerHTML = originalHtml;
                     }
                 });
             });

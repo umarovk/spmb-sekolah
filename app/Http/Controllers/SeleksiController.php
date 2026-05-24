@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Siswa;
+use App\Services\GoogleSheetsService;
 use Illuminate\Support\Facades\Log;
 
 class SeleksiController extends Controller
@@ -13,7 +14,8 @@ class SeleksiController extends Controller
         $search = $request->input('search');
         $status_filter = $request->input('status_filter');
 
-        $datasiswa = Siswa::when($search, function($query) use ($search) {
+        $datasiswa = Siswa::with('selektor:id,nama')
+            ->when($search, function($query) use ($search) {
                 return $query->where('namasiswa', 'like', "%{$search}%")
                             ->orWhere('nisn', 'like', "%{$search}%")
                             ->orWhere('jurusan', 'LIKE', "%{$search}%")
@@ -39,13 +41,31 @@ class SeleksiController extends Controller
 
         try {
             $siswa = Siswa::findOrFail($id);
-            $siswa->status_seleksi = $request->status;
-            $siswa->tanggalseleksi = $request->tanggal_seleksi;
+            $user  = auth()->user();
+
+            if (! $siswa->canBeEditedBy($user)) {
+                $lockedBy = $siswa->selektor?->nama ?? 'user lain';
+                return response()->json([
+                    'success' => false,
+                    'message' => "Status sudah dikunci oleh {$lockedBy}. Hubungi admin untuk membuka kembali.",
+                ], 403);
+            }
+
+            $isPending = $request->status === 'pending';
+
+            $siswa->status_seleksi  = $request->status;
+            $siswa->tanggalseleksi  = $request->tanggal_seleksi;
+            $siswa->selektor_inisial = $isPending
+                ? null
+                : strtolower(substr(preg_replace('/\s+/', '', $user->nama ?? ''), 0, 3));
+            $siswa->selektor_user_id = $isPending ? null : $user->id;
             $siswa->save();
 
             return response()->json([
-                'success' => true,
-                'message' => 'Status berhasil diupdate'
+                'success'           => true,
+                'message'           => 'Status berhasil diupdate',
+                'inisial'           => $siswa->selektor_inisial,
+                'selektor_user_id'  => $siswa->selektor_user_id,
             ]);
         } catch (\Exception $e) {
             Log::error('Status update error: ' . $e->getMessage());
@@ -54,6 +74,24 @@ class SeleksiController extends Controller
                 'message' => 'Gagal mengupdate status: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function jawaban(Request $request, $id, GoogleSheetsService $sheets)
+    {
+        $siswa = Siswa::findOrFail($id);
+
+        if ($request->boolean('refresh')) {
+            $sheets->fetchSeleksiRows(true);
+        }
+
+        $configured = $sheets->isConfigured();
+        $data = $configured ? $sheets->findByStudentName($siswa->namasiswa) : null;
+
+        return view('seleksi.jawaban', [
+            'siswa'      => $siswa,
+            'data'       => $data,
+            'configured' => $configured,
+        ]);
     }
 
     public function export()

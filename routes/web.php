@@ -95,6 +95,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin/backup', [App\Http\Controllers\DatabaseBackupController::class, 'index'])->name('admin.backup.index');
         Route::get('/admin/backup/generate', [App\Http\Controllers\DatabaseBackupController::class, 'generateBackup'])->name('admin.backup.generate');
         Route::get('/admin/backup/generate-php', [App\Http\Controllers\DatabaseBackupController::class, 'downloadBackupUsingPHP'])->name('admin.backup.generate-php');
+
+        // App Settings (Google Sheets dll)
+        Route::get('/admin/settings', [App\Http\Controllers\SettingsController::class, 'index'])->name('admin.settings.index');
+        Route::post('/admin/settings', [App\Http\Controllers\SettingsController::class, 'update'])->name('admin.settings.update');
+        Route::post('/admin/settings/test-sheets', [App\Http\Controllers\SettingsController::class, 'testSheets'])->name('admin.settings.test-sheets');
     });
     
     // Selection routes
@@ -103,6 +108,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/seleksi/{id}/update-status', [SeleksiController::class, 'updateStatus'])
             ->name('seleksi.update-status');
         Route::get('/seleksi-export', [SeleksiController::class, 'export'])->name('seleksi.export');
+        Route::get('/seleksi/{id}/jawaban', [SeleksiController::class, 'jawaban'])->name('seleksi.jawaban');
     });
 
 
