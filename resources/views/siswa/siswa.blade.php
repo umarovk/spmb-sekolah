@@ -120,11 +120,11 @@
                                 <th class="ps-3">No</th>
                                 <th>Nama</th>
                                 <th>Jurusan</th>
-                                <th class="d-none d-md-table-cell">Agama</th>
+                                <th class="d-none">Agama</th>
                                 <th class="d-none d-md-table-cell">Gender</th>
                                 <th class="d-none d-lg-table-cell">Jalur</th>
                                 <th class="d-none d-lg-table-cell">Tahfidz</th>
-                                <th>Status</th>
+                                <th class="d-none">Status</th>
                                 <th class="text-end pe-3">Aksi</th>
                             </tr>
                         </thead>
@@ -138,7 +138,7 @@
                                         <span class="fw-medium">{{ $dt->namasiswa }}</span>
                                     </td>
                                     <td>{{ $dt->jurusan }}</td>
-                                    <td class="d-none d-md-table-cell">{{ $dt->agama ?? '-' }}</td>
+                                    <td class="d-none">{{ $dt->agama ?? '-' }}</td>
                                     <td class="d-none d-md-table-cell">{{ $dt->jeniskelamin }}</td>
                                     <td class="d-none d-lg-table-cell">
                                         @if($dt->jalurdaftar === 'Prestasi')
@@ -162,7 +162,7 @@
                                             <span class="text-muted small">-</span>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="d-none">
                                         <span
                                             class="badge {{ $dt->status_seleksi === 'diterima'
                                                 ? 'bg-success'

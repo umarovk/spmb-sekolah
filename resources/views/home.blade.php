@@ -192,7 +192,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-md-6 mb-4">
+                <div class="col-lg-4 col-md-6 mb-4 d-none">
                     <div class="chart-card h-100">
                         <div class="chart-header">
                             <h3>Distribusi Gender</h3>
