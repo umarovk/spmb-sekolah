@@ -86,12 +86,12 @@
     <!-- This is where styles pushed from individual views will appear -->
     <link
         rel="stylesheet"
-        href="{{ asset('css/sidebar.css') }}"
+        href="{{ asset('css/sidebar.css') }}?v={{ filemtime(public_path('css/sidebar.css')) }}"
     >
 
     <link
         rel="stylesheet"
-        href="{{ asset('css/dashboard.css') }}"
+        href="{{ asset('css/dashboard.css') }}?v={{ filemtime(public_path('css/dashboard.css')) }}"
     >
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
