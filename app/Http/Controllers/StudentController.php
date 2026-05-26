@@ -132,14 +132,17 @@ class StudentController extends Controller
      */
     public function create()
     {
-        $sekolahList = Siswa::query()
+        return view('siswa.create', ['sekolahList' => $this->sekolahAsalList()]);
+    }
+
+    private function sekolahAsalList()
+    {
+        return Siswa::query()
             ->whereNotNull('sekolah_asal')
             ->where('sekolah_asal', '!=', '')
             ->distinct()
             ->orderBy('sekolah_asal')
             ->pluck('sekolah_asal');
-
-        return view('siswa.create', compact('sekolahList'));
     }
 
     private function resolveSekolahAsal(Request $request): void
@@ -296,9 +299,10 @@ class StudentController extends Controller
 
     public function ubah($id)
     {
-    $datasiswa = Siswa::findOrFail($id);
-    // return view('siswa.editsiswa', compact('datasiswa'));
-    return view('siswa.edit', compact('datasiswa'));
+        $datasiswa = Siswa::findOrFail($id);
+        $sekolahList = $this->sekolahAsalList();
+
+        return view('siswa.edit', compact('datasiswa', 'sekolahList'));
     }
 
     /**
@@ -306,7 +310,8 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+        $this->resolveSekolahAsal($request);
+
         $request->validate([
             'namasiswa' => 'required',
             'jurusan' => 'required',

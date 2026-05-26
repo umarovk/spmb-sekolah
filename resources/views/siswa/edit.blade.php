@@ -126,18 +126,40 @@
 
                                                         <div class="col-md-6">
                                                             <label
-                                                                for="validationCustom01"
+                                                                for="sekolah_asal"
                                                                 class="form-label"
-                                                                name="sekolah_asal"
                                                             >Sekolah Asal</label>
-                                                            <input
-                                                                value="{{ old('sekolah_asal', $datasiswa->sekolah_asal) }}"
-                                                                type="text"
-                                                                class="form-control"
-                                                                id="validationCustom01"
-                                                                placeholder="Sekolah Asal"
+                                                            @php
+                                                                $currentSekolah = old('sekolah_asal', $datasiswa->sekolah_asal);
+                                                                $isInList = $currentSekolah && $sekolahList->contains($currentSekolah);
+                                                                $useManual = $currentSekolah && !$isInList;
+                                                            @endphp
+                                                            <select
+                                                                class="form-select"
+                                                                id="sekolah_asal"
                                                                 name="sekolah_asal"
-                                                            />
+                                                                onchange="toggleSekolahAsalManual(this)"
+                                                            >
+                                                                <option value="">-- Pilih sekolah asal --</option>
+                                                                @foreach ($sekolahList as $sekolah)
+                                                                    <option
+                                                                        value="{{ $sekolah }}"
+                                                                        @selected($isInList && $sekolah === $currentSekolah)
+                                                                    >{{ $sekolah }}</option>
+                                                                @endforeach
+                                                                <option
+                                                                    value="__OTHER__"
+                                                                    @selected($useManual)
+                                                                >Lainnya (tulis manual)</option>
+                                                            </select>
+                                                            <input
+                                                                type="text"
+                                                                class="form-control mt-2 {{ $useManual ? '' : 'd-none' }}"
+                                                                id="sekolah_asal_other"
+                                                                name="sekolah_asal_other"
+                                                                placeholder="Tulis nama sekolah asal"
+                                                                value="{{ $useManual ? $currentSekolah : '' }}"
+                                                            >
                                                         </div>
 
                                                         {{-- batas --}}
@@ -1291,6 +1313,19 @@
                                 );
                             });
                         })();
+
+                        function toggleSekolahAsalManual(selectEl) {
+                            const manualInput = document.getElementById('sekolah_asal_other');
+                            if (selectEl.value === '__OTHER__') {
+                                manualInput.classList.remove('d-none');
+                                manualInput.required = true;
+                                manualInput.focus();
+                            } else {
+                                manualInput.classList.add('d-none');
+                                manualInput.required = false;
+                                manualInput.value = '';
+                            }
+                        }
                     </script>
                 </div>
             </div>
