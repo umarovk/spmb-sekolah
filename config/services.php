@@ -31,4 +31,11 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'google_sheets' => [
+        'api_key'      => env('GOOGLE_SHEETS_API_KEY'),
+        'seleksi_id'   => env('GOOGLE_SHEETS_SELEKSI_ID'),
+        'seleksi_range' => env('GOOGLE_SHEETS_SELEKSI_RANGE', 'Sheet1'),
+        'cache_ttl'    => (int) env('GOOGLE_SHEETS_CACHE_TTL', 300),
+    ],
+
 ];

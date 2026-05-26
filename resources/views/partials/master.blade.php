@@ -251,6 +251,17 @@
                                         <span>Backup Database</span>
                                     </a>
                                 </li>
+
+                                <!-- Pengaturan Aplikasi (Admin Only) -->
+                                <li class="nav-item mb-1">
+                                    <a
+                                        href="{{ route('admin.settings.index') }}"
+                                        class="nav-link rounded-pill py-2 {{ Request::routeIs('admin.settings.*') ? 'active bg-light text-primary' : 'text-dark' }}"
+                                    >
+                                        <i class="nav-icon bi bi-gear me-2"></i>
+                                        <span>Pengaturan</span>
+                                    </a>
+                                </li>
                             @endif
 
 
@@ -350,6 +361,11 @@
            class="mobile-nav-item {{ Request::routeIs('admin.backup.*') ? 'active' : '' }}">
             <i class="bi bi-database-down"></i>
             <span>Backup</span>
+        </a>
+        <a href="{{ route('admin.settings.index') }}"
+           class="mobile-nav-item {{ Request::routeIs('admin.settings.*') ? 'active' : '' }}">
+            <i class="bi bi-gear"></i>
+            <span>Setting</span>
         </a>
         @endif
 
