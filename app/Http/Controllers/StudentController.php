@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Siswa;
 use App\Models\Pembayaran;
 use App\Exports\SiswaExport;
+use App\Services\GoogleSheetsService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -130,9 +131,27 @@ class StudentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(GoogleSheetsService $sheets)
     {
-        return view('siswa.create', ['sekolahList' => $this->sekolahAsalList()]);
+        return view('siswa.create', [
+            'sekolahList'        => $this->sekolahAsalList(),
+            'gformConfigured'    => $sheets->isPendaftaranConfigured(),
+        ]);
+    }
+
+    public function gformSearch(Request $request, GoogleSheetsService $sheets)
+    {
+        $q = trim((string) $request->input('q', ''));
+        if (! $sheets->isPendaftaranConfigured()) {
+            return response()->json(['configured' => false, 'results' => []]);
+        }
+        if (mb_strlen($q) < 2) {
+            return response()->json(['configured' => true, 'results' => []]);
+        }
+        return response()->json([
+            'configured' => true,
+            'results'    => $sheets->searchPendaftaranByName($q, 10),
+        ]);
     }
 
     private function sekolahAsalList()

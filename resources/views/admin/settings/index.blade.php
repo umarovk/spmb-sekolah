@@ -154,6 +154,121 @@
                     </div>
                 </div>
 
+                <div class="card border-0 shadow-sm rounded-3 mb-4">
+                    <div class="card-header bg-white py-3 border-bottom border-light">
+                        <h5 class="mb-0 text-dark">
+                            <i class="bi bi-clipboard-data text-primary me-2"></i>Google Sheets — Pendaftaran Online
+                        </h5>
+                        <small class="text-muted">Dipakai oleh search bar di halaman "Tambah Siswa" untuk autofill data dari Google Form</small>
+                    </div>
+                    <div class="card-body p-4">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                API Key Pendaftaran
+                                @if (filled($envFallback['pendaftaran_api_key']) && empty($settings['google_sheets_pendaftaran_api_key']))
+                                    <span class="badge bg-light text-secondary border ms-1">dari .env</span>
+                                @endif
+                            </label>
+                            <div class="input-group">
+                                <input type="password"
+                                       name="google_sheets_pendaftaran_api_key"
+                                       id="pendaftaranApiKeyInput"
+                                       class="form-control"
+                                       value="{{ old('google_sheets_pendaftaran_api_key', $settings['google_sheets_pendaftaran_api_key']) }}"
+                                       placeholder="{{ filled($envFallback['pendaftaran_api_key']) ? 'Kosongkan untuk pakai .env' : 'AIza...' }}"
+                                       autocomplete="off">
+                                <button type="button" class="btn btn-outline-secondary" id="togglePendaftaranApiKey" tabindex="-1">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                            <small class="text-muted">API Key boleh sama atau berbeda dengan Seleksi.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                Spreadsheet ID Pendaftaran
+                                @if (filled($envFallback['pendaftaran_id']) && empty($settings['google_sheets_pendaftaran_id']))
+                                    <span class="badge bg-light text-secondary border ms-1">dari .env</span>
+                                @endif
+                            </label>
+                            <input type="text"
+                                   name="google_sheets_pendaftaran_id"
+                                   id="pendaftaranSheetIdInput"
+                                   class="form-control"
+                                   value="{{ old('google_sheets_pendaftaran_id', $settings['google_sheets_pendaftaran_id']) }}"
+                                   placeholder="1AbC...xyz (atau paste link spreadsheet)">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                Range / Sheet Name
+                                @if (filled($envFallback['pendaftaran_range']) && empty($settings['google_sheets_pendaftaran_range']))
+                                    <span class="badge bg-light text-secondary border ms-1">dari .env</span>
+                                @endif
+                            </label>
+                            <input type="text"
+                                   name="google_sheets_pendaftaran_range"
+                                   id="pendaftaranRangeInput"
+                                   class="form-control"
+                                   value="{{ old('google_sheets_pendaftaran_range', $settings['google_sheets_pendaftaran_range']) }}"
+                                   placeholder="Sheet1 atau Form Responses 1!A:Z">
+                        </div>
+
+                        <div class="mt-4 pt-3 border-top">
+                            <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+                                <button type="button" class="btn btn-outline-primary rounded-pill" id="testPendaftaranBtn">
+                                    <i class="bi bi-plug me-1"></i> Test Koneksi
+                                </button>
+                                <button type="button" class="btn btn-outline-primary rounded-pill" id="fetchHeadersBtn">
+                                    <i class="bi bi-arrow-clockwise me-1"></i> Ambil Header dari Sheet
+                                </button>
+                                <small class="text-muted">Test koneksi cek akses; Ambil Header muat ulang kolom utk mapping.</small>
+                            </div>
+                            <div id="testPendaftaranResult" class="mb-2" style="display:none;"></div>
+
+                            <div class="mb-2 fw-semibold">Mapping Kolom Gform → Field Siswa</div>
+                            <div class="border rounded-3 p-3 bg-light-subtle" id="mappingContainer">
+                                @if (empty($pendaftaranMapping))
+                                    <div class="text-muted small" id="mappingEmpty">
+                                        Belum ada mapping. Klik <strong>Ambil Header dari Sheet</strong> untuk mulai.
+                                    </div>
+                                @else
+                                    <div class="table-responsive">
+                                        <table class="table table-sm align-middle mb-0" id="mappingTable">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:50%;">Header di Google Form</th>
+                                                    <th style="width:50%;">Field Siswa</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($pendaftaranMapping as $header => $field)
+                                                    <tr>
+                                                        <td>
+                                                            <input type="hidden" name="mapping_keys[]" value="{{ $header }}">
+                                                            <code>{{ $header }}</code>
+                                                        </td>
+                                                        <td>
+                                                            <select name="mapping[{{ $header }}]" class="form-select form-select-sm">
+                                                                <option value="">-- skip --</option>
+                                                                @foreach ($siswaFields as $sf)
+                                                                    <option value="{{ $sf }}" @selected($sf === $field)>{{ $sf }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                @endif
+                            </div>
+                            <div id="fetchHeadersResult" class="mt-2"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="d-flex justify-content-end gap-2">
                     <a href="{{ route('admin.settings.index') }}" class="btn btn-outline-secondary rounded-pill">
                         Reset Form
@@ -250,6 +365,156 @@ document.addEventListener('DOMContentLoaded', function () {
             '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
         }[c]));
     }
+
+    // Pendaftaran API key visibility
+    const pendaftaranApiKeyInput = document.getElementById('pendaftaranApiKeyInput');
+    document.getElementById('togglePendaftaranApiKey').addEventListener('click', function () {
+        const isPwd = pendaftaranApiKeyInput.type === 'password';
+        pendaftaranApiKeyInput.type = isPwd ? 'text' : 'password';
+        this.querySelector('i').className = isPwd ? 'bi bi-eye-slash' : 'bi bi-eye';
+    });
+
+    // Pendaftaran sheet ID auto-extract from URL
+    const pendaftaranSheetIdInput = document.getElementById('pendaftaranSheetIdInput');
+    pendaftaranSheetIdInput.addEventListener('input', function () {
+        const m = this.value.match(/\/d\/([a-zA-Z0-9-_]{20,})/);
+        if (m) this.value = m[1];
+    });
+
+    // Siswa fields available for mapping
+    const SISWA_FIELDS = @json($siswaFields);
+    // Existing mapping from DB
+    const EXISTING_MAPPING = @json($pendaftaranMapping);
+
+    function renderMappingTable(headers) {
+        const container = document.getElementById('mappingContainer');
+        if (!headers || !headers.length) {
+            container.innerHTML = '<div class="text-muted small">Tidak ada kolom terdeteksi.</div>';
+            return;
+        }
+        const options = ['<option value="">-- skip --</option>']
+            .concat(SISWA_FIELDS.map(f => `<option value="${escapeHtml(f)}">${escapeHtml(f)}</option>`))
+            .join('');
+
+        const rows = headers.map(h => {
+            const sel = EXISTING_MAPPING[h] || '';
+            const opts = ['<option value="">-- skip --</option>']
+                .concat(SISWA_FIELDS.map(f =>
+                    `<option value="${escapeHtml(f)}" ${f === sel ? 'selected' : ''}>${escapeHtml(f)}</option>`
+                ))
+                .join('');
+            return `
+                <tr>
+                    <td><code>${escapeHtml(h)}</code></td>
+                    <td>
+                        <select name="mapping[${escapeHtml(h)}]" class="form-select form-select-sm">
+                            ${opts}
+                        </select>
+                    </td>
+                </tr>`;
+        }).join('');
+
+        container.innerHTML = `
+            <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width:50%;">Header di Google Form</th>
+                            <th style="width:50%;">Field Siswa</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            </div>`;
+    }
+
+    document.getElementById('testPendaftaranBtn').addEventListener('click', async function () {
+        const btn = this;
+        const result = document.getElementById('testPendaftaranResult');
+        const original = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Mengetes...';
+        result.style.display = 'block';
+        result.innerHTML = '<div class="text-muted small">Mengirim request ke Google Sheets API...</div>';
+
+        const fd = new FormData();
+        fd.append('api_key', pendaftaranApiKeyInput.value);
+        fd.append('sheet_id', pendaftaranSheetIdInput.value);
+        fd.append('range', document.getElementById('pendaftaranRangeInput').value);
+        fd.append('_token', '{{ csrf_token() }}');
+
+        try {
+            const res = await fetch('{{ route('admin.settings.fetch-pendaftaran-headers') }}', {
+                method: 'POST',
+                body: fd,
+                headers: { 'Accept': 'application/json' }
+            });
+            const data = await res.json();
+            if (data.ok) {
+                let sampleHtml = '';
+                if (data.sample && data.sample.headers && data.sample.headers.length) {
+                    sampleHtml = `
+                        <div class="mt-2">
+                            <small class="text-muted fw-semibold">Preview header kolom:</small>
+                            <div class="mt-1">
+                                ${data.sample.headers.map(h => `<span class="badge bg-light text-dark border me-1 mb-1">${escapeHtml(h)}</span>`).join('')}
+                            </div>
+                        </div>`;
+                }
+                result.innerHTML = `
+                    <div class="alert alert-success border-0 shadow-sm mb-0">
+                        <div class="fw-semibold"><i class="bi bi-check-circle-fill me-2"></i>${escapeHtml(data.message)}</div>
+                        ${sampleHtml}
+                    </div>`;
+            } else {
+                result.innerHTML = `
+                    <div class="alert alert-danger border-0 shadow-sm mb-0">
+                        <div class="fw-semibold"><i class="bi bi-x-circle-fill me-2"></i>Koneksi gagal</div>
+                        <div class="small mt-1">${escapeHtml(data.message)}</div>
+                    </div>`;
+            }
+        } catch (e) {
+            result.innerHTML = `<div class="alert alert-danger border-0 shadow-sm mb-0">Error: ${escapeHtml(e.message)}</div>`;
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = original;
+        }
+    });
+
+    document.getElementById('fetchHeadersBtn').addEventListener('click', async function () {
+        const btn = this;
+        const result = document.getElementById('fetchHeadersResult');
+        const original = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Memuat...';
+        result.innerHTML = '';
+
+        const fd = new FormData();
+        fd.append('api_key', pendaftaranApiKeyInput.value);
+        fd.append('sheet_id', pendaftaranSheetIdInput.value);
+        fd.append('range', document.getElementById('pendaftaranRangeInput').value);
+        fd.append('_token', '{{ csrf_token() }}');
+
+        try {
+            const res = await fetch('{{ route('admin.settings.fetch-pendaftaran-headers') }}', {
+                method: 'POST',
+                body: fd,
+                headers: { 'Accept': 'application/json' }
+            });
+            const data = await res.json();
+            if (data.ok && data.sample && data.sample.headers) {
+                renderMappingTable(data.sample.headers);
+                result.innerHTML = `<div class="alert alert-success border-0 shadow-sm mb-0 py-2 small">${escapeHtml(data.message)}</div>`;
+            } else {
+                result.innerHTML = `<div class="alert alert-danger border-0 shadow-sm mb-0 py-2 small">${escapeHtml(data.message || 'Gagal mengambil header.')}</div>`;
+            }
+        } catch (e) {
+            result.innerHTML = `<div class="alert alert-danger border-0 shadow-sm mb-0 py-2 small">Error: ${escapeHtml(e.message)}</div>`;
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = original;
+        }
+    });
 });
 </script>
 @endpush

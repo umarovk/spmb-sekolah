@@ -10,6 +10,27 @@
                             <h3 class="text-center font-weight-light my-2">Tambah Data Siswa</h3>
                         </div>
                         <div class="card-body">
+                            @if (!empty($gformConfigured))
+                                <div class="mb-4 position-relative">
+                                    <label for="gformSearch" class="form-label fw-semibold">
+                                        <i class="bi bi-search me-1"></i> Cari Data dari Google Form Pendaftaran
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="gformSearch"
+                                        class="form-control"
+                                        placeholder="Ketik nama siswa minimal 2 huruf..."
+                                        autocomplete="off"
+                                    >
+                                    <div
+                                        id="gformResults"
+                                        class="list-group position-absolute w-100 shadow"
+                                        style="display:none;z-index:1000;max-height:280px;overflow-y:auto;"
+                                    ></div>
+                                    <small class="text-muted">Klik salah satu hasil untuk autofill form di bawah.</small>
+                                </div>
+                            @endif
+
                             <form
                                 method="POST"
                                 action="{{ route('siswa.store') }}"
@@ -1172,5 +1193,116 @@
                 manualInput.value = '';
             }
         }
+
+        (() => {
+            const searchInput = document.getElementById('gformSearch');
+            if (!searchInput) return;
+
+            const resultsBox = document.getElementById('gformResults');
+            const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+            }[c]));
+
+            let timer = null;
+            let lastResults = [];
+
+            searchInput.addEventListener('input', () => {
+                clearTimeout(timer);
+                const q = searchInput.value.trim();
+                if (q.length < 2) {
+                    resultsBox.style.display = 'none';
+                    resultsBox.innerHTML = '';
+                    return;
+                }
+                timer = setTimeout(() => doSearch(q), 300);
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!resultsBox.contains(e.target) && e.target !== searchInput) {
+                    resultsBox.style.display = 'none';
+                }
+            });
+
+            async function doSearch(q) {
+                resultsBox.innerHTML = '<div class="list-group-item text-muted small">Mencari...</div>';
+                resultsBox.style.display = 'block';
+                try {
+                    const res = await fetch(`{{ route('siswa.gform-search') }}?q=${encodeURIComponent(q)}`, {
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    const data = await res.json();
+                    if (!data.configured) {
+                        resultsBox.innerHTML = '<div class="list-group-item text-danger small">Google Sheets pendaftaran belum dikonfigurasi.</div>';
+                        return;
+                    }
+                    lastResults = data.results || [];
+                    if (!lastResults.length) {
+                        resultsBox.innerHTML = '<div class="list-group-item text-muted small">Tidak ada hasil.</div>';
+                        return;
+                    }
+                    resultsBox.innerHTML = lastResults.map((r, i) =>
+                        `<button type="button" class="list-group-item list-group-item-action" data-idx="${i}">
+                            <i class="bi bi-person me-2"></i>${escapeHtml(r.nama)}
+                        </button>`
+                    ).join('');
+                    resultsBox.querySelectorAll('button[data-idx]').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const idx = parseInt(btn.dataset.idx, 10);
+                            applyAutofill(lastResults[idx].data || {});
+                            resultsBox.style.display = 'none';
+                            searchInput.value = lastResults[idx].nama;
+                        });
+                    });
+                } catch (e) {
+                    resultsBox.innerHTML = `<div class="list-group-item text-danger small">Error: ${escapeHtml(e.message)}</div>`;
+                }
+            }
+
+            function applyAutofill(data) {
+                const form = document.querySelector('form.needs-validation');
+                if (!form) return;
+                let filledCount = 0;
+
+                for (const [field, rawVal] of Object.entries(data)) {
+                    if (rawVal == null || rawVal === '') continue;
+                    const value = String(rawVal).trim();
+                    if (value === '') continue;
+
+                    const el = form.querySelector(`[name="${field}"]`);
+                    if (!el) continue;
+
+                    if (el.tagName === 'SELECT') {
+                        const match = Array.from(el.options).find(o => o.value === value);
+                        if (match) {
+                            el.value = value;
+                        } else if (field === 'sekolah_asal') {
+                            el.value = '__OTHER__';
+                            const manual = document.getElementById('sekolah_asal_other');
+                            if (manual) {
+                                manual.value = value;
+                                manual.classList.remove('d-none');
+                                manual.required = true;
+                            }
+                        } else {
+                            continue;
+                        }
+                        el.dispatchEvent(new Event('change'));
+                    } else if (el.type === 'date') {
+                        // Try common date formats: YYYY-MM-DD, DD/MM/YYYY
+                        let iso = value;
+                        const dmy = value.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+                        if (dmy) iso = `${dmy[3]}-${String(dmy[2]).padStart(2,'0')}-${String(dmy[1]).padStart(2,'0')}`;
+                        el.value = iso;
+                    } else {
+                        el.value = value;
+                    }
+                    filledCount++;
+                }
+
+                if (filledCount > 0) {
+                    alert(`Autofill berhasil — ${filledCount} field terisi dari Google Form. Periksa & lengkapi sebelum simpan.`);
+                }
+            }
+        })();
     </script>
 @endsection
