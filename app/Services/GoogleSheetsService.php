@@ -10,9 +10,11 @@ use Illuminate\Support\Facades\Log;
 
 class GoogleSheetsService
 {
-    public const CACHE_KEY = 'google_sheets.seleksi.rows';
+    public const CACHE_KEY              = 'google_sheets.seleksi.rows';
+    public const CACHE_KEY_PENDAFTARAN  = 'google_sheets.pendaftaran.rows';
 
-    /** DB-overridable settings (DB value > .env). */
+    // ---------- Seleksi (existing) ----------
+
     public function apiKey(): ?string
     {
         return AppSetting::get('google_sheets_api_key') ?: config('services.google_sheets.api_key');
@@ -43,60 +45,22 @@ class GoogleSheetsService
         return filled($this->apiKey()) && filled($this->seleksiId());
     }
 
-    /**
-     * Fetch raw rows from the configured spreadsheet.
-     * Returns ['headers' => [...], 'rows' => [[...], ...]] or null on failure.
-     */
     public function fetchSeleksiRows(bool $forceRefresh = false): ?array
     {
         if (! $this->isConfigured()) {
             return null;
         }
 
-        $ttl = $this->cacheTtl();
-
         if ($forceRefresh) {
             Cache::forget(self::CACHE_KEY);
         }
 
-        return Cache::remember(self::CACHE_KEY, $ttl, function () {
-            $sheetId = $this->seleksiId();
-            $range   = $this->seleksiRange();
-            $apiKey  = $this->apiKey();
-
-            $url = sprintf(
-                'https://sheets.googleapis.com/v4/spreadsheets/%s/values/%s',
-                rawurlencode($sheetId),
-                rawurlencode($range)
-            );
-
-            try {
-                $client = new Client(['timeout' => 10]);
-                $response = $client->get($url, [
-                    'query' => ['key' => $apiKey],
-                ]);
-                $body = json_decode((string) $response->getBody(), true);
-            } catch (GuzzleException $e) {
-                Log::warning('GoogleSheets fetch failed: ' . $e->getMessage());
-                return null;
-            }
-
-            $values = $body['values'] ?? [];
-            if (count($values) < 1) {
-                return ['headers' => [], 'rows' => []];
-            }
-
-            $headers = array_map(fn ($h) => trim((string) $h), array_shift($values));
-            $rows = array_map(fn ($row) => array_map(fn ($cell) => (string) $cell, $row), $values);
-
-            return ['headers' => $headers, 'rows' => $rows];
+        return Cache::remember(self::CACHE_KEY, $this->cacheTtl(), function () {
+            return $this->fetchSheet($this->apiKey(), $this->seleksiId(), $this->seleksiRange())
+                ?? ['headers' => [], 'rows' => []];
         });
     }
 
-    /**
-     * Find the answer row for a given student name (case-insensitive, trimmed).
-     * Returns ['nama' => string, 'answers' => ['Header' => 'Value', ...]] or null.
-     */
     public function findByStudentName(string $namaSiswa): ?array
     {
         $data = $this->fetchSeleksiRows();
@@ -132,9 +96,133 @@ class GoogleSheetsService
         return null;
     }
 
+    // ---------- Pendaftaran (new) ----------
+
+    public function pendaftaranApiKey(): ?string
+    {
+        return AppSetting::get('google_sheets_pendaftaran_api_key')
+            ?: config('services.google_sheets.pendaftaran_api_key');
+    }
+
+    public function pendaftaranId(): ?string
+    {
+        return AppSetting::get('google_sheets_pendaftaran_id')
+            ?: config('services.google_sheets.pendaftaran_id');
+    }
+
+    public function pendaftaranRange(): string
+    {
+        return AppSetting::get('google_sheets_pendaftaran_range')
+            ?: config('services.google_sheets.pendaftaran_range', 'Sheet1');
+    }
+
+    /** Returns [gform_header => siswa_field] map. */
+    public function pendaftaranMapping(): array
+    {
+        $json = AppSetting::get('google_sheets_pendaftaran_mapping');
+        if (! $json) {
+            return [];
+        }
+        $arr = json_decode($json, true);
+        return is_array($arr) ? $arr : [];
+    }
+
+    public function isPendaftaranConfigured(): bool
+    {
+        return filled($this->pendaftaranApiKey()) && filled($this->pendaftaranId());
+    }
+
+    public function fetchPendaftaranRows(bool $forceRefresh = false): ?array
+    {
+        if (! $this->isPendaftaranConfigured()) {
+            return null;
+        }
+
+        if ($forceRefresh) {
+            Cache::forget(self::CACHE_KEY_PENDAFTARAN);
+        }
+
+        return Cache::remember(self::CACHE_KEY_PENDAFTARAN, $this->cacheTtl(), function () {
+            return $this->fetchSheet(
+                $this->pendaftaranApiKey(),
+                $this->pendaftaranId(),
+                $this->pendaftaranRange()
+            ) ?? ['headers' => [], 'rows' => []];
+        });
+    }
+
+    /**
+     * Partial (case-insensitive) name search.
+     * Returns array of ['index' => int, 'nama' => string, 'data' => [siswa_field => value]].
+     */
+    public function searchPendaftaranByName(string $query, int $limit = 10): array
+    {
+        $data = $this->fetchPendaftaranRows();
+        if (! $data || empty($data['headers'])) {
+            return [];
+        }
+
+        $headers = $data['headers'];
+        $mapping = $this->pendaftaranMapping();
+        $nameIdx = $this->resolveNameColumnFromMapping($headers, $mapping);
+
+        $needle = $this->normalize($query);
+        if ($needle === '') {
+            return [];
+        }
+
+        $results = [];
+        foreach ($data['rows'] as $idx => $row) {
+            $cellName = $row[$nameIdx] ?? '';
+            if ($cellName === '') {
+                continue;
+            }
+            if (str_contains($this->normalize($cellName), $needle)) {
+                $results[] = [
+                    'index' => $idx,
+                    'nama'  => $cellName,
+                    'data'  => $this->transformRow($row, $headers, $mapping),
+                ];
+                if (count($results) >= $limit) {
+                    break;
+                }
+            }
+        }
+        return $results;
+    }
+
+    private function resolveNameColumnFromMapping(array $headers, array $mapping): int
+    {
+        foreach ($headers as $i => $h) {
+            if (($mapping[$h] ?? null) === 'namasiswa') {
+                return $i;
+            }
+        }
+        $fallback = $this->resolveNameColumnIndex($headers);
+        return $fallback ?? 0;
+    }
+
+    private function transformRow(array $row, array $headers, array $mapping): array
+    {
+        $out = [];
+        foreach ($headers as $i => $h) {
+            $field = $mapping[$h] ?? null;
+            if (! $field) {
+                continue;
+            }
+            $value = $row[$i] ?? '';
+            if (! isset($out[$field]) || $out[$field] === '') {
+                $out[$field] = $value;
+            }
+        }
+        return $out;
+    }
+
+    // ---------- Shared helpers ----------
+
     private function resolveNameColumnIndex(array $headers): ?int
     {
-        $candidates = ['nama siswa', 'namasiswa', 'nama'];
+        $candidates = ['nama siswa', 'namasiswa', 'nama', 'nama lengkap'];
         foreach ($headers as $i => $header) {
             $normalized = $this->normalize($header);
             if (in_array($normalized, $candidates, true)) {
@@ -150,8 +238,38 @@ class GoogleSheetsService
     }
 
     /**
-     * Test connection with given (or current) credentials without touching the cache.
-     * Returns ['ok' => bool, 'message' => string, 'sample' => array|null].
+     * Generic fetch: returns ['headers' => [...], 'rows' => [[...], ...]] or null on failure.
+     */
+    private function fetchSheet(string $apiKey, string $sheetId, string $range): ?array
+    {
+        $url = sprintf(
+            'https://sheets.googleapis.com/v4/spreadsheets/%s/values/%s',
+            rawurlencode($sheetId),
+            rawurlencode($range)
+        );
+
+        try {
+            $client = new Client(['timeout' => 10]);
+            $response = $client->get($url, ['query' => ['key' => $apiKey]]);
+            $body = json_decode((string) $response->getBody(), true);
+        } catch (GuzzleException $e) {
+            Log::warning('GoogleSheets fetch failed: ' . $e->getMessage());
+            return null;
+        }
+
+        $values = $body['values'] ?? [];
+        if (count($values) < 1) {
+            return ['headers' => [], 'rows' => []];
+        }
+
+        $headers = array_map(fn ($h) => trim((string) $h), array_shift($values));
+        $rows = array_map(fn ($row) => array_map(fn ($cell) => (string) $cell, $row), $values);
+
+        return ['headers' => $headers, 'rows' => $rows];
+    }
+
+    /**
+     * Test connection with given (or current seleksi) credentials without touching cache.
      */
     public function testConnection(?string $apiKey = null, ?string $sheetId = null, ?string $range = null): array
     {

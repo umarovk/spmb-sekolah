@@ -42,6 +42,10 @@ Route::middleware(['auth'])->group(function () {
 
     // Guest & Admin Routes (Student Management)
     Route::middleware(['role:guest,admin,teller,selektor'])->group(function () {
+        // IMPORTANT: define custom static-path siswa routes BEFORE Route::resource('siswa'),
+        // otherwise siswa/{siswa} show route will capture them as model binding params.
+        Route::get('/siswa/gform-search', [StudentController::class, 'gformSearch'])->name('siswa.gform-search');
+
         Route::resource('siswa', StudentController::class)->names([
             'index'   => 'siswa.index',
             'create'  => 'siswa.create',
@@ -101,6 +105,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin/settings', [App\Http\Controllers\SettingsController::class, 'index'])->name('admin.settings.index');
         Route::post('/admin/settings', [App\Http\Controllers\SettingsController::class, 'update'])->name('admin.settings.update');
         Route::post('/admin/settings/test-sheets', [App\Http\Controllers\SettingsController::class, 'testSheets'])->name('admin.settings.test-sheets');
+        Route::post('/admin/settings/fetch-pendaftaran-headers', [App\Http\Controllers\SettingsController::class, 'fetchPendaftaranHeaders'])->name('admin.settings.fetch-pendaftaran-headers');
     });
     
     // Selection routes
