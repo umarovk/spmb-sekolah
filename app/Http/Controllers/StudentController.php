@@ -316,12 +316,21 @@ class StudentController extends Controller
      * Show the form for editing the specified resource.
      */
 
-    public function ubah($id)
+    public function ubah($id, \App\Services\KelengkapanDataService $kelengkapan)
     {
         $datasiswa = Siswa::findOrFail($id);
         $sekolahList = $this->sekolahAsalList();
 
-        return view('siswa.edit', compact('datasiswa', 'sekolahList'));
+        // Field yang ditandai missing dari halaman Kelengkapan (?missing=field1,field2)
+        $missingParam = trim((string) request('missing', ''));
+        $missingFields = $missingParam !== ''
+            ? array_values(array_filter(array_map('trim', explode(',', $missingParam))))
+            : [];
+        // Sanitasi: hanya field valid
+        $missingFields = array_values(array_intersect($missingFields, array_keys(\App\Services\KelengkapanDataService::FIELD_LABELS)));
+        $fieldLabels = \App\Services\KelengkapanDataService::FIELD_LABELS;
+
+        return view('siswa.edit', compact('datasiswa', 'sekolahList', 'missingFields', 'fieldLabels'));
     }
 
     /**

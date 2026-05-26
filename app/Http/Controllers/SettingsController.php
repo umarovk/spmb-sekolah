@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AppSetting;
 use App\Providers\AppServiceProvider;
 use App\Services\GoogleSheetsService;
+use App\Services\KelengkapanDataService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -29,7 +30,7 @@ class SettingsController extends Controller
         'asrama_tahfidz', 'jalurdaftar',
     ];
 
-    public function index(GoogleSheetsService $sheets)
+    public function index(GoogleSheetsService $sheets, KelengkapanDataService $kelengkapan)
     {
         $settings = [
             'google_sheets_api_key'        => AppSetting::get('google_sheets_api_key'),
@@ -84,6 +85,10 @@ class SettingsController extends Controller
             'pendaftaranMapping' => $sheets->pendaftaranMapping(),
             'siswaFields'        => self::SISWA_FIELDS,
             'loginContent'       => $loginContent,
+            'requiredFields'     => $kelengkapan->requiredFields(),
+            'fieldGroups'        => KelengkapanDataService::FIELD_GROUPS,
+            'fieldLabels'        => KelengkapanDataService::FIELD_LABELS,
+            'defaultRequired'    => KelengkapanDataService::DEFAULT_REQUIRED,
         ]);
     }
 
@@ -112,7 +117,21 @@ class SettingsController extends Controller
             'login_roles_description'  => ['nullable', 'array'],
             'login_roles_description.*'=> ['nullable', 'string', 'max:200'],
             'login_reset'              => ['nullable', 'in:1'],
+            'required_siswa_fields'   => ['nullable', 'array'],
+            'required_siswa_fields.*' => ['string', 'max:64'],
+            'required_reset'          => ['nullable', 'in:1'],
         ]);
+
+        // Field wajib siswa (cek kelengkapan data)
+        if ($request->boolean('required_reset')) {
+            $requiredToSave = null;
+        } else {
+            $req = array_values(array_intersect(
+                (array) ($validated['required_siswa_fields'] ?? []),
+                array_keys(KelengkapanDataService::FIELD_LABELS)
+            ));
+            $requiredToSave = $req ? json_encode($req, JSON_UNESCAPED_UNICODE) : null;
+        }
 
         // Parse flow steps (satu baris = satu langkah)
         $flowStepsRaw = (string) ($validated['login_flow_steps'] ?? '');
@@ -200,6 +219,7 @@ class SettingsController extends Controller
             'login_description' => $loginDescriptionToSave,
             'login_flow_steps'  => $loginFlowToSave,
             'login_roles'       => $loginRolesToSave,
+            KelengkapanDataService::SETTING_KEY => $requiredToSave,
         ]);
 
         AppSetting::flush();

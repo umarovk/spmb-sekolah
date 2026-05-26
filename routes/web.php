@@ -40,6 +40,9 @@ Route::middleware(['auth'])->group(function () {
     // Routes accessible by all authenticated users
     Route::get('/', [StudentController::class, 'index'])->name('home');
 
+    // Kelengkapan data siswa (semua role bisa melihat)
+    Route::get('/kelengkapan', [App\Http\Controllers\KelengkapanController::class, 'index'])->name('kelengkapan.index');
+
     // Guest & Admin Routes (Student Management)
     Route::middleware(['role:guest,admin,teller,selektor'])->group(function () {
         // IMPORTANT: define custom static-path siswa routes BEFORE Route::resource('siswa'),

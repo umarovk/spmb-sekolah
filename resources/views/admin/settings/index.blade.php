@@ -231,6 +231,68 @@
                     </div>
                 </div>
 
+                {{-- Kelengkapan Data Siswa: field wajib --}}
+                <div class="card border-0 shadow-sm rounded-3 mb-4" id="req-fields">
+                    <div class="card-header bg-white py-3 border-bottom border-light">
+                        <h5 class="mb-0 text-dark">
+                            <i class="bi bi-check2-square text-primary me-2"></i>Kelengkapan Data — Field Wajib Siswa
+                        </h5>
+                        <small class="text-muted">
+                            Tandai field mana saja yang <strong>wajib diisi</strong>. Progress bar di halaman <em>Kelengkapan Data</em> akan dihitung dari field-field ini.
+                        </small>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="d-flex gap-2 mb-3 flex-wrap">
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" id="reqCheckAll">
+                                <i class="bi bi-check-all me-1"></i> Centang semua
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" id="reqUncheckAll">
+                                <i class="bi bi-x-lg me-1"></i> Kosongkan
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-info rounded-pill" id="reqDefault">
+                                <i class="bi bi-arrow-counterclockwise me-1"></i> Set ke default
+                            </button>
+                            <span class="ms-auto small text-muted align-self-center">
+                                Terpilih: <strong id="reqCount">{{ count($requiredFields) }}</strong> field
+                            </span>
+                        </div>
+
+                        @foreach ($fieldGroups as $groupName => $groupFields)
+                            <div class="mb-3">
+                                <div class="fw-semibold small text-uppercase text-muted mb-2" style="letter-spacing:0.8px;">
+                                    <i class="bi bi-folder2 me-1"></i> {{ $groupName }}
+                                </div>
+                                <div class="row g-2">
+                                    @foreach ($groupFields as $field)
+                                        @php $checked = in_array($field, $requiredFields, true); @endphp
+                                        <div class="col-md-4 col-sm-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input req-field-cb"
+                                                       type="checkbox"
+                                                       name="required_siswa_fields[]"
+                                                       value="{{ $field }}"
+                                                       id="req_{{ $field }}"
+                                                       @checked($checked)>
+                                                <label class="form-check-label small" for="req_{{ $field }}">
+                                                    {{ $fieldLabels[$field] ?? $field }}
+                                                    <code class="text-muted small">{{ $field }}</code>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
+
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox" name="required_reset" value="1" id="required_reset">
+                            <label class="form-check-label small text-danger" for="required_reset">
+                                Reset ke daftar default (mengabaikan centang di atas)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card border-0 shadow-sm rounded-3 mb-4">
                     <div class="card-header bg-white py-3 border-bottom border-light">
                         <h5 class="mb-0 text-dark">
@@ -655,6 +717,29 @@ document.addEventListener('DOMContentLoaded', function () {
             btn.disabled = false;
             btn.innerHTML = original;
         }
+    });
+
+    // ===== Required siswa fields: bulk actions =====
+    const reqCheckboxes = () => document.querySelectorAll('.req-field-cb');
+    const reqCountEl    = document.getElementById('reqCount');
+    const updateReqCount = () => {
+        if (reqCountEl) reqCountEl.textContent = document.querySelectorAll('.req-field-cb:checked').length;
+    };
+    document.getElementById('reqCheckAll')?.addEventListener('click', () => {
+        reqCheckboxes().forEach(cb => cb.checked = true);
+        updateReqCount();
+    });
+    document.getElementById('reqUncheckAll')?.addEventListener('click', () => {
+        reqCheckboxes().forEach(cb => cb.checked = false);
+        updateReqCount();
+    });
+    document.getElementById('reqDefault')?.addEventListener('click', () => {
+        const defaults = @json($defaultRequired);
+        reqCheckboxes().forEach(cb => cb.checked = defaults.includes(cb.value));
+        updateReqCount();
+    });
+    document.addEventListener('change', (e) => {
+        if (e.target.classList && e.target.classList.contains('req-field-cb')) updateReqCount();
     });
 
     // ===== Login content: roles table (add/remove rows + icon preview) =====

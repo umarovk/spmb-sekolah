@@ -6,6 +6,111 @@
             <div class="container-fluid">
                 <h1>Edit Data Siswa</h1>
 
+                {{-- ===== Banner Kelengkapan Data (muncul saat datang dari halaman Kelengkapan) ===== --}}
+                @isset($missingFields)
+                    @if (count($missingFields))
+                        <div id="kelengkapan-banner" class="alert alert-warning border-0 shadow-sm rounded-3 d-flex align-items-start gap-3 mb-3" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill fs-3 text-warning"></i>
+                            <div class="flex-grow-1">
+                                <div class="fw-semibold mb-1">
+                                    Lengkapi {{ count($missingFields) }} field berikut:
+                                </div>
+                                <div class="d-flex flex-wrap gap-1 mb-2">
+                                    @foreach ($missingFields as $mf)
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-warning rounded-pill px-3 missing-jump"
+                                                data-field="{{ $mf }}">
+                                            <i class="bi bi-arrow-down-circle me-1"></i>
+                                            {{ $fieldLabels[$mf] ?? $mf }}
+                                        </button>
+                                    @endforeach
+                                </div>
+                                <small class="text-muted">Klik chip untuk meloncat ke field. Field bertanda merah belum diisi.</small>
+                            </div>
+                            <button type="button" class="btn-close" id="kelengkapan-banner-close" aria-label="Tutup"></button>
+                        </div>
+
+                        @push('styles')
+                        <style>
+                            .missing-highlight {
+                                border-color: #f59e0b !important;
+                                background-color: #fffbeb !important;
+                                box-shadow: 0 0 0 0.18rem rgba(245, 158, 11, 0.18) !important;
+                            }
+                            .missing-flash {
+                                animation: missingFlash 1.4s ease-out 1;
+                            }
+                            @keyframes missingFlash {
+                                0%   { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.55); }
+                                70%  { box-shadow: 0 0 0 12px rgba(245, 158, 11, 0); }
+                                100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+                            }
+                        </style>
+                        @endpush
+
+                        @push('scripts')
+                        <script>
+                            (function () {
+                                const missingFields = @json($missingFields);
+
+                                function findInputByName(name) {
+                                    const sel = `input[name="${name}"], select[name="${name}"], textarea[name="${name}"], input[name="${name}[]"], select[name="${name}[]"]`;
+                                    const els = document.querySelectorAll(sel);
+                                    for (const el of els) {
+                                        if (el.type === 'hidden') continue;
+                                        if (el.offsetParent === null) continue; // display:none
+                                        return el;
+                                    }
+                                    return els[0] || null;
+                                }
+
+                                // Auto-highlight
+                                missingFields.forEach((name) => {
+                                    const el = findInputByName(name);
+                                    if (el) el.classList.add('missing-highlight');
+                                });
+
+                                // Klik chip → scroll & flash
+                                document.querySelectorAll('.missing-jump').forEach((btn) => {
+                                    btn.addEventListener('click', () => {
+                                        const name = btn.getAttribute('data-field');
+                                        const el = findInputByName(name);
+                                        if (!el) return;
+
+                                        // Buka accordion parent jika tertutup
+                                        let p = el.closest('.accordion-collapse');
+                                        if (p && !p.classList.contains('show')) {
+                                            const id = p.getAttribute('id');
+                                            const trigger = document.querySelector(`[data-bs-target="#${id}"]`);
+                                            if (trigger) trigger.click();
+                                            setTimeout(() => scrollAndFlash(el), 250);
+                                        } else {
+                                            scrollAndFlash(el);
+                                        }
+                                    });
+                                });
+
+                                function scrollAndFlash(el) {
+                                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    el.classList.add('missing-flash');
+                                    try { el.focus({ preventScroll: true }); } catch (e) {}
+                                    setTimeout(() => el.classList.remove('missing-flash'), 1500);
+                                }
+
+                                // Close banner
+                                const closeBtn = document.getElementById('kelengkapan-banner-close');
+                                if (closeBtn) {
+                                    closeBtn.addEventListener('click', () => {
+                                        document.getElementById('kelengkapan-banner').remove();
+                                        document.querySelectorAll('.missing-highlight').forEach(el => el.classList.remove('missing-highlight'));
+                                    });
+                                }
+                            })();
+                        </script>
+                        @endpush
+                    @endif
+                @endisset
+
                 <div class="card card-info card-outline mb-4">
                     <div class="card-header">
                         <div class="card-title">Formm edit Siswa</div>

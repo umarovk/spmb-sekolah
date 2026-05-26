@@ -234,6 +234,17 @@
                                 </a>
                             </li>
 
+                            <!-- Kelengkapan Data (semua role) -->
+                            <li class="nav-item mb-1">
+                                <a
+                                    href="{{ route('kelengkapan.index') }}"
+                                    class="nav-link rounded-pill py-2 {{ Request::routeIs('kelengkapan.*') ? 'active bg-light text-primary' : 'text-dark' }}"
+                                >
+                                    <i class="nav-icon bi bi-clipboard2-check me-2"></i>
+                                    <span>Kelengkapan Data</span>
+                                </a>
+                            </li>
+
                             @if (auth()->user()->isAdmin())
                                 <!-- User Management (Admin Only) -->
                                 <li class="nav-item mb-1">
@@ -355,6 +366,12 @@
            class="mobile-nav-item {{ Request::routeIs('siswa.rangkuman') ? 'active' : '' }}">
             <i class="bi bi-bar-chart-fill"></i>
             <span>Rekap</span>
+        </a>
+
+        <a href="{{ route('kelengkapan.index') }}"
+           class="mobile-nav-item {{ Request::routeIs('kelengkapan.*') ? 'active' : '' }}">
+            <i class="bi bi-clipboard2-check"></i>
+            <span>Lengkap</span>
         </a>
 
         @if (auth()->user()->isAdmin())
