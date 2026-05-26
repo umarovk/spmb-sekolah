@@ -109,13 +109,25 @@
                                                             for="sekolah_asal"
                                                             class="form-label"
                                                         >Sekolah Asal</label>
-                                                        <input
-                                                            type="text"
-                                                            class="form-control"
+                                                        <select
+                                                            class="form-select"
                                                             id="sekolah_asal"
-                                                            placeholder="Masukkan sekolah asal"
                                                             name="sekolah_asal"
                                                             required
+                                                            onchange="toggleSekolahAsalManual(this)"
+                                                        >
+                                                            <option value="">-- Pilih sekolah asal --</option>
+                                                            @foreach ($sekolahList as $sekolah)
+                                                                <option value="{{ $sekolah }}">{{ $sekolah }}</option>
+                                                            @endforeach
+                                                            <option value="__OTHER__">Lainnya (tulis manual)</option>
+                                                        </select>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control mt-2 d-none"
+                                                            id="sekolah_asal_other"
+                                                            name="sekolah_asal_other"
+                                                            placeholder="Tulis nama sekolah asal"
                                                         >
                                                         <div class="invalid-feedback">Sekolah asal tidak boleh kosong</div>
                                                     </div>
@@ -1147,5 +1159,18 @@
                 }, false);
             });
         })();
+
+        function toggleSekolahAsalManual(selectEl) {
+            const manualInput = document.getElementById('sekolah_asal_other');
+            if (selectEl.value === '__OTHER__') {
+                manualInput.classList.remove('d-none');
+                manualInput.required = true;
+                manualInput.focus();
+            } else {
+                manualInput.classList.add('d-none');
+                manualInput.required = false;
+                manualInput.value = '';
+            }
+        }
     </script>
 @endsection
