@@ -12,6 +12,28 @@ use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
+    private const UPPERCASE_FIELDS = [
+        'namasiswa', 'tempatlahir', 'alamat', 'sekolah_asal',
+        'agama', 'transport', 'jenis_tinggal',
+        'nama_ayah', 'pendidikan_ayah', 'tempat_lahir_ayah', 'alamat_ayah', 'pekerjaan_ayah',
+        'nama_ibu', 'pendidikan_ibu', 'tempat_lahir_ibu', 'alamat_ibu', 'pekerjaan_ibu',
+        'nama_wali', 'alamat_wali',
+    ];
+
+    private function uppercaseTextFields(Request $request): void
+    {
+        $updates = [];
+        foreach (self::UPPERCASE_FIELDS as $field) {
+            $value = $request->input($field);
+            if (is_string($value) && $value !== '') {
+                $updates[$field] = mb_strtoupper($value, 'UTF-8');
+            }
+        }
+        if ($updates) {
+            $request->merge($updates);
+        }
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -172,6 +194,8 @@ class StudentController extends Controller
             'jalurdaftar' => 'required|in:Reguler,Prestasi'
         ]);
 
+        $this->uppercaseTextFields($request);
+
         siswa::create([
             'namasiswa' => $request->namasiswa, 
             'jurusan' => $request->jurusan, 
@@ -319,6 +343,8 @@ class StudentController extends Controller
             'asrama_tahfidz' => 'required|in:Bersedia,Tidak',
             'jalurdaftar' => 'required|in:Reguler,Prestasi'
         ]);
+
+        $this->uppercaseTextFields($request);
 
         $datasiswa = Siswa::findOrFail($id);
 
