@@ -86,6 +86,81 @@
                                         <li>Pastikan untuk menyimpan file backup di tempat yang aman.</li>
                                     </ul>
                                 </div>
+
+                                <hr class="my-4">
+
+                                <div class="card border-danger">
+                                    <div class="card-header bg-danger text-white">
+                                        <h5 class="card-title mb-0"><i class="bi bi-arrow-counterclockwise"></i> Restore Database</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="alert alert-warning">
+                                            <strong><i class="bi bi-exclamation-triangle"></i> Peringatan:</strong>
+                                            Restore akan <strong>menimpa seluruh data</strong> pada database saat ini dengan
+                                            isi dari file backup yang diunggah. Aksi ini <strong>tidak dapat dibatalkan</strong>.
+                                            Pastikan Anda sudah membuat backup terbaru sebelum melanjutkan.
+                                        </div>
+
+                                        @if ($errors->any())
+                                            <div class="alert alert-danger">
+                                                <ul class="mb-0">
+                                                    @foreach ($errors->all() as $err)
+                                                        <li>{{ $err }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
+
+                                        <form
+                                            action="{{ route('admin.backup.restore') }}"
+                                            method="POST"
+                                            enctype="multipart/form-data"
+                                            id="restoreForm"
+                                        >
+                                            @csrf
+                                            <div class="mb-3">
+                                                <label
+                                                    for="backup_file"
+                                                    class="form-label"
+                                                >File Backup (.sql)</label>
+                                                <input
+                                                    type="file"
+                                                    class="form-control"
+                                                    id="backup_file"
+                                                    name="backup_file"
+                                                    accept=".sql,.txt"
+                                                    required
+                                                >
+                                                <small class="form-text text-muted">Maksimal 100 MB. Hanya menerima file
+                                                    .sql atau .txt</small>
+                                            </div>
+
+                                            <div class="form-check mb-3">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                    id="konfirmasi"
+                                                    name="konfirmasi"
+                                                    value="1"
+                                                    required
+                                                >
+                                                <label
+                                                    class="form-check-label"
+                                                    for="konfirmasi"
+                                                >Saya mengerti bahwa data lama akan ditimpa dan tidak dapat
+                                                    dikembalikan.</label>
+                                            </div>
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-danger"
+                                                onclick="return confirm('Yakin ingin restore database? Seluruh data lama akan ditimpa.');"
+                                            >
+                                                <i class="bi bi-upload"></i> Restore Database
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

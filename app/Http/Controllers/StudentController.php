@@ -132,8 +132,22 @@ class StudentController extends Controller
      */
     public function create()
     {
-        return view('siswa.create');
+        $sekolahList = Siswa::query()
+            ->whereNotNull('sekolah_asal')
+            ->where('sekolah_asal', '!=', '')
+            ->distinct()
+            ->orderBy('sekolah_asal')
+            ->pluck('sekolah_asal');
 
+        return view('siswa.create', compact('sekolahList'));
+    }
+
+    private function resolveSekolahAsal(Request $request): void
+    {
+        if ($request->input('sekolah_asal') === '__OTHER__') {
+            $manual = trim((string) $request->input('sekolah_asal_other'));
+            $request->merge(['sekolah_asal' => $manual !== '' ? $manual : null]);
+        }
     }
 
     /**
@@ -141,6 +155,8 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
+        $this->resolveSekolahAsal($request);
+
         $request->validate([
             'namasiswa' => 'required',
             'jurusan' => 'required',
