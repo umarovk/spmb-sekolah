@@ -7,7 +7,13 @@
         http-equiv="Content-Type"
         content="text/html; charset=utf-8"
     />
-    <title>SPMB by Umarov</title>
+    <title>{{ $appBranding['name'] ?? 'SPMB' }}</title>
+    @php
+        $faviconPath = $appBranding['favicon'] ?? 'favicon.ico';
+        $faviconAbs  = public_path($faviconPath);
+        $faviconVer  = (is_file($faviconAbs) ? filemtime($faviconAbs) : 1);
+    @endphp
+    <link rel="icon" href="{{ asset($faviconPath) }}?v={{ $faviconVer }}">
     <!--begin::Primary Meta Tags-->
     <meta
         name="viewport"

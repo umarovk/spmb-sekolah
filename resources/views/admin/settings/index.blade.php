@@ -52,8 +52,184 @@
                 </div>
             </div>
 
-            <form method="POST" action="{{ route('admin.settings.update') }}" id="settingsForm">
+            <form method="POST" action="{{ route('admin.settings.update') }}" id="settingsForm" enctype="multipart/form-data">
                 @csrf
+
+                {{-- Identitas Aplikasi (Nama, Tagline, Favicon) --}}
+                <div class="card border-0 shadow-sm rounded-3 mb-4">
+                    <div class="card-header bg-white py-3 border-bottom border-light">
+                        <h5 class="mb-0 text-dark">
+                            <i class="bi bi-window-stack text-primary me-2"></i>Identitas Aplikasi
+                        </h5>
+                        <small class="text-muted">Nama & icon yang tampil pada tab browser, halaman login, dan layout aplikasi</small>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Nama Aplikasi (Title Tab)</label>
+                                <input type="text"
+                                       name="app_name"
+                                       class="form-control @error('app_name') is-invalid @enderror"
+                                       value="{{ old('app_name', $settings['app_name']) }}"
+                                       placeholder="SPMB — SMK Cokroaminoto"
+                                       maxlength="100">
+                                <small class="text-muted">Tampil di title tab browser. Kosongkan untuk pakai default "SPMB".</small>
+                                @error('app_name')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Tagline / Deskripsi Singkat</label>
+                                <input type="text"
+                                       name="app_tagline"
+                                       class="form-control @error('app_tagline') is-invalid @enderror"
+                                       value="{{ old('app_tagline', $settings['app_tagline']) }}"
+                                       placeholder="Sistem Penerimaan Murid Baru"
+                                       maxlength="200">
+                                <small class="text-muted">Tampil di halaman login sebagai sub-judul.</small>
+                                @error('app_tagline')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <label class="form-label fw-semibold">Favicon / Icon Tab</label>
+                            <div class="d-flex align-items-center gap-3 flex-wrap">
+                                <div class="border rounded-3 d-flex align-items-center justify-content-center bg-light-subtle"
+                                     style="width:64px;height:64px;flex-shrink:0;">
+                                    @if (filled($settings['app_favicon']) && file_exists(public_path($settings['app_favicon'])))
+                                        <img src="{{ asset($settings['app_favicon']) }}?v={{ time() }}" alt="Favicon" style="max-width:48px;max-height:48px;">
+                                    @else
+                                        <img src="{{ asset('favicon.ico') }}" alt="Favicon default" style="max-width:48px;max-height:48px;">
+                                    @endif
+                                </div>
+                                <div class="flex-grow-1" style="min-width:240px;">
+                                    <input type="file"
+                                           name="app_favicon"
+                                           accept=".png,.jpg,.jpeg,.ico,.svg,.webp"
+                                           class="form-control @error('app_favicon') is-invalid @enderror">
+                                    <small class="text-muted">PNG / ICO / SVG, ukuran ideal 32×32 atau 64×64. Maks 512 KB.</small>
+                                    @error('app_favicon')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                </div>
+                                @if (filled($settings['app_favicon']))
+                                    <div class="form-check ms-2">
+                                        <input class="form-check-input" type="checkbox" name="app_favicon_reset" value="1" id="app_favicon_reset">
+                                        <label class="form-check-label small text-danger" for="app_favicon_reset">
+                                            Reset ke default
+                                        </label>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Konten Halaman Login (deskripsi, alur, role) --}}
+                <div class="card border-0 shadow-sm rounded-3 mb-4">
+                    <div class="card-header bg-white py-3 border-bottom border-light">
+                        <h5 class="mb-0 text-dark">
+                            <i class="bi bi-card-text text-primary me-2"></i>Konten Halaman Login
+                        </h5>
+                        <small class="text-muted">
+                            Atur teks deskripsi aplikasi, langkah-langkah alur, dan daftar role yang tampil di panel kiri halaman login.
+                            Gunakan <code>**teks**</code> untuk membuat <strong>tebal</strong>.
+                        </small>
+                    </div>
+                    <div class="card-body p-4">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Deskripsi Aplikasi</label>
+                            <textarea name="login_description"
+                                      class="form-control @error('login_description') is-invalid @enderror"
+                                      rows="3"
+                                      maxlength="1000"
+                                      placeholder="{{ $loginContent['defaults']['description'] }}">{{ old('login_description', $settings['login_description']) }}</textarea>
+                            <small class="text-muted">Paragraf singkat (1-3 kalimat). Tampil di atas daftar alur.</small>
+                            @error('login_description')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Langkah Alur Aplikasi</label>
+                            <textarea name="login_flow_steps"
+                                      class="form-control @error('login_flow_steps') is-invalid @enderror"
+                                      rows="6"
+                                      maxlength="2000"
+                                      placeholder="Satu baris = satu langkah">{{ old('login_flow_steps', implode("\n", $loginContent['flow_steps'])) }}</textarea>
+                            <small class="text-muted">Tulis <strong>satu baris untuk satu langkah</strong>. Nomor urut akan diberikan otomatis.</small>
+                            @error('login_flow_steps')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="mb-2 fw-semibold d-flex justify-content-between align-items-center">
+                            <span>Daftar Role Pengguna</span>
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" id="addRoleBtn">
+                                <i class="bi bi-plus-lg me-1"></i> Tambah Role
+                            </button>
+                        </div>
+                        <div class="border rounded-3 p-3 bg-light-subtle">
+                            <div class="table-responsive">
+                                <table class="table table-sm align-middle mb-0" id="rolesTable">
+                                    <thead>
+                                        <tr class="small text-muted">
+                                            <th style="width:34%;">Icon
+                                                <a href="https://icons.getbootstrap.com/" target="_blank" rel="noopener" class="text-decoration-none small">
+                                                    <i class="bi bi-info-circle"></i>
+                                                </a>
+                                            </th>
+                                            <th style="width:22%;">Nama Role</th>
+                                            <th>Deskripsi</th>
+                                            <th style="width:50px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="rolesTbody">
+                                        @foreach ($loginContent['roles'] as $r)
+                                            <tr>
+                                                <td>
+                                                    <div class="input-group input-group-sm">
+                                                        <span class="input-group-text bg-white">
+                                                            <i class="bi {{ $r['icon'] ?? 'bi-person' }} role-icon-preview"></i>
+                                                        </span>
+                                                        <input type="text" name="login_roles_icon[]"
+                                                               value="{{ $r['icon'] ?? '' }}"
+                                                               class="form-control form-control-sm role-icon-input"
+                                                               placeholder="bi-person">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="login_roles_name[]"
+                                                           value="{{ $r['name'] ?? '' }}"
+                                                           class="form-control form-control-sm"
+                                                           maxlength="50"
+                                                           placeholder="Admin">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="login_roles_description[]"
+                                                           value="{{ $r['description'] ?? '' }}"
+                                                           class="form-control form-control-sm"
+                                                           maxlength="200"
+                                                           placeholder="Deskripsi singkat role">
+                                                </td>
+                                                <td class="text-end">
+                                                    <button type="button" class="btn btn-sm btn-outline-danger remove-role-btn" title="Hapus">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            <small class="text-muted d-block mt-2">
+                                Icon class menggunakan
+                                <a href="https://icons.getbootstrap.com/" target="_blank" rel="noopener">Bootstrap Icons</a>
+                                (contoh: <code>bi-shield-lock-fill</code>, <code>bi-cash-coin</code>).
+                            </small>
+                        </div>
+
+                        <div class="form-check mt-3">
+                            <input class="form-check-input" type="checkbox" name="login_reset" value="1" id="login_reset">
+                            <label class="form-check-label small text-danger" for="login_reset">
+                                Reset konten halaman login ke default (mengabaikan field di atas)
+                            </label>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="card border-0 shadow-sm rounded-3 mb-4">
                     <div class="card-header bg-white py-3 border-bottom border-light">
@@ -478,6 +654,57 @@ document.addEventListener('DOMContentLoaded', function () {
         } finally {
             btn.disabled = false;
             btn.innerHTML = original;
+        }
+    });
+
+    // ===== Login content: roles table (add/remove rows + icon preview) =====
+    const rolesTbody = document.getElementById('rolesTbody');
+
+    function newRoleRow(icon = 'bi-person', name = '', desc = '') {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-white">
+                        <i class="bi ${escapeHtml(icon)} role-icon-preview"></i>
+                    </span>
+                    <input type="text" name="login_roles_icon[]"
+                           value="${escapeHtml(icon)}"
+                           class="form-control form-control-sm role-icon-input"
+                           placeholder="bi-person">
+                </div>
+            </td>
+            <td><input type="text" name="login_roles_name[]" value="${escapeHtml(name)}" class="form-control form-control-sm" maxlength="50" placeholder="Admin"></td>
+            <td><input type="text" name="login_roles_description[]" value="${escapeHtml(desc)}" class="form-control form-control-sm" maxlength="200" placeholder="Deskripsi singkat role"></td>
+            <td class="text-end">
+                <button type="button" class="btn btn-sm btn-outline-danger remove-role-btn" title="Hapus">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>`;
+        return tr;
+    }
+
+    document.getElementById('addRoleBtn').addEventListener('click', function () {
+        rolesTbody.appendChild(newRoleRow());
+    });
+
+    // Delegated handler: remove row + live update icon preview
+    rolesTbody.addEventListener('click', function (e) {
+        const rm = e.target.closest('.remove-role-btn');
+        if (rm) {
+            const tr = rm.closest('tr');
+            if (tr) tr.remove();
+        }
+    });
+    rolesTbody.addEventListener('input', function (e) {
+        if (e.target.classList.contains('role-icon-input')) {
+            const preview = e.target.closest('.input-group').querySelector('.role-icon-preview');
+            if (preview) {
+                preview.className = 'bi role-icon-preview';
+                const cls = e.target.value.trim();
+                if (cls) preview.classList.add(cls.startsWith('bi-') ? cls : ('bi-' + cls));
+                else preview.classList.add('bi-person');
+            }
         }
     });
 
