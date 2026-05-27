@@ -11,8 +11,19 @@ class PengambilanBahan extends Model
 
     protected $table = 'pengambilan_bahans';
 
+    public const JENIS_BAHAN_LIST = [
+        'Bahan Osis',
+        'Bahan Pramuka',
+        'Atribut',
+        'Dasi',
+        'Topi',
+        'Badge',
+        'Seragam Olahraga',
+    ];
+
     protected $fillable = [
         'siswa_id',
+        'jenis_bahan',
         'nama_bahan',
         'jumlah',
         'tanggal_pengambilan',

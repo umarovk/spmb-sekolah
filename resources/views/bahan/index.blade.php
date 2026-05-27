@@ -1,269 +1,5 @@
 @extends('partials.master')
 
-@section('content')
-
-    <div class="dashboard-content">
-        <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-
-
-                {{-- CARD --}}
-                <div class="card">
-
-                    {{-- CARD HEADER --}}
-                    <div class="card-header">
-                        {{-- JUDUL  PENGAMBILAN DAN EXPORT DATA --}}
-                        <div class="container py-4">
-                            <div class="row mb-4 align-items-center">
-                                <div class="col-md-8">
-                                    <h1 class="fw-light text-primary mb-0 fs-3">Data Pengambilan Bahan Siswa</h1>
-                                </div>
-                                <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                                    <a
-                                        href="{{ route('bahan.export') }}"
-                                        class="btn btn-success w-50"
-                                    >
-                                        Download Data <i class="bi bi-download"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- CARD BODY --}}
-                    <div class="card-body">
-                        <!-- Form Pencarian -->
-                        <form
-                            action="{{ route('bahan.index') }}"
-                            method="GET"
-                            class="mb-4"
-                        >
-                            <div class="row align-items-center">
-                                <div class="col-md-4">
-                                    <div class="input-group">
-                                        <input
-                                            type="text"
-                                            name="search"
-                                            class="form-control"
-                                            placeholder="Cari nama..."
-                                            value="{{ $search }}"
-                                        >
-                                        <button
-                                            class="btn btn-outline-secondary"
-                                            type="submit"
-                                        >
-                                            <i class="bi bi-search"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <select
-                                        name="status"
-                                        class="form-select"
-                                        onchange="this.form.submit()"
-                                    >
-                                        <option value="">Semua Data</option>
-                                        <option
-                                            value="diberikan"
-                                            {{ $status === 'diberikan' ? 'selected' : '' }}
-                                        >Diberikan</option>
-                                        <option
-                                            value="belum_ambil"
-                                            {{ $status === 'belum_ambil' ? 'selected' : '' }}
-                                        >Belum Ambil Bahan</option>
-                                    </select>
-                                </div>
-
-                                @if ($search || $status)
-                                    <div class="col-md-2">
-                                        <a
-                                            href="{{ route('bahan.index') }}"
-                                            class="btn btn-secondary"
-                                        >
-                                            <i class="bi bi-x-circle"></i> Reset
-                                        </a>
-                                    </div>
-                                @endif
-                            </div>
-                        </form>
-
-                        @if (session('success'))
-                            <div
-                                class="alert alert-success alert-dismissible fade show"
-                                role="alert"
-                            >
-                                {{ session('success') }}
-                                <button
-                                    type="button"
-                                    class="btn-close"
-                                    data-bs-dismiss="alert"
-                                    aria-label="Close"
-                                ></button>
-                            </div>
-                        @endif
-
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama Siswa</th>
-                                        <th>Jurusan</th>
-                                        <th>Status Pengambilan</th>
-                                        <th>Tanggal Pengambilan</th>
-                                        <th>Detail Pengambilan</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($siswas as $index => $siswa)
-                                        <tr>
-                                            <td>{{ $index + 1 }}</td>
-                                            <td>{{ $siswa->namasiswa }}</td>
-                                            <td>{{ $siswa->jurusan }}</td>
-                                            <td>
-                                                @if ($siswa->pengambilanBahans->isNotEmpty())
-                                                    <span
-                                                        class="badge bg-{{ $siswa->pengambilanBahans->first()->status === 'diberikan' ? 'success' : 'warning' }}"
-                                                    >
-                                                        {{ $siswa->pengambilanBahans->first()->status }}
-                                                    </span>
-                                                @else
-                                                    -
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($siswa->pengambilanBahans->isNotEmpty())
-                                                    {{ $siswa->pengambilanBahans->first()->tanggal_pengambilan->format('d/m/Y') }}
-                                                @else
-                                                    -
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($siswa->pengambilanBahans->isNotEmpty())
-                                                    <button
-                                                        type="button"
-                                                        class="btn btn-info btn-sm"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#detailModal{{ $siswa->id }}"
-                                                    >
-                                                        <i class="bi bi-eye"></i> Lihat Detail
-                                                    </button>
-
-                                                    <!-- Modal Detail -->
-                                                    <div
-                                                        class="modal fade"
-                                                        id="detailModal{{ $siswa->id }}"
-                                                        tabindex="-1"
-                                                        aria-labelledby="detailModalLabel{{ $siswa->id }}"
-                                                        aria-hidden="true"
-                                                    >
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5
-                                                                        class="modal-title"
-                                                                        id="detailModalLabel{{ $siswa->id }}"
-                                                                    >Detail Pengambilan Bahan - {{ $siswa->namasiswa }}
-                                                                    </h5>
-                                                                    <button
-                                                                        type="button"
-                                                                        class="btn-close"
-                                                                        data-bs-dismiss="modal"
-                                                                        aria-label="Close"
-                                                                    ></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <table class="table table-sm">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th>Tanggal</th>
-                                                                                <th>Bahan</th>
-                                                                                <th>Jumlah</th>
-                                                                                <th>Keterangan</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            @foreach ($siswa->pengambilanBahans as $bahan)
-                                                                                <tr>
-                                                                                    <td>{{ $bahan->tanggal_pengambilan->format('d/m/Y') }}
-                                                                                    </td>
-                                                                                    <td>{{ $bahan->nama_bahan }}</td>
-                                                                                    <td>{{ $bahan->jumlah }}</td>
-                                                                                    <td>{{ $bahan->keterangan ?? '-' }}
-                                                                                    </td>
-                                                                                </tr>
-                                                                            @endforeach
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @else
-                                                    -
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($siswa->pengambilanBahans->isEmpty())
-                                                    <a
-                                                        href="{{ route('bahan.create', ['siswa_id' => $siswa->id]) }}"
-                                                        class="btn btn-primary btn-sm"
-                                                    >
-                                                        <i class="bi bi-plus"></i> Ambil Bahan
-                                                    </a>
-                                                @else
-                                                    <div
-                                                        class="btn-group"
-                                                        role="group"
-                                                    >
-                                                        <a
-                                                            href="{{ route('bahan.ubah', $siswa->pengambilanBahans->first()) }}"
-                                                            class="btn btn-warning btn-sm"
-                                                        >
-                                                            <i class="bi bi-pencil"></i>
-                                                        </a>
-                                                        <form
-                                                            action="{{ route('bahan.destroy', $siswa->pengambilanBahans->first()) }}"
-                                                            method="POST"
-                                                            class="d-inline"
-                                                        >
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button
-                                                                type="submit"
-                                                                class="btn btn-danger btn-sm"
-                                                                onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')"
-                                                            >
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td
-                                                colspan="7"
-                                                class="text-center"
-                                            >Tidak ada data siswa</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-        </div>
-        </div>
-    </div>
-@endsection
-
 @push('styles')
     <link
         rel="stylesheet"
@@ -271,6 +7,247 @@
     >
 @endpush
 
-@push('scripts')
-    <script src="{{ asset('js/bahan.js') }}"></script>
-@endpush
+@section('content')
+    <div class="bahan-page">
+        <div class="container-fluid">
+
+            {{-- HEADER --}}
+            <div class="bahan-header">
+                <div class="bahan-header-icon">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+                <div class="bahan-header-text">
+                    <h1 class="bahan-title">Tracking Pengambilan Bahan Siswa</h1>
+                    <p class="bahan-subtitle">Rekap distribusi 7 jenis bahan per siswa</p>
+                </div>
+                <div class="bahan-header-action">
+                    <a
+                        href="{{ route('bahan.export') }}"
+                        class="btn btn-success"
+                    >
+                        <i class="bi bi-download"></i> Export CSV
+                    </a>
+                </div>
+            </div>
+
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show">
+                    {{ session('success') }}
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                    ></button>
+                </div>
+            @endif
+
+            {{-- SUMMARY SISWA --}}
+            <div class="bahan-summary-grid">
+                <div class="b-summary b-summary-total">
+                    <div class="b-summary-num">{{ $rekapSiswa['total'] }}</div>
+                    <div class="b-summary-lbl">Total Siswa</div>
+                </div>
+                <div class="b-summary b-summary-lengkap">
+                    <div class="b-summary-num">{{ $rekapSiswa['lengkap'] }}</div>
+                    <div class="b-summary-lbl">Lengkap (7/7)</div>
+                </div>
+                <div class="b-summary b-summary-sebagian">
+                    <div class="b-summary-num">{{ $rekapSiswa['sebagian'] }}</div>
+                    <div class="b-summary-lbl">Sebagian</div>
+                </div>
+                <div class="b-summary b-summary-belum">
+                    <div class="b-summary-num">{{ $rekapSiswa['belum'] }}</div>
+                    <div class="b-summary-lbl">Belum Ambil</div>
+                </div>
+            </div>
+
+            {{-- REKAP PER ITEM --}}
+            <div class="bahan-section-title">
+                <i class="bi bi-bar-chart-line"></i> Rekap Distribusi per Jenis Bahan
+            </div>
+            <div class="bahan-items-grid">
+                @foreach ($rekapItems as $it)
+                    <div class="b-item-card">
+                        <div class="b-item-head">
+                            <div class="b-item-icon">
+                                <i class="bi bi-bag-check"></i>
+                            </div>
+                            <div class="b-item-name">{{ $it['nama'] }}</div>
+                        </div>
+                        <div class="b-item-stats">
+                            <div class="b-item-num">
+                                <span class="b-item-num-val">{{ $it['sudah'] }}</span>
+                                <span class="b-item-num-sep">/</span>
+                                <span class="b-item-num-tot">{{ $rekapSiswa['total'] }}</span>
+                            </div>
+                            <div class="b-item-pill b-item-pill-belum">
+                                <i class="bi bi-exclamation-circle"></i> {{ $it['belum'] }} belum
+                            </div>
+                        </div>
+                        <div class="b-progress">
+                            <div
+                                class="b-progress-bar"
+                                style="width: {{ $it['persen'] }}%"
+                            ></div>
+                        </div>
+                        <div class="b-item-percent">{{ $it['persen'] }}% terdistribusi</div>
+                    </div>
+                @endforeach
+            </div>
+
+            {{-- FILTER & TABEL --}}
+            <div class="bahan-card">
+                <div class="bahan-card-header">
+                    <h3 class="bahan-card-title"><i class="bi bi-people"></i> Daftar Siswa</h3>
+                </div>
+                <div class="bahan-card-body">
+                    <form
+                        action="{{ route('bahan.index') }}"
+                        method="GET"
+                        class="bahan-filter-row"
+                    >
+                        <div class="b-filter-search">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                <input
+                                    type="text"
+                                    name="search"
+                                    class="form-control"
+                                    placeholder="Cari nama atau NISN..."
+                                    value="{{ $search }}"
+                                >
+                            </div>
+                        </div>
+                        <select
+                            name="status"
+                            class="form-select b-filter-select"
+                            onchange="this.form.submit()"
+                        >
+                            <option value="">Semua Status Siswa</option>
+                            <option
+                                value="lengkap"
+                                {{ $status === 'lengkap' ? 'selected' : '' }}
+                            >Lengkap (7/7)</option>
+                            <option
+                                value="sebagian"
+                                {{ $status === 'sebagian' ? 'selected' : '' }}
+                            >Sebagian</option>
+                            <option
+                                value="belum"
+                                {{ $status === 'belum' ? 'selected' : '' }}
+                            >Belum Ambil</option>
+                        </select>
+                        <select
+                            name="jenis"
+                            class="form-select b-filter-select"
+                            onchange="this.form.submit()"
+                        >
+                            <option value="">Semua Jenis Bahan</option>
+                            @foreach ($items as $it)
+                                <option
+                                    value="{{ $it }}"
+                                    {{ $jenisFilter === $it ? 'selected' : '' }}
+                                >{{ $it }}</option>
+                            @endforeach
+                        </select>
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        ><i class="bi bi-funnel"></i> Filter</button>
+                        @if ($search || $status || $jenisFilter)
+                            <a
+                                href="{{ route('bahan.index') }}"
+                                class="btn btn-outline-secondary"
+                            >
+                                <i class="bi bi-x-circle"></i> Reset
+                            </a>
+                        @endif
+                    </form>
+
+                    <div class="table-responsive">
+                        <table class="table bahan-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Siswa</th>
+                                    <th>Jurusan</th>
+                                    <th>Progress</th>
+                                    <th>Status</th>
+                                    <th>Belum Diambil</th>
+                                    <th class="text-end">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($siswas as $i => $siswa)
+                                    <tr>
+                                        <td data-label="No">{{ $i + 1 }}</td>
+                                        <td data-label="Nama">
+                                            <div class="b-siswa-name">{{ $siswa->namasiswa }}</div>
+                                            <small class="text-muted">NISN: {{ $siswa->nisn ?: '-' }}</small>
+                                        </td>
+                                        <td data-label="Jurusan">
+                                            <span class="badge bg-light text-dark border">{{ $siswa->jurusan }}</span>
+                                        </td>
+                                        <td
+                                            data-label="Progress"
+                                            style="min-width: 180px;"
+                                        >
+                                            <div class="b-progress b-progress-sm">
+                                                <div
+                                                    class="b-progress-bar"
+                                                    style="width: {{ $siswa->progress_percent }}%"
+                                                ></div>
+                                            </div>
+                                            <small class="text-muted">{{ $siswa->taken_count }}/{{ $siswa->total_items }} item ({{ $siswa->progress_percent }}%)</small>
+                                        </td>
+                                        <td data-label="Status">
+                                            @if ($siswa->status_label === 'lengkap')
+                                                <span class="badge bahan-badge-lengkap"><i class="bi bi-check-circle-fill"></i> Lengkap</span>
+                                            @elseif ($siswa->status_label === 'sebagian')
+                                                <span class="badge bahan-badge-sebagian"><i class="bi bi-hourglass-split"></i> Sebagian</span>
+                                            @else
+                                                <span class="badge bahan-badge-belum"><i class="bi bi-x-circle-fill"></i> Belum Ambil</span>
+                                            @endif
+                                        </td>
+                                        <td data-label="Belum Diambil">
+                                            @if ($siswa->items_missing->isEmpty())
+                                                <span class="text-success small"><i class="bi bi-check2-all"></i> Semua lengkap</span>
+                                            @else
+                                                <div class="b-missing-list">
+                                                    @foreach ($siswa->items_missing as $miss)
+                                                        <span class="b-missing-chip">{{ $miss }}</span>
+                                                    @endforeach
+                                                </div>
+                                            @endif
+                                        </td>
+                                        <td
+                                            data-label="Aksi"
+                                            class="text-end"
+                                        >
+                                            <a
+                                                href="{{ route('bahan.manage', $siswa->id) }}"
+                                                class="btn btn-sm btn-primary"
+                                            >
+                                                <i class="bi bi-pencil-square"></i> Kelola
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td
+                                            colspan="7"
+                                            class="text-center py-4 text-muted"
+                                        >
+                                            <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                                            Tidak ada data siswa
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
