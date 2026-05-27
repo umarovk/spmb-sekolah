@@ -1,195 +1,424 @@
-/* Base Styles */
+/* ===== Rangkuman Page — Blue Theme ===== */
+:root {
+    --r-blue-900: #0c2d6b;
+    --r-blue-800: #1e3a8a;
+    --r-blue-700: #1e40af;
+    --r-blue-600: #2563eb;
+    --r-blue-500: #3b82f6;
+    --r-blue-400: #60a5fa;
+    --r-blue-300: #93c5fd;
+    --r-blue-200: #bfdbfe;
+    --r-blue-100: #dbeafe;
+    --r-blue-50:  #eff6ff;
+
+    --r-success: #16a34a;
+    --r-success-soft: #dcfce7;
+    --r-danger: #dc2626;
+    --r-danger-soft: #fee2e2;
+    --r-warning: #d97706;
+    --r-warning-soft: #fef3c7;
+    --r-neutral: #475569;
+    --r-neutral-soft: #e2e8f0;
+
+    --r-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+    --r-shadow: 0 4px 12px rgba(30, 58, 138, 0.08);
+    --r-shadow-lg: 0 10px 25px rgba(30, 58, 138, 0.12);
+
+    --r-radius: 14px;
+    --r-radius-lg: 18px;
+}
+
 * {
     box-sizing: border-box;
 }
 
-.app-main {
+.rangkuman-main {
     min-height: 100vh;
-    padding: 2rem 0;
+    padding: 1.5rem 0 3rem;
+    background: linear-gradient(180deg, var(--r-blue-50) 0%, #ffffff 280px);
 }
 
-.container-fluid {
+.rangkuman-main .container-fluid {
     max-width: 1200px;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
-/* Header Styles */
-.header-section {
-    text-align: center;
-    margin-bottom: 2.5rem;
+/* ===== Header ===== */
+.rangkuman-header {
+    background: var(--r-blue-50);
+    color: var(--r-blue-900);
+    border-radius: var(--r-radius-lg);
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    border: 1px solid var(--r-blue-100);
 }
 
-.page-title {
-    font-size: 2rem;
-    font-weight: 600;
-    color: #334155;
-    margin-bottom: 0.5rem;
+.rangkuman-header-icon {
+    width: 64px;
+    height: 64px;
+    min-width: 64px;
+    border-radius: 16px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.85rem;
+    color: var(--r-blue-600);
+    border: 1px solid var(--r-blue-100);
 }
 
-.page-subtitle {
-    font-size: 1rem;
-    color: #64748b;
-    margin: 0;
+.rangkuman-header-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.rangkuman-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem;
+    color: var(--r-blue-900);
+    letter-spacing: -0.01em;
+}
+
+.rangkuman-subtitle {
+    font-size: 0.95rem;
+    margin: 0 0 0.5rem;
+    color: var(--r-blue-700);
     font-weight: 400;
 }
 
-/* Stats Grid */
-.stats-grid {
+.rangkuman-timestamp {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--r-blue-700);
+    background: #fff;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid var(--r-blue-100);
+}
+
+/* ===== Grid ===== */
+.rangkuman-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.25rem;
-    margin-bottom: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.25rem;
 }
 
-/* Stats Card */
-.stats-card {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
+/* ===== Stat Card ===== */
+.r-card {
+    background: #fff;
+    border-radius: var(--r-radius);
+    padding: 1.25rem;
+    box-shadow: var(--r-shadow-sm);
+    border: 1px solid var(--r-blue-100);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.r-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--r-blue-500);
+}
+
+.r-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--r-shadow);
+}
+
+.r-card-head {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e2e8f0;
-}
-
-.stats-card:hover {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-/* Background Colors */
-.bg-gradient-blue {
-    border-left: 4px solid #3b82f6;
-}
-
-.bg-gradient-green {
-    border-left: 4px solid #22c55e;
-}
-
-.bg-gradient-red {
-    border-left: 4px solid #ef4444;
-}
-
-.bg-gradient-yellow {
-    border-left: 4px solid #eab308;
-}
-
-.bg-gradient-purple {
-    border-left: 4px solid #8b5cf6;
-}
-
-/* Stats Content */
-.stats-content {
-    flex: 1;
-}
-
-.stats-title {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #000000;
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.stats-numbers-row {
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-    margin-top: 0.5rem;
-}
-
-.main-number {
-    font-size: 2rem;
-    font-weight: 600;
-    color: #334155;
-    line-height: 1.2;
-    text-align: center;
-}
-
-.sub-number {
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: #334155;
-    line-height: 1.2;
-    text-align: center;
-}
-
-.sub-numbers {
-    display: flex;
     gap: 0.75rem;
+    margin-bottom: 1rem;
 }
 
-.sub-number {
+.r-icon {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 10px;
+    background: var(--r-blue-100);
+    color: var(--r-blue-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+}
+
+.r-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--r-blue-900);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    line-height: 1.3;
+}
+
+.r-main {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--r-blue-800);
+    line-height: 1;
+    margin-bottom: 0.85rem;
+    letter-spacing: -0.02em;
+}
+
+.r-sub {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.r-chip {
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-width: 70px;
-    border-radius: 6px;
-    padding: 0.25rem 0.75rem;
-    color: #fff;
+    padding: 0.5rem 0.4rem;
+    border-radius: 10px;
+    background: var(--r-blue-50);
+    border: 1px solid var(--r-blue-100);
 }
 
-.sub-number.tkj {
-    background: #f97316;
+.r-chip-num {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--r-blue-800);
+    line-height: 1;
 }
 
-.sub-number.tsm {
-    background: #22c55e;
-}
-
-.sub-label {
+.r-chip-lbl {
     font-size: 0.65rem;
-    font-weight: 500;
-    margin-top: 2px;
-    color: #fff;
+    font-weight: 600;
+    margin-top: 3px;
+    color: var(--r-blue-600);
     letter-spacing: 1px;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .app-main {
-        padding: 1rem 0;
-    }
-
-    .page-title {
-        font-size: 1.75rem;
-    }
-
-    .stats-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-
-    .stats-card {
-        padding: 1.25rem;
-    }
-
-    .main-number {
-        font-size: 1.5rem;
-    }
+.r-chip-tkj {
+    background: var(--r-blue-100);
+    border-color: var(--r-blue-200);
 }
 
-@media (max-width: 480px) {
-    .container-fluid {
-        padding-left: 1rem;
-        padding-right: 1rem;
+.r-chip-tkj .r-chip-num { color: var(--r-blue-800); }
+.r-chip-tkj .r-chip-lbl { color: var(--r-blue-700); }
+
+.r-chip-tsm {
+    background: #fff;
+    border-color: var(--r-blue-200);
+}
+
+.r-chip-tsm .r-chip-num { color: var(--r-blue-700); }
+.r-chip-tsm .r-chip-lbl { color: var(--r-blue-600); }
+
+/* Card variants — accent strip + icon color */
+.r-card-primary::before { background: var(--r-blue-700); }
+.r-card-primary .r-icon { background: var(--r-blue-100); color: var(--r-blue-800); }
+
+.r-card-success::before { background: var(--r-success); }
+.r-card-success .r-icon { background: var(--r-success-soft); color: var(--r-success); }
+
+.r-card-danger::before { background: var(--r-danger); }
+.r-card-danger .r-icon { background: var(--r-danger-soft); color: var(--r-danger); }
+
+.r-card-warning::before { background: var(--r-warning); }
+.r-card-warning .r-icon { background: var(--r-warning-soft); color: var(--r-warning); }
+
+.r-card-neutral::before { background: var(--r-neutral); }
+.r-card-neutral .r-icon { background: var(--r-neutral-soft); color: var(--r-neutral); }
+
+.r-card-info::before { background: var(--r-blue-500); }
+.r-card-info .r-icon { background: var(--r-blue-100); color: var(--r-blue-600); }
+
+/* ===== Wide Card (Total Transaksi) ===== */
+.r-card-wide {
+    background: var(--r-blue-50);
+    color: var(--r-blue-900);
+    border-radius: var(--r-radius-lg);
+    padding: 1.5rem 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    border: 1px solid var(--r-blue-100);
+}
+
+.r-wide-icon {
+    width: 70px;
+    height: 70px;
+    min-width: 70px;
+    border-radius: 18px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--r-blue-600);
+    border: 1px solid var(--r-blue-100);
+}
+
+.r-wide-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.r-wide-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--r-blue-700);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 0.25rem;
+}
+
+.r-wide-amount {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--r-blue-900);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.25rem;
+    word-break: break-word;
+}
+
+.r-wide-note {
+    font-size: 0.85rem;
+    color: var(--r-blue-700);
+    margin: 0;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    .rangkuman-main {
+        padding: 1rem 0 2rem;
     }
 
-    .stats-card {
+    .rangkuman-header {
+        padding: 1.1rem 1.1rem;
+        gap: 0.9rem;
+        border-radius: 14px;
+    }
+
+    .rangkuman-header-icon {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        font-size: 1.4rem;
+        border-radius: 12px;
+    }
+
+    .rangkuman-title {
+        font-size: 1.15rem;
+    }
+
+    .rangkuman-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .rangkuman-timestamp {
+        font-size: 0.72rem;
+    }
+
+    .rangkuman-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .r-card {
         padding: 1rem;
     }
 
-    .page-title {
+    .r-card-head {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .r-icon {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        font-size: 1rem;
+        border-radius: 9px;
+    }
+
+    .r-title {
+        font-size: 0.72rem;
+        letter-spacing: 0.3px;
+    }
+
+    .r-main {
+        font-size: 1.7rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .r-chip {
+        padding: 0.4rem 0.3rem;
+        border-radius: 8px;
+    }
+
+    .r-chip-num {
+        font-size: 0.95rem;
+    }
+
+    .r-chip-lbl {
+        font-size: 0.6rem;
+    }
+
+    .r-card-wide {
+        padding: 1.1rem;
+        gap: 0.9rem;
+        border-radius: 14px;
+    }
+
+    .r-wide-icon {
+        width: 54px;
+        height: 54px;
+        min-width: 54px;
         font-size: 1.5rem;
+        border-radius: 14px;
     }
 
-    .main-number {
-        font-size: 3rem;
+    .r-wide-amount {
+        font-size: 1.4rem;
     }
 
-    .sub-numbers span {
+    .r-wide-title {
+        font-size: 0.72rem;
+    }
+
+    .r-wide-note {
         font-size: 0.75rem;
-        padding: 0.2rem 0.5rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .rangkuman-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rangkuman-header {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+
+    .r-card-head {
+        flex-direction: row;
+        align-items: center;
     }
 }
