@@ -6,6 +6,7 @@ use App\Models\Siswa;
 use App\Models\Pembayaran;
 use App\Exports\SiswaExport;
 use App\Services\GoogleSheetsService;
+use App\Services\TelegramNotifier;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -234,8 +235,8 @@ class StudentController extends Controller
 
         $this->uppercaseTextFields($request);
 
-        siswa::create([
-            'namasiswa' => $request->namasiswa, 
+        $createdSiswa = siswa::create([
+            'namasiswa' => $request->namasiswa,
             'jurusan' => $request->jurusan, 
             'jeniskelamin' => $request->jeniskelamin, 
             'agama' => $request->agama, 
@@ -298,6 +299,12 @@ class StudentController extends Controller
             'asrama_tahfidz' => $request->asrama_tahfidz,
             'jalurdaftar' => $request->jalurdaftar,
         ]);
+
+        try {
+            app(TelegramNotifier::class)->notifySiswaBaru($createdSiswa);
+        } catch (\Throwable $e) {
+            \Log::warning('Gagal kirim notif Telegram siswa baru: ' . $e->getMessage());
+        }
 
         return redirect()->route('tabelsiswa')
             ->with('success', 'Data siswa berhasil ditambahkan');

@@ -6,6 +6,7 @@ use App\Models\AppSetting;
 use App\Providers\AppServiceProvider;
 use App\Services\GoogleSheetsService;
 use App\Services\KelengkapanDataService;
+use App\Services\TelegramNotifier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -46,6 +47,11 @@ class SettingsController extends Controller
             'login_description' => AppSetting::get('login_description'),
             'login_flow_steps'  => AppSetting::get('login_flow_steps'),
             'login_roles'       => AppSetting::get('login_roles'),
+            'telegram_bot_token'      => AppSetting::get('telegram_bot_token'),
+            'telegram_chat_id'        => AppSetting::get('telegram_chat_id'),
+            'telegram_enabled'        => AppSetting::get('telegram_enabled'),
+            'telegram_notify_siswa'   => AppSetting::get('telegram_notify_siswa'),
+            'telegram_notify_payment' => AppSetting::get('telegram_notify_payment'),
         ];
 
         // Decode untuk preview / form
@@ -120,6 +126,11 @@ class SettingsController extends Controller
             'required_siswa_fields'   => ['nullable', 'array'],
             'required_siswa_fields.*' => ['string', 'max:64'],
             'required_reset'          => ['nullable', 'in:1'],
+            'telegram_bot_token'      => ['nullable', 'string', 'max:255'],
+            'telegram_chat_id'        => ['nullable', 'string', 'max:64'],
+            'telegram_enabled'        => ['nullable', 'in:1'],
+            'telegram_notify_siswa'   => ['nullable', 'in:1'],
+            'telegram_notify_payment' => ['nullable', 'in:1'],
         ]);
 
         // Field wajib siswa (cek kelengkapan data)
@@ -220,6 +231,11 @@ class SettingsController extends Controller
             'login_flow_steps'  => $loginFlowToSave,
             'login_roles'       => $loginRolesToSave,
             KelengkapanDataService::SETTING_KEY => $requiredToSave,
+            'telegram_bot_token'      => $validated['telegram_bot_token']      ?? null,
+            'telegram_chat_id'        => $validated['telegram_chat_id']        ?? null,
+            'telegram_enabled'        => $request->boolean('telegram_enabled') ? '1' : null,
+            'telegram_notify_siswa'   => $request->boolean('telegram_notify_siswa') ? '1' : null,
+            'telegram_notify_payment' => $request->boolean('telegram_notify_payment') ? '1' : null,
         ]);
 
         AppSetting::flush();
@@ -260,6 +276,28 @@ class SettingsController extends Controller
             $request->input('range')      ?: null,
         );
 
+        return response()->json($result);
+    }
+
+    public function testTelegram(Request $request, TelegramNotifier $telegram)
+    {
+        $request->validate([
+            'token'    => ['nullable', 'string', 'max:255'],
+            'chat_id'  => ['nullable', 'string', 'max:64'],
+        ]);
+
+        $token  = $request->input('token')   ?: $telegram->token();
+        $chatId = $request->input('chat_id') ?: $telegram->chatId();
+
+        if (! $token || ! $chatId) {
+            return response()->json(['ok' => false, 'message' => 'Bot token & chat ID harus diisi.']);
+        }
+
+        $appName = AppSetting::get('app_name') ?: 'SPMB Sekolah';
+        $now = now('Asia/Jakarta')->translatedFormat('d F Y, H:i') . ' WIB';
+        $text = "✅ <b>Test Notifikasi Telegram</b>\n<i>{$appName}</i>\n\nKoneksi berhasil. Notifikasi otomatis siap digunakan.\n\n🕐 {$now}";
+
+        $result = $telegram->sendMessage($text, $token, $chatId);
         return response()->json($result);
     }
 

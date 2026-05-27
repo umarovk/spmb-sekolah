@@ -7,6 +7,7 @@ use App\Models\Pembayaran;
 use App\Models\Siswa;
 use App\Exports\PaymentExport;
 use App\Exports\PaymentExport2;
+use App\Services\TelegramNotifier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -94,6 +95,12 @@ class PaymentController extends Controller
                 'tanggal_bayar' => $request->tanggal_bayar,
                 'teller' => auth()->user()->name ?? 'Admin',
             ]);
+
+            try {
+                app(TelegramNotifier::class)->notifyPembayaran($payment);
+            } catch (\Throwable $e) {
+                \Log::warning('Gagal kirim notif Telegram pembayaran: ' . $e->getMessage());
+            }
 
             return redirect()->route('payments.show', $request->siswa_id)
                             ->with('success', 'Pembayaran berhasil disimpan.');

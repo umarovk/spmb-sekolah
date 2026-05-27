@@ -109,6 +109,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/admin/settings', [App\Http\Controllers\SettingsController::class, 'update'])->name('admin.settings.update');
         Route::post('/admin/settings/test-sheets', [App\Http\Controllers\SettingsController::class, 'testSheets'])->name('admin.settings.test-sheets');
         Route::post('/admin/settings/fetch-pendaftaran-headers', [App\Http\Controllers\SettingsController::class, 'fetchPendaftaranHeaders'])->name('admin.settings.fetch-pendaftaran-headers');
+        Route::post('/admin/settings/test-telegram', [App\Http\Controllers\SettingsController::class, 'testTelegram'])->name('admin.settings.test-telegram');
     });
     
     // Selection routes

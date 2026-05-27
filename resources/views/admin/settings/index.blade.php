@@ -507,6 +507,87 @@
                     </div>
                 </div>
 
+                {{-- Notifikasi Telegram --}}
+                <div class="card border-0 shadow-sm rounded-3 mb-4">
+                    <div class="card-header bg-white py-3 border-bottom border-light">
+                        <h5 class="mb-0 text-dark">
+                            <i class="bi bi-send-fill text-primary me-2"></i>Notifikasi Telegram
+                        </h5>
+                        <small class="text-muted">Kirim notif otomatis ke grup/chat Telegram saat ada pendaftar baru atau pembayaran masuk</small>
+                    </div>
+                    <div class="card-body p-4">
+
+                        <div class="alert alert-info border-0 small mb-3">
+                            <strong><i class="bi bi-info-circle"></i> Cara setup singkat:</strong>
+                            <ol class="mb-0 mt-1 ps-3">
+                                <li>Chat <a href="https://t.me/BotFather" target="_blank">@BotFather</a> di Telegram → ketik <code>/newbot</code> → ikuti petunjuk → salin <strong>HTTP API token</strong></li>
+                                <li>Buat grup Telegram (atau pakai grup yang ada) → tambahkan bot sebagai anggota → kirim 1 pesan apa saja di grup itu</li>
+                                <li>Cari Chat ID grup: buka <code>https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code> di browser → cari <code>"chat":{"id":-100...</code> → salin angka (termasuk tanda minus)</li>
+                                <li>Isi token & Chat ID di form bawah → klik <strong>Test Koneksi</strong></li>
+                            </ol>
+                        </div>
+
+                        <div class="form-check form-switch mb-3">
+                            <input type="checkbox" class="form-check-input" id="telegram_enabled" name="telegram_enabled" value="1" {{ $settings['telegram_enabled'] === '1' ? 'checked' : '' }}>
+                            <label for="telegram_enabled" class="form-check-label fw-semibold">Aktifkan Notifikasi Telegram</label>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Bot Token</label>
+                                <div class="input-group">
+                                    <input type="password"
+                                           id="telegram_bot_token"
+                                           name="telegram_bot_token"
+                                           class="form-control @error('telegram_bot_token') is-invalid @enderror"
+                                           value="{{ old('telegram_bot_token', $settings['telegram_bot_token']) }}"
+                                           placeholder="123456789:AAH...">
+                                    <button type="button" class="btn btn-outline-secondary" id="toggle_tg_token">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                                @error('telegram_bot_token')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Chat ID (Group)</label>
+                                <input type="text"
+                                       name="telegram_chat_id"
+                                       class="form-control @error('telegram_chat_id') is-invalid @enderror"
+                                       value="{{ old('telegram_chat_id', $settings['telegram_chat_id']) }}"
+                                       placeholder="-1001234567890">
+                                <small class="text-muted">ID grup biasanya dimulai dengan tanda minus (<code>-100...</code>)</small>
+                                @error('telegram_chat_id')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <div class="form-check form-switch p-3 border rounded-3">
+                                    <input type="checkbox" class="form-check-input" id="telegram_notify_siswa" name="telegram_notify_siswa" value="1" {{ $settings['telegram_notify_siswa'] === '1' ? 'checked' : '' }}>
+                                    <label for="telegram_notify_siswa" class="form-check-label">
+                                        <strong><i class="bi bi-person-plus me-1"></i> Siswa Baru</strong>
+                                        <div class="small text-muted">Notif setiap ada data siswa baru tersimpan</div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check form-switch p-3 border rounded-3">
+                                    <input type="checkbox" class="form-check-input" id="telegram_notify_payment" name="telegram_notify_payment" value="1" {{ $settings['telegram_notify_payment'] === '1' ? 'checked' : '' }}>
+                                    <label for="telegram_notify_payment" class="form-check-label">
+                                        <strong><i class="bi bi-cash-coin me-1"></i> Pembayaran Masuk</strong>
+                                        <div class="small text-muted">Notif setiap ada pembayaran baru tersimpan</div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-outline-primary rounded-pill" id="btnTestTelegram">
+                            <i class="bi bi-send-check"></i> Test Koneksi (Kirim Pesan Test)
+                        </button>
+                        <div id="testTelegramResult" class="mt-2"></div>
+                    </div>
+                </div>
+
                 <div class="d-flex justify-content-end gap-2">
                     <a href="{{ route('admin.settings.index') }}" class="btn btn-outline-secondary rounded-pill">
                         Reset Form
@@ -825,6 +906,46 @@ document.addEventListener('DOMContentLoaded', function () {
         } finally {
             btn.disabled = false;
             btn.innerHTML = original;
+        }
+    });
+
+    // ===== Telegram =====
+    const tgToken = document.getElementById('telegram_bot_token');
+    document.getElementById('toggle_tg_token').addEventListener('click', function () {
+        const isPwd = tgToken.type === 'password';
+        tgToken.type = isPwd ? 'text' : 'password';
+        this.querySelector('i').className = isPwd ? 'bi bi-eye-slash' : 'bi bi-eye';
+    });
+
+    const btnTestTg = document.getElementById('btnTestTelegram');
+    const tgResult  = document.getElementById('testTelegramResult');
+    btnTestTg.addEventListener('click', async function () {
+        const original = btnTestTg.innerHTML;
+        btnTestTg.disabled = true;
+        btnTestTg.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Mengirim...';
+
+        const fd = new FormData();
+        fd.append('token', tgToken.value);
+        fd.append('chat_id', document.querySelector('[name="telegram_chat_id"]').value);
+        fd.append('_token', '{{ csrf_token() }}');
+
+        try {
+            const res = await fetch('{{ route('admin.settings.test-telegram') }}', {
+                method: 'POST',
+                body: fd,
+                headers: { 'Accept': 'application/json' }
+            });
+            const data = await res.json();
+            if (data.ok) {
+                tgResult.innerHTML = '<div class="alert alert-success border-0 shadow-sm mb-0 py-2 small"><i class="bi bi-check-circle"></i> Pesan test berhasil terkirim ke Telegram. Cek grupmu.</div>';
+            } else {
+                tgResult.innerHTML = `<div class="alert alert-danger border-0 shadow-sm mb-0 py-2 small"><i class="bi bi-x-circle"></i> Gagal: ${escapeHtml(data.message || 'Unknown error')}</div>`;
+            }
+        } catch (e) {
+            tgResult.innerHTML = `<div class="alert alert-danger border-0 shadow-sm mb-0 py-2 small">Error: ${escapeHtml(e.message)}</div>`;
+        } finally {
+            btnTestTg.disabled = false;
+            btnTestTg.innerHTML = original;
         }
     });
 });
