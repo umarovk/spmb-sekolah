@@ -22,6 +22,7 @@ class User extends Authenticatable
         'nama',
         'email',
         'password',
+        'password_plain',
         'role'
     ];
 
@@ -32,6 +33,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
+        'password_plain',
         'remember_token',
     ];
 
@@ -43,6 +45,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'password_plain' => 'encrypted',
     ];
 
     // Role checking methods

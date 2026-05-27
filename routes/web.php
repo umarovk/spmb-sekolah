@@ -123,8 +123,10 @@ Route::middleware(['auth'])->group(function () {
 
     // pengambilan bahan routes
     Route::middleware(['auth', 'role:selektor,admin'])->group(function () {
-        Route::resource('bahan', BahanController::class);
         Route::get('/bahan-export', [BahanController::class, 'export'])->name('bahan.export');
+        Route::get('/bahan/manage/{siswa}', [BahanController::class, 'manage'])->name('bahan.manage');
+        Route::post('/bahan/manage/{siswa}', [BahanController::class, 'updateChecklist'])->name('bahan.update-checklist');
+        Route::resource('bahan', BahanController::class);
         Route::get('/{bahan}/ubah', [BahanController::class, 'ubah'])->name('bahan.ubah');
     });
 
@@ -135,6 +137,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/users', [UserController::class, 'store'])->name('users.store');
         Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
         Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+        Route::post('/users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
         Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     });
 });

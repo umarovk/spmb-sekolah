@@ -9,6 +9,58 @@
                         <h3 class="card-title">Edit User</h3>
                     </div>
                     <div class="card-body">
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
+                        @if (session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+
+                        @if (auth()->user()->isAdmin())
+                            <div class="alert alert-info d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                <div>
+                                    <strong>Password saat ini:</strong>
+                                    @if ($user->password_plain)
+                                        <span
+                                            id="current-password-text"
+                                            data-password="{{ $user->password_plain }}"
+                                        >••••••••</span>
+                                        <button
+                                            type="button"
+                                            class="btn btn-sm btn-outline-secondary ms-2"
+                                            id="toggle-current-password"
+                                        >
+                                            <i
+                                                class="bi bi-eye"
+                                                id="toggle-current-password-icon"
+                                            ></i> Lihat
+                                        </button>
+                                    @else
+                                        <span class="text-muted">(belum tersedia — password lama dibuat sebelum fitur ini aktif)</span>
+                                    @endif
+                                </div>
+                                <form
+                                    action="{{ route('users.reset-password', $user->id) }}"
+                                    method="POST"
+                                    class="d-inline"
+                                    onsubmit="return confirm('Reset password user {{ $user->nama }} menjadi guru123456?')"
+                                >
+                                    @csrf
+                                    <button
+                                        type="submit"
+                                        class="btn btn-sm btn-warning"
+                                    >
+                                        <i class="bi bi-key"></i> Reset ke "guru123456"
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+
                         <form
                             action="{{ route('users.update', $user) }}"
                             method="POST"
@@ -130,4 +182,28 @@
             </div>
         </div>
     </div>
+
+    @if (auth()->user()->isAdmin())
+        <script>
+            (function () {
+                const toggleBtn = document.getElementById('toggle-current-password');
+                if (!toggleBtn) return;
+                const textEl = document.getElementById('current-password-text');
+                const iconEl = document.getElementById('toggle-current-password-icon');
+                let visible = false;
+                toggleBtn.addEventListener('click', function () {
+                    visible = !visible;
+                    if (visible) {
+                        textEl.textContent = textEl.dataset.password;
+                        iconEl.classList.remove('bi-eye');
+                        iconEl.classList.add('bi-eye-slash');
+                    } else {
+                        textEl.textContent = '••••••••';
+                        iconEl.classList.remove('bi-eye-slash');
+                        iconEl.classList.add('bi-eye');
+                    }
+                });
+            })();
+        </script>
+    @endif
 @endsection

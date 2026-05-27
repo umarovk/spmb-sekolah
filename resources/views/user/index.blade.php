@@ -156,6 +156,9 @@
                                         <th>Username</th>
                                         <th>Email</th>
                                         <th>Role</th>
+                                        @if (auth()->user()->isAdmin())
+                                            <th>Password</th>
+                                        @endif
                                         <th>Login Terakhir</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -176,6 +179,25 @@
                                                     {{ ucfirst($user->role) }}
                                                 </span>
                                             </td>
+                                            @if (auth()->user()->isAdmin())
+                                                <td>
+                                                    @if ($user->password_plain)
+                                                        <span
+                                                            class="user-password-text"
+                                                            data-password="{{ $user->password_plain }}"
+                                                        >••••••••</span>
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-sm btn-link p-0 ms-1 toggle-user-password"
+                                                            title="Lihat password"
+                                                        >
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                    @else
+                                                        <span class="text-muted small">(tidak tersedia)</span>
+                                                    @endif
+                                                </td>
+                                            @endif
                                             <td>
                                                 @if ($user->lastLogin())
                                                     @if (isset($user->lastLogin()->login_number))
@@ -196,9 +218,27 @@
                                                     <a
                                                         href="{{ route('users.edit', $user->id) }}"
                                                         class="btn btn-sm btn-outline-primary"
+                                                        title="Edit"
                                                     >
                                                         <i class="bi bi-pencil"></i>
                                                     </a>
+                                                    @if (auth()->user()->isAdmin())
+                                                        <form
+                                                            action="{{ route('users.reset-password', $user->id) }}"
+                                                            method="POST"
+                                                            class="d-inline"
+                                                            onsubmit="return confirm('Reset password user {{ $user->nama }} menjadi guru123456?')"
+                                                        >
+                                                            @csrf
+                                                            <button
+                                                                type="submit"
+                                                                class="btn btn-sm btn-outline-warning"
+                                                                title="Reset password ke guru123456"
+                                                            >
+                                                                <i class="bi bi-key"></i>
+                                                            </button>
+                                                        </form>
+                                                    @endif
                                                     @if (auth()->user()->isAdmin() && $user->id !== auth()->id())
                                                         <form
                                                             action="{{ route('users.destroy', $user->id) }}"
@@ -210,6 +250,7 @@
                                                             <button
                                                                 type="submit"
                                                                 class="btn btn-sm btn-outline-danger"
+                                                                title="Hapus"
                                                                 onclick="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')"
                                                             >
                                                                 <i class="bi bi-trash"></i>
@@ -222,7 +263,7 @@
                                     @empty
                                         <tr>
                                             <td
-                                                colspan="6"
+                                                colspan="{{ auth()->user()->isAdmin() ? 8 : 7 }}"
                                                 class="text-center py-4"
                                             >
                                                 <i class="bi bi-inbox fs-4 d-block mb-2"></i>
@@ -250,4 +291,25 @@
         </div>
         </div>
     </div>
+
+    @if (auth()->user()->isAdmin())
+        <script>
+            document.querySelectorAll('.toggle-user-password').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    const cell = btn.closest('td');
+                    const span = cell.querySelector('.user-password-text');
+                    const icon = btn.querySelector('i');
+                    if (span.textContent === '••••••••') {
+                        span.textContent = span.dataset.password;
+                        icon.classList.remove('bi-eye');
+                        icon.classList.add('bi-eye-slash');
+                    } else {
+                        span.textContent = '••••••••';
+                        icon.classList.remove('bi-eye-slash');
+                        icon.classList.add('bi-eye');
+                    }
+                });
+            });
+        </script>
+    @endif
 @endsection

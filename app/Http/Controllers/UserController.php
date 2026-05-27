@@ -52,6 +52,7 @@ class UserController extends Controller
             'nama' => $request->nama,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'password_plain' => $request->password,
             'role' => $request->role
         ]);
 
@@ -87,11 +88,32 @@ class UserController extends Controller
             $request->validate([
                 'password' => ['confirmed', Password::defaults()]
             ]);
-            $user->update(['password' => Hash::make($request->password)]);
+            $user->update([
+                'password' => Hash::make($request->password),
+                'password_plain' => $request->password,
+            ]);
         }
 
         return redirect()->route('users.index')
             ->with('success', 'User berhasil diperbarui');
+    }
+
+    public function resetPassword($id)
+    {
+        if (!auth()->user()->isAdmin()) {
+            return redirect()->route('users.index')
+                ->with('error', 'Anda tidak memiliki akses untuk reset password');
+        }
+
+        $user = User::findOrFail($id);
+        $newPassword = 'guru123456';
+
+        $user->update([
+            'password' => Hash::make($newPassword),
+            'password_plain' => $newPassword,
+        ]);
+
+        return back()->with('success', "Password user {$user->nama} berhasil di-reset menjadi: {$newPassword}");
     }
 
     public function destroy($id)
