@@ -54,6 +54,7 @@ class TelegramNotifier
         try {
             $response = Http::timeout(10)
                 ->asJson()
+                ->withoutVerifying()
                 ->post("https://api.telegram.org/bot{$token}/sendMessage", [
                     'chat_id'    => $chatId,
                     'text'       => $text,
