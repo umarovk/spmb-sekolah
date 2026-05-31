@@ -288,6 +288,21 @@
                                                         >
                                                     </div>
 
+                                                    <div class="col-md-3">
+                                                        <label
+                                                            for="lingkar_kepala"
+                                                            class="form-label"
+                                                        >Lingkar Kepala (cm)</label>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            id="lingkar_kepala"
+                                                            placeholder="Contoh: 56"
+                                                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                            name="lingkar_kepala"
+                                                        >
+                                                    </div>
+
                                                     <!-- NIS -->
                                                     <div class="col-md-6">
                                                         <label

@@ -426,6 +426,26 @@
                                                             </div>
                                                         </div>
 
+                                                        <div class="col-md-6">
+                                                            <label
+                                                                for="validationCustomUsername"
+                                                                class="form-label"
+                                                                name="lingkar_kepala"
+                                                            >Lingkar Kepala</label>
+                                                            <div class="input-group has-validation">
+                                                                <input
+                                                                    value="{{ old('lingkar_kepala', $datasiswa->lingkar_kepala) }}"
+                                                                    type="text"
+                                                                    class="form-control"
+                                                                    id="validationCustom01"
+                                                                    placeholder="Lingkar Kepala (cm)"
+                                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                                    name="lingkar_kepala"
+                                                                />
+                                                                <div class="invalid-feedback">Lingkar Kepala</div>
+                                                            </div>
+                                                        </div>
+
 
 
 
