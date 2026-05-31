@@ -249,7 +249,10 @@ class GoogleSheetsService
         );
 
         try {
-            $client = new Client(['timeout' => 10]);
+            $client = new Client([
+                'timeout' => 10,
+                'verify' => base_path('ssl-for-api-telegram/cacert.pem'),
+            ]);
             $response = $client->get($url, ['query' => ['key' => $apiKey]]);
             $body = json_decode((string) $response->getBody(), true);
         } catch (GuzzleException $e) {
@@ -288,7 +291,11 @@ class GoogleSheetsService
         );
 
         try {
-            $client   = new Client(['timeout' => 10, 'http_errors' => false]);
+            $client   = new Client([
+                'timeout' => 10,
+                'http_errors' => false,
+                'verify' => base_path('ssl-for-api-telegram/cacert.pem'),
+            ]);
             $response = $client->get($url, ['query' => ['key' => $apiKey]]);
             $status   = $response->getStatusCode();
             $body     = json_decode((string) $response->getBody(), true);
