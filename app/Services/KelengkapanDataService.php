@@ -46,6 +46,7 @@ class KelengkapanDataService
         'nomor_ujian_nasional' => 'No. Ujian Nasional',
         'tinggibadan'          => 'Tinggi Badan',
         'beratbadan'           => 'Berat Badan',
+        'lingkar_kepala'       => 'Lingkar Kepala',
         'transport'            => 'Transportasi',
         'jenis_tinggal'        => 'Jenis Tinggal',
         'jumlah_saudara'       => 'Jumlah Saudara',
@@ -77,7 +78,7 @@ class KelengkapanDataService
     public const FIELD_GROUPS = [
         'Data Pribadi'      => ['namasiswa','jurusan','jeniskelamin','agama','tempatlahir','tanggallahir','tahunmasuk','jalurdaftar','asrama_tahfidz'],
         'Identitas & Dokumen' => ['nik','nisn','nis','nomorsiswa','email','akta_lahir','kartu_keluarga','nomorkip','nomorkps','nomorkks','npsn','ijazah','skhun','nomor_ujian_nasional','kebutuhan_khusus'],
-        'Domisili & Fisik'  => ['alamat','sekolah_asal','transport','jenis_tinggal','jumlah_saudara','tinggibadan','beratbadan'],
+        'Domisili & Fisik'  => ['alamat','sekolah_asal','transport','jenis_tinggal','jumlah_saudara','tinggibadan','beratbadan','lingkar_kepala'],
         'Orang Tua — Ayah'  => ['nama_ayah','pendidikan_ayah','tempat_lahir_ayah','tanggal_lahir_ayah','alamat_ayah','pekerjaan_ayah','penghasilan_ayah','nomor_ayah'],
         'Orang Tua — Ibu'   => ['nama_ibu','pendidikan_ibu','tempat_lahir_ibu','tanggal_lahir_ibu','alamat_ibu','pekerjaan_ibu','penghasilan_ibu','nomor_ibu'],
         'Wali'              => ['nama_wali','alamat_wali','nomor_wali','penghasilan_wali'],

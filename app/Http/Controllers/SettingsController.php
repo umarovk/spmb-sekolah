@@ -21,7 +21,7 @@ class SettingsController extends Controller
         'kebutuhan_khusus', 'akta_lahir', 'kartu_keluarga',
         'email', 'alamat',
         'sekolah_asal', 'npsn', 'ijazah', 'skhun', 'nomor_ujian_nasional',
-        'tinggibadan', 'beratbadan', 'transport',
+        'tinggibadan', 'beratbadan', 'lingkar_kepala', 'transport',
         'jenis_tinggal', 'jumlah_saudara',
         'nama_ayah', 'pendidikan_ayah', 'tempat_lahir_ayah', 'tanggal_lahir_ayah',
         'alamat_ayah', 'pekerjaan_ayah', 'penghasilan_ayah', 'nomor_ayah',
