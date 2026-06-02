@@ -77,6 +77,8 @@ class SettingsController extends Controller
             'pendaftaran_range'    => config('services.google_sheets.pendaftaran_range', 'Sheet1'),
         ];
 
+        $normalizationRules = json_decode((string) AppSetting::get('google_sheets_normalization'), true) ?? [];
+
         return view('admin.settings.index', [
             'settings'    => $settings,
             'envFallback' => $envFallback,
@@ -88,13 +90,14 @@ class SettingsController extends Controller
                 'configured'             => $sheets->isConfigured(),
                 'pendaftaran_configured' => $sheets->isPendaftaranConfigured(),
             ],
-            'pendaftaranMapping' => $sheets->pendaftaranMapping(),
-            'siswaFields'        => self::SISWA_FIELDS,
-            'loginContent'       => $loginContent,
-            'requiredFields'     => $kelengkapan->requiredFields(),
-            'fieldGroups'        => KelengkapanDataService::FIELD_GROUPS,
-            'fieldLabels'        => KelengkapanDataService::FIELD_LABELS,
-            'defaultRequired'    => KelengkapanDataService::DEFAULT_REQUIRED,
+            'pendaftaranMapping'    => $sheets->pendaftaranMapping(),
+            'normalizationRules'    => $normalizationRules,
+            'siswaFields'           => self::SISWA_FIELDS,
+            'loginContent'          => $loginContent,
+            'requiredFields'        => $kelengkapan->requiredFields(),
+            'fieldGroups'           => KelengkapanDataService::FIELD_GROUPS,
+            'fieldLabels'           => KelengkapanDataService::FIELD_LABELS,
+            'defaultRequired'       => KelengkapanDataService::DEFAULT_REQUIRED,
         ]);
     }
 
@@ -110,6 +113,7 @@ class SettingsController extends Controller
             'google_sheets_pendaftaran_range'   => ['nullable', 'string', 'max:255'],
             'mapping'                           => ['nullable', 'array'],
             'mapping.*'                         => ['nullable', 'string', 'max:64'],
+            'normalization_json'                => ['nullable', 'string', 'max:10000'],
             'app_name'    => ['nullable', 'string', 'max:100'],
             'app_tagline' => ['nullable', 'string', 'max:200'],
             'app_favicon' => ['nullable', 'file', 'mimes:png,jpg,jpeg,ico,svg,webp', 'max:512'],
@@ -195,6 +199,35 @@ class SettingsController extends Controller
             $mapping[$header] = $field;
         }
 
+        // Process normalization rules dari JSON textarea
+        $normalization = [];
+        $normalizationJson = trim((string) ($validated['normalization_json'] ?? ''));
+        if ($normalizationJson !== '') {
+            try {
+                $parsed = json_decode($normalizationJson, true);
+                if (is_array($parsed)) {
+                    foreach ($parsed as $field => $rules) {
+                        $field = trim((string) $field);
+                        if ($field === '' || ! is_array($rules)) {
+                            continue;
+                        }
+                        $normalization[$field] = [];
+                        foreach ($rules as $fromVal => $toVal) {
+                            $from = trim((string) $fromVal);
+                            $to   = trim((string) $toVal);
+                            if ($from !== '' && $to !== '') {
+                                $normalization[$field][$from] = $to;
+                            }
+                        }
+                    }
+                    // Remove empty field entries
+                    $normalization = array_filter($normalization, fn ($rules) => ! empty($rules));
+                }
+            } catch (\Exception $e) {
+                // JSON parsing gagal, lewati
+            }
+        }
+
         // Handle favicon upload / reset
         $faviconPath = AppSetting::get('app_favicon');
         if ($request->boolean('app_favicon_reset')) {
@@ -224,6 +257,7 @@ class SettingsController extends Controller
             'google_sheets_pendaftaran_id'      => $validated['google_sheets_pendaftaran_id']      ?? null,
             'google_sheets_pendaftaran_range'   => $validated['google_sheets_pendaftaran_range']   ?? null,
             'google_sheets_pendaftaran_mapping' => $mapping ? json_encode($mapping, JSON_UNESCAPED_UNICODE) : null,
+            'google_sheets_normalization'       => $normalization ? json_encode($normalization, JSON_UNESCAPED_UNICODE) : null,
             'app_name'    => $validated['app_name']    ?? null,
             'app_tagline' => $validated['app_tagline'] ?? null,
             'app_favicon' => $faviconPath,

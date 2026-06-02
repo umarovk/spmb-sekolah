@@ -1273,6 +1273,9 @@
                 }
             }
 
+            // Load normalization rules dari server
+            const normalizationRules = @json($normalizationRules ?? []);
+
             function applyAutofill(data) {
                 const form = document.querySelector('form.needs-validation');
                 if (!form) return;
@@ -1283,13 +1286,17 @@
                     const value = String(rawVal).trim();
                     if (value === '') continue;
 
-                    const el = form.querySelector(`[name="${field}"]`);
+                    // Query untuk specific element type, tidak ambil label
+                    let el = form.querySelector(`input[name="${field}"], select[name="${field}"], textarea[name="${field}"]`);
                     if (!el) continue;
 
                     if (el.tagName === 'SELECT') {
-                        const match = Array.from(el.options).find(o => o.value === value);
+                        // Try to normalize value first (dari server rules)
+                        let normalizedValue = normalizationRules[field] && normalizationRules[field][value] ? normalizationRules[field][value] : value;
+
+                        const match = Array.from(el.options).find(o => o.value === normalizedValue || o.value === value);
                         if (match) {
-                            el.value = value;
+                            el.value = match.value;
                         } else if (field === 'sekolah_asal') {
                             el.value = '__OTHER__';
                             const manual = document.getElementById('sekolah_asal_other');

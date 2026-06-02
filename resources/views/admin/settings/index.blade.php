@@ -504,6 +504,36 @@
                             </div>
                             <div id="fetchHeadersResult" class="mt-2"></div>
                         </div>
+
+                        {{-- Normalization Rules --}}
+                        <div class="mt-4 pt-4 border-top">
+                            <div class="mb-2 fw-semibold">
+                                <i class="bi bi-arrow-left-right me-2"></i>Value Normalization (Auto-convert dari Google Form)
+                            </div>
+                            <small class="text-muted d-block mb-3">
+                                Atur transformasi nilai dari Google Form ke form values (JSON format). Contoh: untuk field "jalurdaftar", jika Google Form punya "REGULER", convert ke "Reguler".
+                            </small>
+                            <textarea
+                                name="normalization_json"
+                                class="form-control font-monospace"
+                                rows="12"
+                            >{{ empty($normalizationRules) ? json_encode([
+  'jurusan' => [
+    'TEKNIK SEPEDA MOTOR (TSM)' => 'Teknik Sepeda Motor',
+    'TEKNIK KOMPUTER JARINGAN (TKJ)' => 'Teknik Komputer Jaringan'
+  ],
+  'jalurdaftar' => [
+    'REGULER' => 'Reguler',
+    'PRESTASI' => 'Prestasi'
+  ],
+  'jeniskelamin' => [
+    'LAKI-LAKI' => 'Laki-laki',
+    'Laki-Laki' => 'Laki-laki',
+    'PEREMPUAN' => 'Perempuan'
+  ]
+], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) : json_encode($normalizationRules, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</textarea>
+                            <small class="text-muted d-block mt-2">Format: <code>{ "field": { "dari_value": "ke_value" } }</code></small>
+                        </div>
                     </div>
                 </div>
 
