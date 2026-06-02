@@ -9,6 +9,17 @@ use Illuminate\Support\Carbon;
 
 class BahanController extends Controller
 {
+    private function getItemsForSiswa(Siswa $siswa): array
+    {
+        $items = PengambilanBahan::JENIS_BAHAN_LIST;
+
+        if ($siswa->jeniskelamin !== 'Perempuan') {
+            $items = array_filter($items, fn($item) => $item !== 'Kerudung');
+        }
+
+        return array_values($items);
+    }
+
     public function index(Request $request)
     {
         $search = $request->input('search');
@@ -16,7 +27,6 @@ class BahanController extends Controller
         $jenisFilter = $request->input('jenis');
 
         $items = PengambilanBahan::JENIS_BAHAN_LIST;
-        $totalItems = count($items);
 
         $siswas = Siswa::with(['pengambilanBahans' => function($q) {
                 $q->where('status', 'diberikan');
@@ -34,10 +44,12 @@ class BahanController extends Controller
             })
             ->orderBy('namasiswa')
             ->get()
-            ->map(function ($siswa) use ($items, $totalItems) {
+            ->map(function ($siswa) use ($items) {
+                $itemsForSiswa = $this->getItemsForSiswa($siswa);
+                $totalItems = count($itemsForSiswa);
                 $taken = $siswa->pengambilanBahans->pluck('jenis_bahan')->unique()->values();
                 $siswa->items_taken = $taken;
-                $siswa->items_missing = collect($items)->diff($taken)->values();
+                $siswa->items_missing = collect($itemsForSiswa)->diff($taken)->values();
                 $siswa->taken_count = $taken->count();
                 $siswa->total_items = $totalItems;
                 $siswa->progress_percent = $totalItems > 0 ? round(($taken->count() / $totalItems) * 100) : 0;
@@ -57,23 +69,29 @@ class BahanController extends Controller
 
         // Rekap per item
         $rekapItems = [];
-        $totalSiswa = Siswa::count();
+        $allSiswaData = Siswa::get();
         foreach ($items as $item) {
             $sudah = PengambilanBahan::where('jenis_bahan', $item)
                 ->where('status', 'diberikan')
                 ->distinct('siswa_id')
                 ->count('siswa_id');
+
+            $relevantSiswaCount = $allSiswaData->filter(function($s) use ($item) {
+                $itemsForSiswa = $this->getItemsForSiswa($s);
+                return in_array($item, $itemsForSiswa);
+            })->count();
+
             $rekapItems[] = [
                 'nama' => $item,
                 'sudah' => $sudah,
-                'belum' => max(0, $totalSiswa - $sudah),
-                'persen' => $totalSiswa > 0 ? round(($sudah / $totalSiswa) * 100) : 0,
+                'belum' => max(0, $relevantSiswaCount - $sudah),
+                'persen' => $relevantSiswaCount > 0 ? round(($sudah / $relevantSiswaCount) * 100) : 0,
             ];
         }
 
         // Rekap siswa
         $rekapSiswa = [
-            'total' => $totalSiswa,
+            'total' => $allSiswaData->count(),
             'lengkap' => $siswas->where('status_label', 'lengkap')->count(),
             'sebagian' => $siswas->where('status_label', 'sebagian')->count(),
             'belum' => $siswas->where('status_label', 'belum')->count(),
@@ -81,15 +99,19 @@ class BahanController extends Controller
 
         // Jika filter aktif, hitung dari semua data tanpa filter
         if ($search || $status || $jenisFilter) {
-            $allSiswas = Siswa::with(['pengambilanBahans' => function($q) {
+            $allSiswasWithBahan = Siswa::with(['pengambilanBahans' => function($q) {
                 $q->where('status', 'diberikan');
             }])->get();
-            $rekapSiswa['lengkap'] = $allSiswas->filter(fn($s) => $s->pengambilanBahans->pluck('jenis_bahan')->unique()->count() === $totalItems)->count();
-            $rekapSiswa['sebagian'] = $allSiswas->filter(function($s) use ($totalItems) {
-                $c = $s->pengambilanBahans->pluck('jenis_bahan')->unique()->count();
-                return $c > 0 && $c < $totalItems;
+            $rekapSiswa['lengkap'] = $allSiswasWithBahan->filter(function($s) {
+                $itemsForSiswa = $this->getItemsForSiswa($s);
+                return $s->pengambilanBahans->pluck('jenis_bahan')->unique()->count() === count($itemsForSiswa);
             })->count();
-            $rekapSiswa['belum'] = $allSiswas->filter(fn($s) => $s->pengambilanBahans->isEmpty())->count();
+            $rekapSiswa['sebagian'] = $allSiswasWithBahan->filter(function($s) {
+                $itemsForSiswa = $this->getItemsForSiswa($s);
+                $c = $s->pengambilanBahans->pluck('jenis_bahan')->unique()->count();
+                return $c > 0 && $c < count($itemsForSiswa);
+            })->count();
+            $rekapSiswa['belum'] = $allSiswasWithBahan->filter(fn($s) => $s->pengambilanBahans->isEmpty())->count();
         }
 
         return view('bahan.index', compact('siswas', 'search', 'status', 'jenisFilter', 'items', 'rekapItems', 'rekapSiswa'));
@@ -101,7 +123,7 @@ class BahanController extends Controller
             $q->where('status', 'diberikan');
         }])->findOrFail($siswaId);
 
-        $items = PengambilanBahan::JENIS_BAHAN_LIST;
+        $items = $this->getItemsForSiswa($siswa);
         $taken = $siswa->pengambilanBahans->keyBy('jenis_bahan');
 
         return view('bahan.manage', compact('siswa', 'items', 'taken'));
@@ -110,7 +132,7 @@ class BahanController extends Controller
     public function updateChecklist(Request $request, $siswaId)
     {
         $siswa = Siswa::findOrFail($siswaId);
-        $items = PengambilanBahan::JENIS_BAHAN_LIST;
+        $items = $this->getItemsForSiswa($siswa);
         $checked = $request->input('items', []);
         $tanggal = $request->input('tanggal_pengambilan') ?: Carbon::now('Asia/Jakarta')->toDateString();
         $keterangan = $request->input('keterangan');
@@ -213,6 +235,7 @@ class BahanController extends Controller
 
             $no = 1;
             foreach ($siswas as $siswa) {
+                $itemsForSiswa = $this->getItemsForSiswa($siswa);
                 $taken = $siswa->pengambilanBahans->keyBy('jenis_bahan');
                 $row = [
                     $no++,
@@ -222,7 +245,9 @@ class BahanController extends Controller
                 ];
                 $takenCount = 0;
                 foreach ($items as $it) {
-                    if (isset($taken[$it])) {
+                    if (! in_array($it, $itemsForSiswa)) {
+                        $row[] = '-';
+                    } elseif (isset($taken[$it])) {
                         $tgl = $taken[$it]->tanggal_pengambilan ? $taken[$it]->tanggal_pengambilan->format('d/m/Y') : '-';
                         $row[] = "Sudah ({$tgl})";
                         $takenCount++;
@@ -230,7 +255,7 @@ class BahanController extends Controller
                         $row[] = 'Belum';
                     }
                 }
-                $row[] = $takenCount . '/' . count($items);
+                $row[] = $takenCount . '/' . count($itemsForSiswa);
                 fputcsv($file, $row);
             }
 

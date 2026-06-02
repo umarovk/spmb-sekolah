@@ -19,6 +19,7 @@ class PengambilanBahan extends Model
         'Topi',
         'Badge',
         'Seragam Olahraga',
+        'Kerudung',
     ];
 
     protected $fillable = [
