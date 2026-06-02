@@ -192,6 +192,10 @@ class StudentController extends Controller
             'tinggibadan' => 'nullable',
             'beratbadan' => 'nullable',
             'lingkar_kepala' => 'nullable',
+            'tahun_lulus_smp' => 'nullable',
+            'anak_ke' => 'nullable',
+            'cita_cita' => 'nullable',
+            'hobi' => 'nullable',
             'email' => 'nullable',
             'alamat' => 'nullable|string',
             'transport' => 'nullable',
@@ -269,10 +273,14 @@ class StudentController extends Controller
             'tinggibadan' => $request->tinggibadan,
             'beratbadan' => $request->beratbadan,
             'lingkar_kepala' => $request->lingkar_kepala,
+            'tahun_lulus_smp' => $request->tahun_lulus_smp,
             'transport' => $request->transport,
 
             'jenis_tinggal' => $request->jenis_tinggal,
             'jumlah_saudara' => $request->jumlah_saudara,
+            'anak_ke' => $request->anak_ke,
+            'cita_cita' => $request->cita_cita,
+            'hobi' => $request->hobi,
             'nama_ayah' => $request->nama_ayah,
             'pendidikan_ayah' => $request->pendidikan_ayah,
 
@@ -361,6 +369,10 @@ class StudentController extends Controller
             'tinggibadan' => 'nullable',
             'beratbadan' => 'nullable',
             'lingkar_kepala' => 'nullable',
+            'tahun_lulus_smp' => 'nullable',
+            'anak_ke' => 'nullable',
+            'cita_cita' => 'nullable',
+            'hobi' => 'nullable',
             'email' => 'nullable',
             'alamat' => 'nullable|string',
             'transport' => 'nullable',
@@ -439,10 +451,14 @@ class StudentController extends Controller
             $datasiswa->tinggibadan = $request->tinggibadan;
             $datasiswa->beratbadan = $request->beratbadan;
             $datasiswa->lingkar_kepala = $request->lingkar_kepala;
+            $datasiswa->tahun_lulus_smp = $request->tahun_lulus_smp;
             $datasiswa->transport = $request->transport;
 
             $datasiswa->jenis_tinggal = $request->jenis_tinggal;
             $datasiswa->jumlah_saudara = $request->jumlah_saudara;
+            $datasiswa->anak_ke = $request->anak_ke;
+            $datasiswa->cita_cita = $request->cita_cita;
+            $datasiswa->hobi = $request->hobi;
             $datasiswa->nama_ayah = $request->nama_ayah;
             $datasiswa->pendidikan_ayah = $request->pendidikan_ayah;
 

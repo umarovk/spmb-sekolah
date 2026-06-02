@@ -550,20 +550,20 @@
                                                             <label
                                                                 for="validationCustomUsername"
                                                                 class="form-label"
-                                                                name="tahunmasuk"
-                                                            >Tahun Masuk</label>
+                                                                name="tahun_lulus_smp"
+                                                            >Tahun Lulus SMP/MTs</label>
                                                             <div class="input-group has-validation">
                                                                 <input
-                                                                    value="{{ old('tahunmasuk', $datasiswa->tahunmasuk) }}"
+                                                                    value="{{ old('tahun_lulus_smp', $datasiswa->tahun_lulus_smp) }}"
                                                                     type="number"
                                                                     class="form-control"
                                                                     id="validationCustom01"
-                                                                    placeholder="Tahun Masuk"
+                                                                    placeholder="Tahun Lulus SMP/MTs"
                                                                     max="2050"
                                                                     min="2008"
-                                                                    name="tahunmasuk"
+                                                                    name="tahun_lulus_smp"
                                                                 />
-                                                                <div class="invalid-feedback">Tahun Masuk</div>
+                                                                <div class="invalid-feedback">Tahun Lulus SMP/MTs</div>
                                                             </div>
                                                         </div>
 
@@ -681,6 +681,55 @@
                                                                 id="validationCustom01"
                                                                 placeholder="jumlah_saudara"
                                                                 name="jumlah_saudara"
+                                                            />
+                                                        </div>
+
+                                                        <!-- Anak Ke -->
+                                                        <div class="col-md-3">
+                                                            <label
+                                                                for="anak_ke"
+                                                                class="form-label"
+                                                            >Anak Ke- (Urutan KK)</label>
+                                                            <input
+                                                                value="{{ old('anak_ke', $datasiswa->anak_ke) }}"
+                                                                type="number"
+                                                                class="form-control"
+                                                                id="anak_ke"
+                                                                placeholder="Contoh: 2"
+                                                                name="anak_ke"
+                                                                min="1"
+                                                            />
+                                                        </div>
+
+                                                        <!-- Cita-cita -->
+                                                        <div class="col-md-6">
+                                                            <label
+                                                                for="cita_cita"
+                                                                class="form-label"
+                                                            >Cita-cita</label>
+                                                            <input
+                                                                value="{{ old('cita_cita', $datasiswa->cita_cita) }}"
+                                                                type="text"
+                                                                class="form-control"
+                                                                id="cita_cita"
+                                                                placeholder="Contoh: Insinyur, Dokter"
+                                                                name="cita_cita"
+                                                            />
+                                                        </div>
+
+                                                        <!-- Hobi -->
+                                                        <div class="col-md-3">
+                                                            <label
+                                                                for="hobi"
+                                                                class="form-label"
+                                                            >Hobi</label>
+                                                            <input
+                                                                value="{{ old('hobi', $datasiswa->hobi) }}"
+                                                                type="text"
+                                                                class="form-control"
+                                                                id="hobi"
+                                                                placeholder="Contoh: Membaca"
+                                                                name="hobi"
                                                             />
                                                         </div>
                                                     </div>

@@ -350,18 +350,18 @@
                                                         >
                                                     </div>
 
-                                                    <!-- Tahun Masuk -->
+                                                    <!-- Tahun Lulus SMP/MTs -->
                                                     <div class="col-md-6">
                                                         <label
-                                                            for="tahunmasuk"
+                                                            for="tahun_lulus_smp"
                                                             class="form-label"
-                                                        >Tahun Masuk</label>
+                                                        >Tahun Lulus SMP/MTs</label>
                                                         <input
                                                             type="number"
                                                             class="form-control"
-                                                            id="tahunmasuk"
-                                                            placeholder="Contoh: 2023"
-                                                            name="tahunmasuk"
+                                                            id="tahun_lulus_smp"
+                                                            placeholder="Contoh: 2025"
+                                                            name="tahun_lulus_smp"
                                                             min="2008"
                                                             max="2050"
                                                         >
@@ -440,7 +440,54 @@
                                                             class="form-control"
                                                             id="jumlah_saudara"
                                                             placeholder="Masukkan jumlah saudara"
+                                                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                             name="jumlah_saudara"
+                                                        >
+                                                    </div>
+
+                                                    <!-- Anak Ke -->
+                                                    <div class="col-md-3">
+                                                        <label
+                                                            for="anak_ke"
+                                                            class="form-label"
+                                                        >Anak Ke- (Urutan KK)</label>
+                                                        <input
+                                                            type="number"
+                                                            class="form-control"
+                                                            id="anak_ke"
+                                                            placeholder="Contoh: 2"
+                                                            name="anak_ke"
+                                                            min="1"
+                                                        >
+                                                    </div>
+
+                                                    <!-- Cita-cita -->
+                                                    <div class="col-md-6">
+                                                        <label
+                                                            for="cita_cita"
+                                                            class="form-label"
+                                                        >Cita-cita</label>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            id="cita_cita"
+                                                            placeholder="Contoh: Insinyur, Dokter"
+                                                            name="cita_cita"
+                                                        >
+                                                    </div>
+
+                                                    <!-- Hobi -->
+                                                    <div class="col-md-3">
+                                                        <label
+                                                            for="hobi"
+                                                            class="form-label"
+                                                        >Hobi</label>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            id="hobi"
+                                                            placeholder="Contoh: Membaca"
+                                                            name="hobi"
                                                         >
                                                     </div>
                                                 </div>

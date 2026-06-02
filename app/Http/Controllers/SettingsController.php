@@ -15,14 +15,14 @@ class SettingsController extends Controller
     /** Field siswa yang bisa di-mapping dari kolom Google Form pendaftaran. */
     public const SISWA_FIELDS = [
         'namasiswa', 'jurusan', 'jeniskelamin', 'agama',
-        'tempatlahir', 'tanggallahir', 'tahunmasuk',
+        'tempatlahir', 'tanggallahir', 'tahun_lulus_smp',
         'nik', 'nisn', 'nis', 'nomorsiswa',
         'nomorkip', 'nomorkps', 'nomorkks',
         'kebutuhan_khusus', 'akta_lahir', 'kartu_keluarga',
         'email', 'alamat',
         'sekolah_asal', 'npsn', 'ijazah', 'skhun', 'nomor_ujian_nasional',
         'tinggibadan', 'beratbadan', 'lingkar_kepala', 'transport',
-        'jenis_tinggal', 'jumlah_saudara',
+        'jenis_tinggal', 'jumlah_saudara', 'anak_ke', 'cita_cita', 'hobi',
         'nama_ayah', 'pendidikan_ayah', 'tempat_lahir_ayah', 'tanggal_lahir_ayah',
         'alamat_ayah', 'pekerjaan_ayah', 'penghasilan_ayah', 'nomor_ayah',
         'nama_ibu', 'pendidikan_ibu', 'tempat_lahir_ibu', 'tanggal_lahir_ibu',

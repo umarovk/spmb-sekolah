@@ -24,7 +24,7 @@ class SiswaExport
                 'Status Asrama',  // Changed label
                 'Status Seleksi', // Added new column
                 'Tanggal Seleksi', // Added new column
-                'Tahun Masuk',
+                'Tahun Lulus SMP/MTs',
                 'NIK',
                 'NISN',
                 'NIS',
@@ -49,6 +49,9 @@ class SiswaExport
                 'Transport',
                 'Jenis Tinggal',
                 'Jumlah Saudara',
+                'Anak Ke- (Urutan KK)',
+                'Cita-cita',
+                'Hobi',
                 'Nama Ayah',
                 'Pendidikan Ayah',
                 'Tempat Lahir Ayah',
@@ -88,7 +91,7 @@ class SiswaExport
                 $s->asrama_tahfidz,
                 $s->status_seleksi, // Added new field
                 $s->tanggalseleksi ? date('d/m/Y', strtotime($s->tanggalseleksi)) : '-', // Added new field
-                $s->tahunmasuk,
+                $s->tahun_lulus_smp,
                 $s->nik,
                 $s->nisn,
                 $s->nis,
@@ -113,6 +116,9 @@ class SiswaExport
                 $s->transport,
                 $s->jenis_tinggal,
                 $s->jumlah_saudara,
+                $s->anak_ke,
+                $s->cita_cita,
+                $s->hobi,
                 $s->nama_ayah,
                 $s->pendidikan_ayah,
                 $s->tempat_lahir_ayah,
