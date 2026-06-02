@@ -140,7 +140,7 @@
                         <div class="card-body p-0">
                             <div class="row g-0">
                                 @foreach ($topSmpData as $index => $smp)
-                                    <div class="col-lg-2 col-md-4 col-sm-6">
+                                    <div class="col-lg-3 col-md-6 col-sm-6">
                                         <div
                                             class="scorecard-item p-3 border-end border-bottom {{ $index == 0 ? 'bg-warning bg-opacity-10' : '' }}">
                                             <div class="d-flex align-items-center mb-2">
@@ -310,7 +310,7 @@
     <style>
         .scorecard-item {
             transition: all 0.3s ease;
-            min-height: 120px;
+            min-height: auto;
         }
 
         .scorecard-item:hover {
@@ -329,9 +329,10 @@
             overflow: hidden;
             word-wrap: break-word;
             white-space: normal;
-            min-height: 2.6em;
+            min-height: auto;
+            max-height: 3.9em;
             display: -webkit-box;
-            -webkit-line-clamp: 2;
+            -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
         }
 

@@ -247,7 +247,6 @@ class StudentController extends Controller
             'agama' => $request->agama,
             'tempatlahir' => $request->tempatlahir,
             'tanggallahir' => $request->tanggallahir,
-            'tahunmasuk' => $request->tahunmasuk,
 
             'nik' => $request->nik,
             'nisn' => $request->nisn,
@@ -425,7 +424,6 @@ class StudentController extends Controller
             $datasiswa->agama = $request->agama;
             $datasiswa->tempatlahir = $request->tempatlahir;
             $datasiswa->tanggallahir = $request->tanggallahir;
-            $datasiswa->tahunmasuk = $request->tahunmasuk;
 
             $datasiswa->nik = $request->nik;
             $datasiswa->nisn = $request->nisn;
