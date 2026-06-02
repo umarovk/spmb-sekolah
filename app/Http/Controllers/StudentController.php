@@ -191,6 +191,7 @@ class StudentController extends Controller
             'tanggallahir' => 'nullable',
             'tinggibadan' => 'nullable',
             'beratbadan' => 'nullable',
+            'lingkar_kepala' => 'nullable',
             'email' => 'nullable',
             'alamat' => 'nullable|string',
             'transport' => 'nullable',
@@ -237,64 +238,65 @@ class StudentController extends Controller
 
         $createdSiswa = siswa::create([
             'namasiswa' => $request->namasiswa,
-            'jurusan' => $request->jurusan, 
-            'jeniskelamin' => $request->jeniskelamin, 
-            'agama' => $request->agama, 
-            'tempatlahir' => $request->tempatlahir, 
-            'tanggallahir' => $request->tanggallahir, 
+            'jurusan' => $request->jurusan,
+            'jeniskelamin' => $request->jeniskelamin,
+            'agama' => $request->agama,
+            'tempatlahir' => $request->tempatlahir,
+            'tanggallahir' => $request->tanggallahir,
             'tahunmasuk' => $request->tahunmasuk,
 
-            'nik' => $request->nik, 
-            'nisn' => $request->nisn, 
-            'nis' => $request->nis, 
-            'nomorsiswa' => $request->nomorsiswa, 
-            'nomorkip' => $request->nomorkip, 
-            'nomorkps' => $request->nomorkps, 
+            'nik' => $request->nik,
+            'nisn' => $request->nisn,
+            'nis' => $request->nis,
+            'nomorsiswa' => $request->nomorsiswa,
+            'nomorkip' => $request->nomorkip,
+            'nomorkps' => $request->nomorkps,
             'nomorkks' => $request->nomorkks,
 
-            'kebutuhan_khusus' => $request->kebutuhan_khusus, 
-            'akta_lahir' => $request->akta_lahir, 
-            'kartu_keluarga' => $request->kartu_keluarga, 
-            'email' => $request->email, 
+            'kebutuhan_khusus' => $request->kebutuhan_khusus,
+            'akta_lahir' => $request->akta_lahir,
+            'kartu_keluarga' => $request->kartu_keluarga,
+            'email' => $request->email,
             'alamat' => $request->alamat,
 
-            'nomorsiswa_kontak' => $request->nomorsiswa_kontak, 
-            'sekolah_asal' => $request->sekolah_asal, 
-            'npsn' => $request->npsn, 
-            'ijazah' => $request->ijazah, 
+            'nomorsiswa_kontak' => $request->nomorsiswa_kontak,
+            'sekolah_asal' => $request->sekolah_asal,
+            'npsn' => $request->npsn,
+            'ijazah' => $request->ijazah,
             'skhun' => $request->skhun,
 
-            'nomor_ujian_nasional' => $request->nomor_ujian_nasional, 
-            'tinggibadan' => $request->tinggibadan, 
-            'beratbadan' => $request->beratbadan, 
+            'nomor_ujian_nasional' => $request->nomor_ujian_nasional,
+            'tinggibadan' => $request->tinggibadan,
+            'beratbadan' => $request->beratbadan,
+            'lingkar_kepala' => $request->lingkar_kepala,
             'transport' => $request->transport,
 
-            'jenis_tinggal' => $request->jenis_tinggal, 
-            'jumlah_saudara' => $request->jumlah_saudara, 
-            'nama_ayah' => $request->nama_ayah, 
+            'jenis_tinggal' => $request->jenis_tinggal,
+            'jumlah_saudara' => $request->jumlah_saudara,
+            'nama_ayah' => $request->nama_ayah,
             'pendidikan_ayah' => $request->pendidikan_ayah,
 
-            'tempat_lahir_ayah' => $request->tempat_lahir_ayah, 
-            'tanggal_lahir_ayah' => $request->tanggal_lahir_ayah, 
-            'alamat_ayah' => $request->alamat_ayah, 
+            'tempat_lahir_ayah' => $request->tempat_lahir_ayah,
+            'tanggal_lahir_ayah' => $request->tanggal_lahir_ayah,
+            'alamat_ayah' => $request->alamat_ayah,
             'pekerjaan_ayah' => $request->pekerjaan_ayah,
 
-            'penghasilan_ayah' => $request->penghasilan_ayah, 
-            'nomor_ayah' => $request->nomor_ayah, 
-            'nama_ibu' => $request->nama_ibu, 
+            'penghasilan_ayah' => $request->penghasilan_ayah,
+            'nomor_ayah' => $request->nomor_ayah,
+            'nama_ibu' => $request->nama_ibu,
             'pendidikan_ibu' => $request->pendidikan_ibu,
 
-            'tempat_lahir_ibu' => $request->tempat_lahir_ibu, 
-            'tanggal_lahir_ibu' => $request->tanggal_lahir_ibu, 
-            'alamat_ibu' => $request->alamat_ibu, 
+            'tempat_lahir_ibu' => $request->tempat_lahir_ibu,
+            'tanggal_lahir_ibu' => $request->tanggal_lahir_ibu,
+            'alamat_ibu' => $request->alamat_ibu,
             'pekerjaan_ibu' => $request->pekerjaan_ibu,
 
-            'penghasilan_ibu' => $request->penghasilan_ibu, 
-            'nomor_ibu' => $request->nomor_ibu, 
-            'nama_wali' => $request->nama_wali, 
+            'penghasilan_ibu' => $request->penghasilan_ibu,
+            'nomor_ibu' => $request->nomor_ibu,
+            'nama_wali' => $request->nama_wali,
             'alamat_wali' => $request->alamat_wali,
 
-            'nomor_wali' => $request->nomor_wali, 
+            'nomor_wali' => $request->nomor_wali,
             'penghasilan_wali' => $request->penghasilan_wali,
             'asrama_tahfidz' => $request->asrama_tahfidz,
             'jalurdaftar' => $request->jalurdaftar,
@@ -358,6 +360,7 @@ class StudentController extends Controller
             'tanggallahir' => 'nullable',
             'tinggibadan' => 'nullable',
             'beratbadan' => 'nullable',
+            'lingkar_kepala' => 'nullable',
             'email' => 'nullable',
             'alamat' => 'nullable|string',
             'transport' => 'nullable',
@@ -404,65 +407,66 @@ class StudentController extends Controller
 
         $datasiswa = Siswa::findOrFail($id);
 
-        $datasiswa->namasiswa = $request->namasiswa; 
-            $datasiswa->jurusan = $request->jurusan; 
-            $datasiswa->jeniskelamin = $request->jeniskelamin; 
-            $datasiswa->agama = $request->agama; 
-            $datasiswa->tempatlahir = $request->tempatlahir; 
-            $datasiswa->tanggallahir = $request->tanggallahir; 
+        $datasiswa->namasiswa = $request->namasiswa;
+            $datasiswa->jurusan = $request->jurusan;
+            $datasiswa->jeniskelamin = $request->jeniskelamin;
+            $datasiswa->agama = $request->agama;
+            $datasiswa->tempatlahir = $request->tempatlahir;
+            $datasiswa->tanggallahir = $request->tanggallahir;
             $datasiswa->tahunmasuk = $request->tahunmasuk;
 
-            $datasiswa->nik = $request->nik; 
-            $datasiswa->nisn = $request->nisn; 
-            $datasiswa->nis = $request->nis; 
-            $datasiswa->nomorsiswa = $request->nomorsiswa; 
-            $datasiswa->nomorkip = $request->nomorkip; 
-            $datasiswa->nomorkps = $request->nomorkps; 
+            $datasiswa->nik = $request->nik;
+            $datasiswa->nisn = $request->nisn;
+            $datasiswa->nis = $request->nis;
+            $datasiswa->nomorsiswa = $request->nomorsiswa;
+            $datasiswa->nomorkip = $request->nomorkip;
+            $datasiswa->nomorkps = $request->nomorkps;
             $datasiswa->nomorkks = $request->nomorkks;
 
-            $datasiswa->kebutuhan_khusus = $request->kebutuhan_khusus; 
-            $datasiswa->akta_lahir = $request->akta_lahir; 
-            $datasiswa->kartu_keluarga = $request->kartu_keluarga; 
-            $datasiswa->email = $request->email; 
+            $datasiswa->kebutuhan_khusus = $request->kebutuhan_khusus;
+            $datasiswa->akta_lahir = $request->akta_lahir;
+            $datasiswa->kartu_keluarga = $request->kartu_keluarga;
+            $datasiswa->email = $request->email;
             $datasiswa->alamat = $request->alamat;
 
-            $datasiswa->nomorsiswa_kontak = $request->nomorsiswa_kontak; 
-            $datasiswa->sekolah_asal = $request->sekolah_asal; 
-            $datasiswa->npsn = $request->npsn; 
-            $datasiswa->ijazah = $request->ijazah; 
+            $datasiswa->nomorsiswa_kontak = $request->nomorsiswa_kontak;
+            $datasiswa->sekolah_asal = $request->sekolah_asal;
+            $datasiswa->npsn = $request->npsn;
+            $datasiswa->ijazah = $request->ijazah;
             $datasiswa->skhun = $request->skhun;
 
-            $datasiswa->nomor_ujian_nasional = $request->nomor_ujian_nasional; 
-            $datasiswa->tinggibadan = $request->tinggibadan; 
-            $datasiswa->beratbadan = $request->beratbadan; 
+            $datasiswa->nomor_ujian_nasional = $request->nomor_ujian_nasional;
+            $datasiswa->tinggibadan = $request->tinggibadan;
+            $datasiswa->beratbadan = $request->beratbadan;
+            $datasiswa->lingkar_kepala = $request->lingkar_kepala;
             $datasiswa->transport = $request->transport;
 
-            $datasiswa->jenis_tinggal = $request->jenis_tinggal; 
-            $datasiswa->jumlah_saudara = $request->jumlah_saudara; 
-            $datasiswa->nama_ayah = $request->nama_ayah; 
+            $datasiswa->jenis_tinggal = $request->jenis_tinggal;
+            $datasiswa->jumlah_saudara = $request->jumlah_saudara;
+            $datasiswa->nama_ayah = $request->nama_ayah;
             $datasiswa->pendidikan_ayah = $request->pendidikan_ayah;
 
-            $datasiswa->tempat_lahir_ayah = $request->tempat_lahir_ayah; 
-            $datasiswa->tanggal_lahir_ayah = $request->tanggal_lahir_ayah; 
-            $datasiswa->alamat_ayah = $request->alamat_ayah; 
+            $datasiswa->tempat_lahir_ayah = $request->tempat_lahir_ayah;
+            $datasiswa->tanggal_lahir_ayah = $request->tanggal_lahir_ayah;
+            $datasiswa->alamat_ayah = $request->alamat_ayah;
             $datasiswa->pekerjaan_ayah = $request->pekerjaan_ayah;
 
-            $datasiswa->penghasilan_ayah = $request->penghasilan_ayah; 
-            $datasiswa->nomor_ayah = $request->nomor_ayah; 
-            $datasiswa->nama_ibu = $request->nama_ibu; 
+            $datasiswa->penghasilan_ayah = $request->penghasilan_ayah;
+            $datasiswa->nomor_ayah = $request->nomor_ayah;
+            $datasiswa->nama_ibu = $request->nama_ibu;
             $datasiswa->pendidikan_ibu = $request->pendidikan_ibu;
 
-            $datasiswa->tempat_lahir_ibu = $request->tempat_lahir_ibu; 
-            $datasiswa->tanggal_lahir_ibu = $request->tanggal_lahir_ibu; 
-            $datasiswa->alamat_ibu = $request->alamat_ibu; 
+            $datasiswa->tempat_lahir_ibu = $request->tempat_lahir_ibu;
+            $datasiswa->tanggal_lahir_ibu = $request->tanggal_lahir_ibu;
+            $datasiswa->alamat_ibu = $request->alamat_ibu;
             $datasiswa->pekerjaan_ibu = $request->pekerjaan_ibu;
 
-            $datasiswa->penghasilan_ibu = $request->penghasilan_ibu; 
-            $datasiswa->nomor_ibu = $request->nomor_ibu; 
-            $datasiswa->nama_wali = $request->nama_wali; 
+            $datasiswa->penghasilan_ibu = $request->penghasilan_ibu;
+            $datasiswa->nomor_ibu = $request->nomor_ibu;
+            $datasiswa->nama_wali = $request->nama_wali;
             $datasiswa->alamat_wali = $request->alamat_wali;
 
-            $datasiswa->nomor_wali = $request->nomor_wali; 
+            $datasiswa->nomor_wali = $request->nomor_wali;
             $datasiswa->penghasilan_wali = $request->penghasilan_wali;
             $datasiswa->asrama_tahfidz = $request->asrama_tahfidz;
             $datasiswa->jalurdaftar = $request->jalurdaftar;
