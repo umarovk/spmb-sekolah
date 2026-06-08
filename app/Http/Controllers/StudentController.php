@@ -571,21 +571,40 @@ class StudentController extends Controller
         return view('siswa.surat-diterima', compact('siswa', 'tanggal', 'user'));
     }
 
-    public function export() 
+    public function export()
     {
         $exporter = new SiswaExport();
         $data = $exporter->export();
-        
+
+        // Normalize data: remove line breaks and ensure proper quoting
+        $normalizedData = array_map(function($row) {
+            return array_map(function($field) {
+                if (is_string($field)) {
+                    // Remove line breaks and trim whitespace
+                    return str_replace(["\r\n", "\r", "\n"], " ", trim($field));
+                }
+                return $field;
+            }, $row);
+        }, $data);
+
         $filename = 'data-siswa-' . date('Y-m-d') . '.csv';
         $filepath = storage_path('app/public/' . $filename);
-        
-        // Create CSV file
+
+        // Create CSV file with force quoting all fields for consistency
         $fp = fopen($filepath, 'w');
-        foreach ($data as $row) {
-            fputcsv($fp, $row);
+        foreach ($normalizedData as $row) {
+            // Use fputcsv with force_quote flag (using PHP 8.1+ parameter)
+            $quoted_row = array_map(function($field) {
+                // Always quote all fields for consistency and to handle special characters
+                if ($field === null || $field === '') {
+                    return '';
+                }
+                return '"' . str_replace('"', '""', $field) . '"';
+            }, $row);
+            fwrite($fp, implode(',', $quoted_row) . "\n");
         }
         fclose($fp);
-        
+
         // Return download response
         return response()->download($filepath, $filename, [
             'Content-Type' => 'text/csv',
