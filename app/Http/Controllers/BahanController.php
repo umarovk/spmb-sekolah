@@ -226,7 +226,7 @@ class BahanController extends Controller
         $callback = function() use ($siswas, $items) {
             $file = fopen('php://output', 'w');
 
-            $header = ['No', 'Nama Siswa', 'NISN', 'Jurusan'];
+            $header = ['No', 'Nama Siswa', 'NISN', 'Jurusan', 'Jenis Kelamin'];
             foreach ($items as $it) {
                 $header[] = $it;
             }
@@ -242,6 +242,7 @@ class BahanController extends Controller
                     $siswa->namasiswa,
                     $siswa->nisn,
                     $siswa->jurusan,
+                    $siswa->jeniskelamin,
                 ];
                 $takenCount = 0;
                 foreach ($items as $it) {

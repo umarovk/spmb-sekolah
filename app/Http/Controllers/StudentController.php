@@ -523,6 +523,7 @@ class StudentController extends Controller
         $search = $request->input('search');
         $perPage = $request->input('perPage', 10);
         $filter = $request->input('filter');
+        $sekolahAsal = $request->input('sekolah_asal');
 
         $datasiswa = Siswa::when($search, function($query) use ($search) {
                 return $query->where(function($q) use ($search) {
@@ -530,16 +531,20 @@ class StudentController extends Controller
                       ->orWhere('jurusan', 'LIKE', "%{$search}%")
                       ->orWhere('jeniskelamin', 'LIKE', "%{$search}%")
                       ->orWhere('agama', 'LIKE', "%{$search}%")
-                      ->orWhere('asrama_tahfidz', 'LIKE', "%{$search}%");
+                      ->orWhere('asrama_tahfidz', 'LIKE', "%{$search}%")
+                      ->orWhere('sekolah_asal', 'LIKE', "%{$search}%");
                 });
             })
+            ->when($sekolahAsal, fn($q) => $q->where('sekolah_asal', $sekolahAsal))
             ->when($filter === 'prestasi', fn($q) => $q->where('jalurdaftar', 'Prestasi'))
             ->when($filter === 'tahfidz', fn($q) => $q->where('asrama_tahfidz', 'Bersedia'))
             ->when($filter === 'both', fn($q) => $q->where('jalurdaftar', 'Prestasi')->where('asrama_tahfidz', 'Bersedia'))
             ->latest()
             ->paginate($perPage);
 
-        return view('siswa.siswa', compact('datasiswa', 'search', 'perPage', 'filter'));
+        $sekolahList = $this->sekolahAsalList();
+
+        return view('siswa.siswa', compact('datasiswa', 'search', 'perPage', 'filter', 'sekolahAsal', 'sekolahList'));
     }
 
     public function test(Request $request)
@@ -571,16 +576,41 @@ class StudentController extends Controller
         return view('siswa.surat-diterima', compact('siswa', 'tanggal', 'user'));
     }
 
-    public function export()
+    public function exportPage()
     {
+        return view('siswa.export');
+    }
+
+    public function exportFields()
+    {
+        return response()->json(SiswaExport::getAvailableFields());
+    }
+
+    public function export(Request $request)
+    {
+        $selectedFields = $request->input('fields');
+
+        if (!$selectedFields || !is_array($selectedFields)) {
+            $selectedFields = array_keys(SiswaExport::getAvailableFields());
+        }
+
+        // Ensure selectedFields only contains valid field keys
+        $availableFields = array_keys(SiswaExport::getAvailableFields());
+        $selectedFields = array_filter($selectedFields, function($field) use ($availableFields) {
+            return in_array($field, $availableFields);
+        });
+
+        if (empty($selectedFields)) {
+            $selectedFields = $availableFields;
+        }
+
         $exporter = new SiswaExport();
-        $data = $exporter->export();
+        $data = $exporter->export($selectedFields);
 
         // Normalize data: remove line breaks and ensure proper quoting
         $normalizedData = array_map(function($row) {
             return array_map(function($field) {
                 if (is_string($field)) {
-                    // Remove line breaks and trim whitespace
                     return str_replace(["\r\n", "\r", "\n"], " ", trim($field));
                 }
                 return $field;
@@ -590,12 +620,9 @@ class StudentController extends Controller
         $filename = 'data-siswa-' . date('Y-m-d') . '.csv';
         $filepath = storage_path('app/public/' . $filename);
 
-        // Create CSV file with force quoting all fields for consistency
         $fp = fopen($filepath, 'w');
         foreach ($normalizedData as $row) {
-            // Use fputcsv with force_quote flag (using PHP 8.1+ parameter)
             $quoted_row = array_map(function($field) {
-                // Always quote all fields for consistency and to handle special characters
                 if ($field === null || $field === '') {
                     return '';
                 }
@@ -605,7 +632,6 @@ class StudentController extends Controller
         }
         fclose($fp);
 
-        // Return download response
         return response()->download($filepath, $filename, [
             'Content-Type' => 'text/csv',
         ])->deleteFileAfterSend();

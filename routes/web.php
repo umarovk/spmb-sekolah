@@ -63,8 +63,13 @@ Route::middleware(['auth'])->group(function () {
             ->name('siswa.print.surat-keterangan');
         Route::get('/siswa/{siswa}/print/surat-diterima', [StudentController::class, 'printSuratDiterima'])
             ->name('siswa.print.surat-diterima');
-        Route::get('/export-siswa', [StudentController::class, 'export'])->name('siswa.export');
         Route::get('/rangkuman', [StudentController::class, 'rangkuman'])->name('siswa.rangkuman');
+    });
+
+    // Admin Routes (Export)
+    Route::middleware(['auth', 'role:admin'])->group(function () {
+        Route::get('/export-siswa', [StudentController::class, 'exportPage'])->name('siswa.export-page');
+        Route::post('/export-siswa', [StudentController::class, 'export'])->name('siswa.export');
     });
 
     // Teller & Admin Routes (Payment Management)
@@ -110,6 +115,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/admin/settings/test-sheets', [App\Http\Controllers\SettingsController::class, 'testSheets'])->name('admin.settings.test-sheets');
         Route::post('/admin/settings/fetch-pendaftaran-headers', [App\Http\Controllers\SettingsController::class, 'fetchPendaftaranHeaders'])->name('admin.settings.fetch-pendaftaran-headers');
         Route::post('/admin/settings/test-telegram', [App\Http\Controllers\SettingsController::class, 'testTelegram'])->name('admin.settings.test-telegram');
+
+        // Export with field selection
+        Route::get('/export-siswa-fields', [StudentController::class, 'exportFields'])->name('siswa.export-fields');
     });
     
     // Selection routes

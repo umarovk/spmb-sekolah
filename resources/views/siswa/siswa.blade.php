@@ -22,32 +22,35 @@
                     {{-- Filter Tabs --}}
                     <div class="mb-3">
                         <div class="d-flex flex-wrap gap-2">
-                            <a href="{{ route('tabelsiswa', array_filter(['search' => $search, 'perPage' => $perPage])) }}"
+                            <a href="{{ route('tabelsiswa', array_filter(['search' => $search, 'perPage' => $perPage, 'sekolah_asal' => $sekolahAsal])) }}"
                                class="btn btn-sm rounded-pill {{ !$filter ? 'btn-primary' : 'btn-outline-secondary' }}">
                                 <i class="bi bi-people me-1"></i> Semua
                             </a>
-                            <a href="{{ route('tabelsiswa', array_filter(['filter' => 'prestasi', 'search' => $search, 'perPage' => $perPage])) }}"
+                            <a href="{{ route('tabelsiswa', array_filter(['filter' => 'prestasi', 'search' => $search, 'perPage' => $perPage, 'sekolah_asal' => $sekolahAsal])) }}"
                                class="btn btn-sm rounded-pill {{ $filter === 'prestasi' ? 'btn-warning text-dark' : 'btn-outline-warning' }}">
                                 <i class="bi bi-trophy me-1"></i> Jalur Prestasi
                             </a>
-                            <a href="{{ route('tabelsiswa', array_filter(['filter' => 'tahfidz', 'search' => $search, 'perPage' => $perPage])) }}"
+                            <a href="{{ route('tabelsiswa', array_filter(['filter' => 'tahfidz', 'search' => $search, 'perPage' => $perPage, 'sekolah_asal' => $sekolahAsal])) }}"
                                class="btn btn-sm rounded-pill {{ $filter === 'tahfidz' ? 'btn-success' : 'btn-outline-success' }}">
                                 <i class="bi bi-book me-1"></i> Asrama Tahfidz
                             </a>
-                            <a href="{{ route('tabelsiswa', array_filter(['filter' => 'both', 'search' => $search, 'perPage' => $perPage])) }}"
+                            <a href="{{ route('tabelsiswa', array_filter(['filter' => 'both', 'search' => $search, 'perPage' => $perPage, 'sekolah_asal' => $sekolahAsal])) }}"
                                class="btn btn-sm rounded-pill {{ $filter === 'both' ? 'btn-purple' : 'btn-outline-purple' }}">
                                 <i class="bi bi-stars me-1"></i> Prestasi + Tahfidz
                             </a>
                         </div>
                     </div>
                     <div class="row align-items-center">
-                        <div class="col-lg-8 col-md-6 mb-3 mb-md-0">
+                        <div class="col-lg-6 col-md-6 mb-3 mb-md-0">
                             <form
                                 action="{{ route('tabelsiswa') }}"
                                 method="GET"
                             >
                                 @if($filter)
                                     <input type="hidden" name="filter" value="{{ $filter }}">
+                                @endif
+                                @if($sekolahAsal)
+                                    <input type="hidden" name="sekolah_asal" value="{{ $sekolahAsal }}">
                                 @endif
                                 <input type="hidden" name="perPage" value="{{ $perPage }}">
                                 <div class="input-group">
@@ -68,6 +71,35 @@
                                 </div>
                             </form>
                         </div>
+                        <div class="col-lg-2 col-md-6 mb-3 mb-md-0">
+                            <form
+                                action="{{ route('tabelsiswa') }}"
+                                method="GET"
+                            >
+                                @if($filter)
+                                    <input type="hidden" name="filter" value="{{ $filter }}">
+                                @endif
+                                @if($search)
+                                    <input type="hidden" name="search" value="{{ $search }}">
+                                @endif
+                                <input type="hidden" name="perPage" value="{{ $perPage }}">
+                                <select
+                                    class="form-select form-select-sm"
+                                    name="sekolah_asal"
+                                    onchange="this.form.submit()"
+                                >
+                                    <option value="">Semua Sekolah</option>
+                                    @foreach($sekolahList as $sekolah)
+                                        <option
+                                            value="{{ $sekolah }}"
+                                            {{ $sekolahAsal === $sekolah ? 'selected' : '' }}
+                                        >
+                                            {{ $sekolah }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </form>
+                        </div>
                         <div class="col-lg-4 col-md-6">
                             <form
                                 action="{{ route('tabelsiswa') }}"
@@ -79,6 +111,9 @@
                                 @endif
                                 @if($search)
                                     <input type="hidden" name="search" value="{{ $search }}">
+                                @endif
+                                @if($sekolahAsal)
+                                    <input type="hidden" name="sekolah_asal" value="{{ $sekolahAsal }}">
                                 @endif
                                 <div
                                     class="input-group input-group-sm"
@@ -271,7 +306,7 @@
                             {{ $datasiswa->total() }} data
                         </p>
                         <div>
-                            {{ $datasiswa->appends(['search' => $search, 'perPage' => $perPage, 'filter' => $filter])->links('vendor.pagination.custom') }}
+                            {{ $datasiswa->appends(['search' => $search, 'perPage' => $perPage, 'filter' => $filter, 'sekolah_asal' => $sekolahAsal])->links('vendor.pagination.custom') }}
                         </div>
                     </div>
                 </div>

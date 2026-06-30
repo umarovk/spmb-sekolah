@@ -51,12 +51,21 @@
                             </div>
                         </div>
                         <div class="stats-action">
-                            <a
-                                href="{{ route('siswa.export') }}"
-                                class="btn-action data-action"
-                            >
-                                Download Excel <i class="bi bi-download"></i>
-                            </a>
+                            @if (auth()->user()->isAdmin())
+                                <a
+                                    href="{{ route('siswa.export-page') }}"
+                                    class="btn-action data-action"
+                                >
+                                    Download Excel <i class="bi bi-download"></i>
+                                </a>
+                            @else
+                                <a
+                                    href="#"
+                                    class="btn-action disabled"
+                                >
+                                    Akses Terbatas <i class="bi bi-lock"></i>
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>

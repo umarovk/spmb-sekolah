@@ -246,6 +246,17 @@
                             </li>
 
                             @if (auth()->user()->isAdmin())
+                                <!-- Export Data (Admin Only) -->
+                                <li class="nav-item mb-1">
+                                    <a
+                                        href="{{ route('siswa.export-page') }}"
+                                        class="nav-link rounded-pill py-2 {{ Request::routeIs('siswa.export-page') ? 'active bg-light text-primary' : 'text-dark' }}"
+                                    >
+                                        <i class="nav-icon bi bi-download me-2"></i>
+                                        <span>Export Data Siswa</span>
+                                    </a>
+                                </li>
+
                                 <!-- User Management (Admin Only) -->
                                 <li class="nav-item mb-1">
                                     <a
