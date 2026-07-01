@@ -68,9 +68,10 @@ class PaymentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nominal' => 'required|integer|min:1',
+            'nominal' => 'required|integer|not_in:0',
             'siswa_id' => 'required|exists:siswas,id',
             'nama_pembayaran' => 'required|string|max:255',
+            'jenis_pembayaran' => 'required|in:debit,credit',
             'keterangan' => 'nullable|string',
             'tanggal_bayar' => 'required|date',
         ]);
@@ -81,16 +82,24 @@ class PaymentController extends Controller
                                     ->whereYear('created_at', now()->year)
                                     ->latest()
                                     ->first();
-            
+
             $lastNumber = $lastPayment ? intval(substr($lastPayment->kode_bayar, -4)) : 0;
             $newNumber = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
             $kodeBayar = 'PYM-' . date('Ym') . '-' . $newNumber;
+
+            // Apply negative value if it's a credit/pengembalian
+            $nominal = (int) $request->nominal;
+            if ($request->jenis_pembayaran === 'credit') {
+                $nominal = -abs($nominal);
+            } else {
+                $nominal = abs($nominal);
+            }
 
             $payment = Pembayaran::create([
                 'siswa_id' => $request->siswa_id,
                 'kode_bayar' => $kodeBayar,
                 'nama_pembayaran' => $request->nama_pembayaran,
-                'nominal' => $request->nominal,
+                'nominal' => $nominal,
                 'keterangan' => $request->keterangan,
                 'tanggal_bayar' => $request->tanggal_bayar,
                 'teller' => auth()->user()->name ?? 'Admin',
@@ -202,7 +211,17 @@ class PaymentController extends Controller
     public function printKwitansi(Pembayaran $payment)
     {
         $user = auth()->user();
+        // Redirect to kwitansi-kembalian if nominal is negative
+        if ($payment->nominal < 0) {
+            return redirect()->route('payments.print.kwitansi-kembalian', $payment->id);
+        }
         return view('payments.kwitansi', compact('payment', 'user'));
+    }
+
+    public function printKwitansiKembalian(Pembayaran $payment)
+    {
+        $user = auth()->user();
+        return view('payments.kwitansi-kembalian', compact('payment', 'user'));
     }
 
     public function printPdf(Pembayaran $payment)

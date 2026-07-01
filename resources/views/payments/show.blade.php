@@ -50,21 +50,42 @@
                                                     </td>
                                                     <td>{{ $bayar->nama_pembayaran }}</td>
                                                     <td class="text-end fw-bold">
-                                                        Rp{{ number_format($bayar->nominal, 0, ',', '.') }}</td>
+                                                        @if ($bayar->nominal < 0)
+                                                            <span class="text-danger">
+                                                                -Rp{{ number_format(abs($bayar->nominal), 0, ',', '.') }}
+                                                            </span>
+                                                        @else
+                                                            <span class="text-success">
+                                                                Rp{{ number_format($bayar->nominal, 0, ',', '.') }}
+                                                            </span>
+                                                        @endif
+                                                    </td>
                                                     <td>{{ $bayar->keterangan ?? '-' }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($bayar->tanggal_bayar)->format('d M Y') }}
                                                     </td>
                                                     <td>
                                                         <div class="d-flex justify-content-center gap-1">
-                                                            <a
-                                                                href="{{ route('payments.print.kwitansi', $bayar->id) }}"
-                                                                class="btn btn-sm btn-outline-success"
-                                                                target="_blank"
-                                                                title="Cetak Kwitansi"
-                                                            >
-                                                                <i class="bi bi-receipt"></i>
-                                                                <strong>Kwitansi</strong>
-                                                            </a>
+                                                            @if ($bayar->nominal < 0)
+                                                                <a
+                                                                    href="{{ route('payments.print.kwitansi-kembalian', $bayar->id) }}"
+                                                                    class="btn btn-sm btn-outline-danger"
+                                                                    target="_blank"
+                                                                    title="Cetak Kwitansi Pengembalian"
+                                                                >
+                                                                    <i class="bi bi-receipt"></i>
+                                                                    <strong>Kembalian</strong>
+                                                                </a>
+                                                            @else
+                                                                <a
+                                                                    href="{{ route('payments.print.kwitansi', $bayar->id) }}"
+                                                                    class="btn btn-sm btn-outline-success"
+                                                                    target="_blank"
+                                                                    title="Cetak Kwitansi"
+                                                                >
+                                                                    <i class="bi bi-receipt"></i>
+                                                                    <strong>Kwitansi</strong>
+                                                                </a>
+                                                            @endif
 
                                                             @if (auth()->user()->isAdmin())
                                                                 <a

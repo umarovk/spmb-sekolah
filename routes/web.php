@@ -87,6 +87,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/payments/detail/{siswa_id}', [PaymentController::class, 'detail'])->name('payments.detail');
         Route::get('/payments/{payment}/print/kwitansi', [PaymentController::class, 'printKwitansi'])
             ->name('payments.print.kwitansi');
+        Route::get('/payments/{payment}/print/kwitansi-kembalian', [PaymentController::class, 'printKwitansiKembalian'])
+            ->name('payments.print.kwitansi-kembalian');
         Route::get('/payments/{payment}/print/pdf', [PaymentController::class, 'printPdf'])
             ->name('payments.print.pdf');
         Route::get('/payments/{payment}/edit', [PaymentController::class, 'edit'])->name('payments.edit');
