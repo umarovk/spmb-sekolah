@@ -247,30 +247,17 @@ if (!function_exists('terbilang')) {
             </div>
 
             <div class="row">
-                <div
-                    class="col-5"
-                    style="margin-left: 13px"
-                >
-                    <div class="d-flex align-items-center mb-2">
-                        <div class="manual-checkbox me-2"></div>
-                        <span>Bahan Osis, Seragam Olahraga</span>
-                    </div>
-                    <div class="d-flex align-items-center mb-2">
-                        <div class="manual-checkbox me-2"></div>
-                        <span>Bahan Pramuka</span>
-                    </div>
-                    <div class="d-flex align-items-center mb-2">
-                        <div class="manual-checkbox me-2"></div>
-                        <span>Atribut, dasi, topi, badge</span>
-                    </div>
-                </div>
                 <div class="col-6">
                     <p class="text-center">Petugas Teller</p>
                     <br>
                     <br>
-
-                    {{-- // ini diambil dari tabel keterangan models --}}
                     <p class="text-center">({{ $payment->keterangan }})</p>
+                </div>
+                <div class="col-6">
+                    <p class="text-center">Penerima</p>
+                    <br>
+                    <br>
+                    <p class="text-center" style="font-size: 0.85rem;">...........................</p>
                 </div>
             </div>
         </div>
@@ -355,28 +342,16 @@ if (!function_exists('terbilang')) {
             </div>
 
             <div class="row">
-                <div
-                    class="col-5"
-                    style="margin-left: 13px"
-                >
-                    <div class="d-flex align-items-center mb-2">
-                        <div class="manual-checkbox me-2"></div>
-                        <span>Bahan Osis</span>
-                    </div>
-                    <div class="d-flex align-items-center mb-2">
-                        <div class="manual-checkbox me-2"></div>
-                        <span>Bahan Pramuka</span>
-                    </div>
-                    <div class="d-flex align-items-center mb-2">
-                        <div class="manual-checkbox me-2"></div>
-                        <span>Atribut, dasi, topi, badge</span>
-                    </div>
-                </div>
                 <div class="col-6">
                     <p class="text-center">Petugas Teller</p>
                     <br>
                     <br>
                     <p class="text-center">({{ $payment->keterangan }})</p>
+                </div>
+                <div class="col-6">
+                    <p class="text-center">Penerima</p>
+                    <br>
+                    <p class="text-center" style="font-size: 0.85rem;">...........................</p>
                 </div>
             </div>
         </div>
@@ -461,28 +436,16 @@ if (!function_exists('terbilang')) {
             </div>
 
             <div class="row">
-                <div
-                    class="col-5"
-                    style="margin-left: 13px"
-                >
-                    <div class="d-flex align-items-center mb-2">
-                        <div class="manual-checkbox me-2"></div>
-                        <span>Bahan Osis</span>
-                    </div>
-                    <div class="d-flex align-items-center mb-2">
-                        <div class="manual-checkbox me-2"></div>
-                        <span>Bahan Pramuka</span>
-                    </div>
-                    <div class="d-flex align-items-center mb-2">
-                        <div class="manual-checkbox me-2"></div>
-                        <span>Atribut, dasi, topi, badge</span>
-                    </div>
-                </div>
                 <div class="col-6">
                     <p class="text-center">Petugas Teller</p>
                     <br>
                     <br>
                     <p class="text-center">({{ $payment->keterangan }})</p>
+                </div>
+                <div class="col-6">
+                    <p class="text-center">Penerima</p>
+                    <br>
+                    <p class="text-center" style="font-size: 0.85rem;">...........................</p>
                 </div>
             </div>
         </div>
